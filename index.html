@@ -144,7 +144,8 @@
                     <span>Добавить острый соус 🌶</span>
                 </label>
             </div>
-            <button class="send-order-btn" onclick="sendOrder()">✅ Отправить заказ</button>
+            <!-- Кнопка будет создаваться динамически -->
+            <div id="sendOrderContainer"></div>
             <button class="btn" onclick="closeCart()" style="background: #555; width: 100%;">🔙 Продолжить покупки</button>
         </div>
     </div>
@@ -210,11 +211,18 @@
         function openCart() {
             const modal = document.getElementById('cartModal');
             const itemsDiv = document.getElementById('cartItems');
+            const sendContainer = document.getElementById('sendOrderContainer');
+            const sauceCheckbox = document.getElementById('sauceCheckbox');
             let total = 0;
             itemsDiv.innerHTML = '';
 
+            // Сбрасываем чекбокс при каждом открытии (можно оставить как есть)
+            // sauceCheckbox.checked = false;  // если хотите, чтобы всегда был выключен при открытии
+
             if (Object.keys(cart).length === 0) {
                 itemsDiv.innerHTML = '<p style="text-align:center;color:#aaa;">Корзина пуста</p>';
+                // Убираем кнопку отправки
+                sendContainer.innerHTML = '';
             } else {
                 for (let id in cart) {
                     const item = cart[id];
@@ -230,6 +238,9 @@
                         </div>
                     `;
                 }
+                // Создаём кнопку отправки динамически
+                sendContainer.innerHTML = '<button id="sendOrderButton" class="send-order-btn">✅ Отправить заказ</button>';
+                document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
             }
 
             document.getElementById('modalTotal').textContent = 'Итого: ' + total + ' ₽';
@@ -238,9 +249,10 @@
 
         function closeCart() {
             document.getElementById('cartModal').classList.remove('active');
+            // Очищаем контейнер кнопки, чтобы избежать дублирования обработчиков
+            document.getElementById('sendOrderContainer').innerHTML = '';
         }
 
-        // Функция отправки заказа (вызывается при нажатии на кнопку)
         function sendOrder() {
             if (Object.keys(cart).length === 0) {
                 alert('Корзина пуста!');
@@ -264,8 +276,6 @@
 
             const encodedText = encodeURIComponent(orderText);
             const telegramUrl = `https://t.me/Andreik115?text=${encodedText}`;
-
-            // Открываем чат
             window.open(telegramUrl, '_blank');
 
             // Очищаем корзину и обновляем интерфейс
