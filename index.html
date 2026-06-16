@@ -41,8 +41,9 @@
         .cart-item-qty { color: #aaa; margin: 0 10px; }
         .cart-item-price { font-weight: bold; }
         .remove-btn { background: none; border: none; color: #e74c3c; font-size: 18px; cursor: pointer; padding: 0 8px; }
-        .send-order-link { display: block; text-align: center; background: #e74c3c; color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-bottom: 8px; }
-        .send-order-link:active { background: #c0392b; }
+        .send-order-btn { display: block; width: 100%; background: #e74c3c; color: #fff; text-align: center; padding: 10px; border-radius: 8px; font-weight: bold; margin-bottom: 8px; border: none; cursor: pointer; }
+        .send-order-btn:active { background: #c0392b; }
+        .send-order-btn:disabled { opacity: 0.5; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -143,13 +144,13 @@
                     <span>Добавить острый соус 🌶</span>
                 </label>
             </div>
-            <a id="sendOrderLink" class="send-order-link" target="_blank">✅ Отправить заказ</a>
+            <button class="send-order-btn" onclick="sendOrder()">✅ Отправить заказ</button>
             <button class="btn" onclick="closeCart()" style="background: #555; width: 100%;">🔙 Продолжить покупки</button>
         </div>
     </div>
 
     <script>
-        // Принудительно снимаем галочку при загрузке страницы (перестраховка от кэша)
+        // Принудительно снимаем галочку при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('sauceCheckbox').checked = false;
         });
@@ -209,17 +210,12 @@
         function openCart() {
             const modal = document.getElementById('cartModal');
             const itemsDiv = document.getElementById('cartItems');
-            const sendLink = document.getElementById('sendOrderLink');
             let total = 0;
             itemsDiv.innerHTML = '';
 
             if (Object.keys(cart).length === 0) {
                 itemsDiv.innerHTML = '<p style="text-align:center;color:#aaa;">Корзина пуста</p>';
-                sendLink.href = '#';
-                sendLink.style.pointerEvents = 'none';
-                sendLink.style.opacity = '0.5';
             } else {
-                let orderTextPlain = '';
                 for (let id in cart) {
                     const item = cart[id];
                     const itemTotal = item.qty * item.price;
@@ -233,18 +229,7 @@
                             <span class="cart-item-price">${itemTotal} ₽</span>
                         </div>
                     `;
-                    orderTextPlain += `${item.name} x${item.qty} = ${itemTotal} ₽\n`;
                 }
-                orderTextPlain += `\nИтого: ${total} ₽`;
-                // Проверяем чекбокс
-                if (document.getElementById('sauceCheckbox').checked) {
-                    orderTextPlain += '\n🌶 С острым соусом!';
-                }
-
-                const encodedText = encodeURIComponent(orderTextPlain);
-                sendLink.href = `https://t.me/Andreik115?text=${encodedText}`;
-                sendLink.style.pointerEvents = 'auto';
-                sendLink.style.opacity = '1';
             }
 
             document.getElementById('modalTotal').textContent = 'Итого: ' + total + ' ₽';
@@ -255,11 +240,47 @@
             document.getElementById('cartModal').classList.remove('active');
         }
 
+        // Функция отправки заказа (вызывается при нажатии на кнопку)
+        function sendOrder() {
+            if (Object.keys(cart).length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+
+            let total = 0;
+            let orderText = '';
+            for (let id in cart) {
+                const item = cart[id];
+                const itemTotal = item.qty * item.price;
+                total += itemTotal;
+                orderText += `${item.name} x${item.qty} = ${itemTotal} ₽\n`;
+            }
+            orderText += `\nИтого: ${total} ₽`;
+
+            // Проверяем чекбокс в момент нажатия
+            if (document.getElementById('sauceCheckbox').checked) {
+                orderText += '\n🌶 С острым соусом!';
+            }
+
+            const encodedText = encodeURIComponent(orderText);
+            const telegramUrl = `https://t.me/Andreik115?text=${encodedText}`;
+
+            // Открываем чат
+            window.open(telegramUrl, '_blank');
+
+            // Очищаем корзину и обновляем интерфейс
+            cart = {};
+            updateCartBar();
+            document.querySelectorAll('.product-card').forEach(card => {
+                updateProductUI(card.dataset.id);
+            });
+            closeCart();
+        }
+
         // Инициализация при загрузке
         updateCartBar();
         document.querySelectorAll('.product-card').forEach(card => {
-            const id = card.dataset.id;
-            updateProductUI(id);
+            updateProductUI(card.dataset.id);
         });
     </script>
 </body>
