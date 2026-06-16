@@ -149,6 +149,11 @@
     </div>
 
     <script>
+        // Принудительно снимаем галочку при загрузке страницы (перестраховка от кэша)
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('sauceCheckbox').checked = false;
+        });
+
         let cart = {};
 
         function updateCartBar() {
@@ -231,7 +236,7 @@
                     orderTextPlain += `${item.name} x${item.qty} = ${itemTotal} ₽\n`;
                 }
                 orderTextPlain += `\nИтого: ${total} ₽`;
-                // Только если чекбокс отмечен, добавляем соус
+                // Проверяем чекбокс
                 if (document.getElementById('sauceCheckbox').checked) {
                     orderTextPlain += '\n🌶 С острым соусом!';
                 }
