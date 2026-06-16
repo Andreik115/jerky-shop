@@ -139,7 +139,7 @@
             <div style="margin-top: 16px; font-size: 18px; font-weight: bold; text-align: right;" id="modalTotal">Итого: 0 ₽</div>
             <div style="margin-top: 16px;">
                 <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
-                    <input type="checkbox" id="sauceCheckbox" checked style="width: 18px; height: 18px;">
+                    <input type="checkbox" id="sauceCheckbox" style="width: 18px; height: 18px;">
                     <span>Добавить острый соус 🌶</span>
                 </label>
             </div>
@@ -231,6 +231,7 @@
                     orderTextPlain += `${item.name} x${item.qty} = ${itemTotal} ₽\n`;
                 }
                 orderTextPlain += `\nИтого: ${total} ₽`;
+                // Только если чекбокс отмечен, добавляем соус
                 if (document.getElementById('sauceCheckbox').checked) {
                     orderTextPlain += '\n🌶 С острым соусом!';
                 }
