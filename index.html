@@ -17,12 +17,11 @@
         .product-weight { color: #aaa; font-size: 13px; }
         .product-comp { color: #888; font-size: 12px; margin-top: 6px; line-height: 1.4; }
 
-        /* Контейнер для кнопки добавления/счётчика */
         .add-container { display: flex; align-items: center; margin-top: 8px; }
         .btn { background: #e74c3c; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
         .btn:active { background: #c0392b; }
         .add-btn { width: 100%; }
-        .quantity-control { display: none; align-items: center; background: #27ae60; border-radius: 8px; overflow: hidden; }
+        .quantity-control { display: none; align-items: center; background: #27ae60; border-radius: 8px; overflow: hidden; width: 100%; justify-content: space-between; }
         .qty-btn { background: transparent; color: #fff; border: none; font-size: 18px; padding: 10px 12px; cursor: pointer; }
         .qty-btn:active { background: rgba(0,0,0,0.2); }
         .qty-display { padding: 0 12px; font-size: 16px; font-weight: bold; min-width: 20px; text-align: center; }
@@ -55,15 +54,14 @@
 
     <div class="category-title">🐷 Свиные джерки</div>
 
-    <!-- Карточка товара (пример с Коньячными) -->
     <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
         <div class="product-name">Свиные джерки «Коньячные»</div>
         <div class="product-price">450 ₽</div>
         <div class="product-weight">100 г</div>
         <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
         <div class="add-container">
-            <button class="btn add-btn" onclick="addToCart(this, 'pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
-            <div class="quantity-control">
+            <button class="btn add-btn" onclick="addToCart('pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
+            <div class="quantity-control" id="qctrl_pork_cognac">
                 <button class="qty-btn" onclick="changeCartQty('pork_cognac', -1)">−</button>
                 <span class="qty-display" id="qty_pork_cognac">0</span>
                 <button class="qty-btn" onclick="changeCartQty('pork_cognac', 1)">+</button>
@@ -71,15 +69,14 @@
         </div>
     </div>
 
-    <!-- Карточка товара (Паприка) -->
     <div class="product-card" data-id="pork_paprika" data-name="Свиные джерки Паприка" data-price="450">
         <div class="product-name">Свиные джерки «Паприка»</div>
         <div class="product-price">450 ₽</div>
         <div class="product-weight">100 г</div>
         <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
         <div class="add-container">
-            <button class="btn add-btn" onclick="addToCart(this, 'pork_paprika', 'Свиные джерки Паприка', 450)">Добавить в корзину</button>
-            <div class="quantity-control">
+            <button class="btn add-btn" onclick="addToCart('pork_paprika', 'Свиные джерки Паприка', 450)">Добавить в корзину</button>
+            <div class="quantity-control" id="qctrl_pork_paprika">
                 <button class="qty-btn" onclick="changeCartQty('pork_paprika', -1)">−</button>
                 <span class="qty-display" id="qty_pork_paprika">0</span>
                 <button class="qty-btn" onclick="changeCartQty('pork_paprika', 1)">+</button>
@@ -95,8 +92,8 @@
         <div class="product-weight">100 г</div>
         <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
         <div class="add-container">
-            <button class="btn add-btn" onclick="addToCart(this, 'chicken', 'Куриные джерки', 600)">Добавить в корзину</button>
-            <div class="quantity-control">
+            <button class="btn add-btn" onclick="addToCart('chicken', 'Куриные джерки', 600)">Добавить в корзину</button>
+            <div class="quantity-control" id="qctrl_chicken">
                 <button class="qty-btn" onclick="changeCartQty('chicken', -1)">−</button>
                 <span class="qty-display" id="qty_chicken">0</span>
                 <button class="qty-btn" onclick="changeCartQty('chicken', 1)">+</button>
@@ -112,8 +109,8 @@
         <div class="product-weight">100 г</div>
         <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
         <div class="add-container">
-            <button class="btn add-btn" onclick="addToCart(this, 'beef', 'Говяжьи джерки', 900)">Добавить в корзину</button>
-            <div class="quantity-control">
+            <button class="btn add-btn" onclick="addToCart('beef', 'Говяжьи джерки', 900)">Добавить в корзину</button>
+            <div class="quantity-control" id="qctrl_beef">
                 <button class="qty-btn" onclick="changeCartQty('beef', -1)">−</button>
                 <span class="qty-display" id="qty_beef">0</span>
                 <button class="qty-btn" onclick="changeCartQty('beef', 1)">+</button>
@@ -165,7 +162,6 @@
             document.getElementById('cartTotal').textContent = total + ' ₽';
         }
 
-        // Обновляет отображение счётчика внутри карточки товара
         function updateProductUI(id) {
             const qty = cart[id] ? cart[id].qty : 0;
             const card = document.querySelector(`.product-card[data-id="${id}"]`);
@@ -183,7 +179,7 @@
             }
         }
 
-        function addToCart(btnElement, id, name, price) {
+        function addToCart(id, name, price) {
             if (!cart[id]) {
                 cart[id] = { name: name, price: price, qty: 0 };
             }
@@ -200,7 +196,6 @@
             }
             updateCartBar();
             updateProductUI(id);
-            // Если модальное окно открыто, обновим его содержимое
             if (document.getElementById('cartModal').classList.contains('active')) {
                 openCart();
             }
@@ -240,7 +235,6 @@
                     orderTextPlain += '\n🌶 С острым соусом!';
                 }
 
-                // Формируем ссылку для Telegram (переносы строк кодируем как %0A)
                 const encodedText = encodeURIComponent(orderTextPlain);
                 sendLink.href = `https://t.me/Andreik115?text=${encodedText}`;
                 sendLink.style.pointerEvents = 'auto';
@@ -255,12 +249,8 @@
             document.getElementById('cartModal').classList.remove('active');
         }
 
-        // Инициализация отображения при загрузке
+        // Инициализация при загрузке
         updateCartBar();
-        for (let id in PRODUCT_LIST) {
-            updateProductUI(id);
-        }
-        // PRODUCT_LIST можно не объявлять, мы просто перебираем известные id (для первоначальной инициализации можно пройтись по карточкам)
         document.querySelectorAll('.product-card').forEach(card => {
             const id = card.dataset.id;
             updateProductUI(id);
