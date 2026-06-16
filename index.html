@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KoMeat - Джерки ручной работы</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #1a1a1a; color: #fff; padding: 16px; padding-bottom: 80px; }
@@ -45,7 +44,7 @@
 
     <div class="category-title">🐷 Свиные джерки</div>
 
-    <div class="product-card" id="pork_cognac">
+    <div class="product-card">
         <div class="product-name">Свиные джерки «Коньячные»</div>
         <div class="product-price">450 ₽</div>
         <div class="product-weight">100 г</div>
@@ -53,7 +52,7 @@
         <button class="btn" onclick="addToCart('pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
     </div>
 
-    <div class="product-card" id="pork_paprika">
+    <div class="product-card">
         <div class="product-name">Свиные джерки «Паприка»</div>
         <div class="product-price">450 ₽</div>
         <div class="product-weight">100 г</div>
@@ -63,7 +62,7 @@
 
     <div class="category-title">🐔 Куриные джерки</div>
 
-    <div class="product-card" id="chicken">
+    <div class="product-card">
         <div class="product-name">Куриные джерки</div>
         <div class="product-price">600 ₽</div>
         <div class="product-weight">100 г</div>
@@ -73,7 +72,7 @@
 
     <div class="category-title">🐮 Говяжьи джерки</div>
 
-    <div class="product-card" id="beef">
+    <div class="product-card">
         <div class="product-name">Говяжьи джерки</div>
         <div class="product-price">900 ₽</div>
         <div class="product-weight">100 г</div>
@@ -86,7 +85,6 @@
         <span style="font-size:11px;">Moruga Scorpion, Carolina Reaper, Ghost Pepper</span>
     </div>
 
-    <!-- Корзина снизу -->
     <div class="cart-bar" id="cartBar">
         <div class="cart-info">
             <span>🛒</span>
@@ -96,7 +94,6 @@
         <button class="cart-btn" onclick="openCart()">Оформить</button>
     </div>
 
-    <!-- Модальное окно корзины -->
     <div class="modal" id="cartModal">
         <div class="modal-content">
             <h2>🛒 Корзина</h2>
@@ -125,12 +122,6 @@
             }
             document.getElementById('cartCount').textContent = count;
             document.getElementById('cartTotal').textContent = total + ' ₽';
-
-            if (count === 0) {
-                document.getElementById('cartBar').style.opacity = '0.5';
-            } else {
-                document.getElementById('cartBar').style.opacity = '1';
-            }
         }
 
         function addToCart(id, name, price) {
@@ -141,7 +132,6 @@
             }
             updateCartBar();
 
-            // Анимация нажатия
             let btn = event.target;
             btn.textContent = '✅ Добавлено!';
             btn.style.background = '#27ae60';
@@ -155,7 +145,6 @@
             let modal = document.getElementById('cartModal');
             let itemsDiv = document.getElementById('cartItems');
             let total = 0;
-
             itemsDiv.innerHTML = '';
 
             if (Object.keys(cart).length === 0) {
@@ -165,19 +154,17 @@
                     let item = cart[id];
                     let itemTotal = item.qty * item.price;
                     total += itemTotal;
-
                     itemsDiv.innerHTML += `
                         <div class="cart-item">
                             <span class="cart-item-name">${item.name}</span>
-                            <button class="remove-btn" onclick="removeItem('${id}')">−</button>
+                            <button class="remove-btn" onclick="changeQty('${id}', -1)">−</button>
                             <span class="cart-item-qty">${item.qty}</span>
-                            <button class="remove-btn" onclick="addItem('${id}')">+</button>
+                            <button class="remove-btn" onclick="changeQty('${id}', 1)">+</button>
                             <span class="cart-item-price">${itemTotal} ₽</span>
                         </div>
                     `;
                 }
             }
-
             document.getElementById('modalTotal').textContent = 'Итого: ' + total + ' ₽';
             modal.classList.add('active');
         }
@@ -186,20 +173,12 @@
             document.getElementById('cartModal').classList.remove('active');
         }
 
-        function removeItem(id) {
+        function changeQty(id, delta) {
             if (cart[id]) {
-                cart[id].qty -= 1;
+                cart[id].qty += delta;
                 if (cart[id].qty <= 0) {
                     delete cart[id];
                 }
-            }
-            updateCartBar();
-            openCart();
-        }
-
-        function addItem(id) {
-            if (cart[id]) {
-                cart[id].qty += 1;
             }
             updateCartBar();
             openCart();
@@ -212,42 +191,32 @@
             }
 
             let total = 0;
-            let orderText = '📦 Новый заказ!\n\n';
-
+            let orderText = '📦 *Новый заказ!*%0A%0A';
             for (let id in cart) {
                 let item = cart[id];
                 let itemTotal = item.qty * item.price;
                 total += itemTotal;
-                orderText += '• ' + item.name + ' x' + item.qty + ' = ' + itemTotal + ' ₽\n';
+                orderText += `• ${item.name} x${item.qty} = ${itemTotal} ₽%0A`;
             }
 
             let wantSauce = document.getElementById('sauceCheckbox').checked;
             if (wantSauce) {
-                orderText += '\n🌶 С острым соусом!';
+                orderText += '%0A🌶 С острым соусом!';
             }
 
-            orderText += '\n💰 Итого: ' + total + ' ₽';
+            orderText += `%0A💰 *Итого: ${total} ₽*`;
 
-            // Отправляем через Telegram WebApp
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.sendData(orderText);
-                window.Telegram.WebApp.close();
-            } else {
-                alert('Откройте через Telegram бота!');
-            }
+            // Открываем чат с менеджером (Andreik115)
+            let telegramUrl = `https://t.me/Andreik115?text=${orderText}`;
+            window.open(telegramUrl, '_blank');
 
-            // Очищаем корзину
+            // Очищаем корзину после отправки
             cart = {};
             updateCartBar();
+            closeCart();
         }
 
         updateCartBar();
-
-        // Сообщаем Telegram что страница готова
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-        }
     </script>
 
 </body>
