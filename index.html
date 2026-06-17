@@ -282,18 +282,24 @@
             const messenger = document.querySelector('input[name="messenger"]:checked').value;
             localStorage.setItem('preferredMessenger', messenger);
 
-            let url = '';
             if (messenger === 'telegram') {
                 const encodedText = encodeURIComponent(orderText);
-                url = `https://t.me/Andreik115?text=${encodedText}`;
+                window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
             } else if (messenger === 'vk') {
                 const vkId = '18451549';
-                const encodedText = encodeURIComponent(orderText);
-                url = `intent://vk.me/${vkId}?text=${encodedText}#Intent;scheme=vk;package=com.vkontakte.android;end`;
+                // Копируем заказ в буфер обмена
+                navigator.clipboard.writeText(orderText).then(() => {
+                    // Показываем короткое уведомление (можно заменить на свой alert)
+                    alert('Текст заказа скопирован! Сейчас откроется диалог — вставьте сообщение и отправьте.');
+                    // Открываем диалог ВК (без сообщения)
+                    window.open(`https://vk.me/${vkId}`, '_blank');
+                }).catch(() => {
+                    // Если буфер обмена не доступен, просто открываем диалог
+                    window.open(`https://vk.me/${vkId}`, '_blank');
+                });
             }
 
-            window.open(url, '_blank');
-
+            // Очищаем корзину
             cart = {};
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => {
