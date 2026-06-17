@@ -292,7 +292,8 @@
             } else if (messenger === 'vk') {
                 const vkId = '18451549';
                 const encodedText = encodeURIComponent(orderText);
-                url = `https://vk.me/${vkId}?message=${encodedText}`;
+                // Более надёжная ссылка, которая предзаполняет сообщение
+                url = `https://vk.com/write${vkId}?message=${encodedText}`;
             }
 
             window.open(url, '_blank');
