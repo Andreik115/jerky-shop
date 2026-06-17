@@ -162,10 +162,8 @@
     </div>
 
     <script>
-        // Принудительно снимаем галочку соуса при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('sauceCheckbox').checked = false;
-            // Восстанавливаем выбор мессенджера
             const savedMessenger = localStorage.getItem('preferredMessenger') || 'telegram';
             const radio = document.querySelector(`input[name="messenger"][value="${savedMessenger}"]`);
             if (radio) radio.checked = true;
@@ -281,7 +279,6 @@
                 orderText += '\n🌶 С острым соусом!';
             }
 
-            // Определяем выбранный мессенджер
             const messenger = document.querySelector('input[name="messenger"]:checked').value;
             localStorage.setItem('preferredMessenger', messenger);
 
@@ -292,13 +289,11 @@
             } else if (messenger === 'vk') {
                 const vkId = '18451549';
                 const encodedText = encodeURIComponent(orderText);
-                // Более надёжная ссылка, которая предзаполняет сообщение
-                url = `https://vk.com/write${vkId}?message=${encodedText}`;
+                url = `intent://vk.me/${vkId}?text=${encodedText}#Intent;scheme=vk;package=com.vkontakte.android;end`;
             }
 
             window.open(url, '_blank');
 
-            // Очищаем корзину
             cart = {};
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => {
