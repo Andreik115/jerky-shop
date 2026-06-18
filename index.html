@@ -19,10 +19,13 @@
         .product-price { color: #e74c3c; font-size: 18px; font-weight: bold; margin-bottom: 6px; }
         .product-weight { color: #aaa; font-size: 13px; }
         .product-comp { color: #888; font-size: 12px; margin-top: 6px; line-height: 1.4; }
+        .stock-info { color: #27ae60; font-size: 12px; margin-top: 4px; }
+        .stock-info.out-of-stock { color: #e74c3c; }
 
         .add-container { display: flex; align-items: center; margin-top: 8px; }
         .btn { background: #e74c3c; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
         .btn:active { background: #c0392b; }
+        .btn:disabled { background: #555; cursor: not-allowed; }
         .add-btn { width: 100%; }
         .quantity-control { display: none; align-items: center; background: #27ae60; border-radius: 8px; overflow: hidden; width: 100%; justify-content: space-between; }
         .qty-btn { background: transparent; color: #fff; border: none; font-size: 18px; padding: 10px 12px; cursor: pointer; }
@@ -65,8 +68,9 @@
         <div class="product-price">450 ₽</div>
         <div class="product-weight">100 г</div>
         <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
+        <div class="stock-info" id="stock_pork_cognac">Загрузка...</div>
         <div class="add-container">
-            <button class="btn add-btn" onclick="addToCart('pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
+            <button class="btn add-btn" id="btn_pork_cognac" onclick="addToCart('pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
             <div class="quantity-control" id="qctrl_pork_cognac">
                 <button class="qty-btn" onclick="changeCartQty('pork_cognac', -1)">−</button>
                 <span class="qty-display" id="qty_pork_cognac">0</span>
@@ -80,8 +84,9 @@
         <div class="product-price">450 ₽</div>
         <div class="product-weight">100 г</div>
         <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
+        <div class="stock-info" id="stock_pork_paprika">Загрузка...</div>
         <div class="add-container">
-            <button class="btn add-btn" onclick="addToCart('pork_paprika', 'Свиные джерки Паприка', 450)">Добавить в корзину</button>
+            <button class="btn add-btn" id="btn_pork_paprika" onclick="addToCart('pork_paprika', 'Свиные джерки Паприка', 450)">Добавить в корзину</button>
             <div class="quantity-control" id="qctrl_pork_paprika">
                 <button class="qty-btn" onclick="changeCartQty('pork_paprika', -1)">−</button>
                 <span class="qty-display" id="qty_pork_paprika">0</span>
@@ -97,8 +102,9 @@
         <div class="product-price">600 ₽</div>
         <div class="product-weight">100 г</div>
         <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
+        <div class="stock-info" id="stock_chicken">Загрузка...</div>
         <div class="add-container">
-            <button class="btn add-btn" onclick="addToCart('chicken', 'Куриные джерки', 600)">Добавить в корзину</button>
+            <button class="btn add-btn" id="btn_chicken" onclick="addToCart('chicken', 'Куриные джерки', 600)">Добавить в корзину</button>
             <div class="quantity-control" id="qctrl_chicken">
                 <button class="qty-btn" onclick="changeCartQty('chicken', -1)">−</button>
                 <span class="qty-display" id="qty_chicken">0</span>
@@ -114,8 +120,9 @@
         <div class="product-price">900 ₽</div>
         <div class="product-weight">100 г</div>
         <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
+        <div class="stock-info" id="stock_beef">Загрузка...</div>
         <div class="add-container">
-            <button class="btn add-btn" onclick="addToCart('beef', 'Говяжьи джерки', 900)">Добавить в корзину</button>
+            <button class="btn add-btn" id="btn_beef" onclick="addToCart('beef', 'Говяжьи джерки', 900)">Добавить в корзину</button>
             <div class="quantity-control" id="qctrl_beef">
                 <button class="qty-btn" onclick="changeCartQty('beef', -1)">−</button>
                 <span class="qty-display" id="qty_beef">0</span>
@@ -167,8 +174,51 @@
     </div>
 
     <script>
+        // ⚙️ НАСТРОЙКИ JSONBIN.IO
+        const JSONBIN_BIN_ID = '6a344c94da38895dfed97ca6';
+        const JSONBIN_API_KEY = '$2a$10$xKhLz93rIe2zlEuPx.44GO8EGEyxB77OR6.9ExlgqOPMuBqHfWeqy';
+
         let cart = {};
 
+        async function loadStockFromJsonBin() {
+            try {
+                const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
+                const response = await fetch(url, {
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
+                });
+                const data = await response.json();
+                const stock = data.record;
+
+                for (let [id, info] of Object.entries(stock)) {
+                    const stockEl = document.getElementById(`stock_${id}`);
+                    const btnEl = document.getElementById(`btn_${id}`);
+                    if (!stockEl) continue;
+
+                    if (info.qty > 0) {
+                        stockEl.textContent = `В наличии: ${info.qty} шт.${info.date ? ' (изготовлено: ' + info.date + ')' : ''}`;
+                        stockEl.className = 'stock-info';
+                        if (btnEl) {
+                            btnEl.disabled = false;
+                            btnEl.textContent = 'Добавить в корзину';
+                        }
+                    } else {
+                        stockEl.textContent = 'Нет в наличии';
+                        stockEl.className = 'stock-info out-of-stock';
+                        if (btnEl) {
+                            btnEl.disabled = true;
+                            btnEl.textContent = 'Нет в наличии';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки из JSONBin:', e);
+                document.querySelectorAll('.stock-info').forEach(el => el.textContent = '');
+            }
+        }
+
+        loadStockFromJsonBin();
+
+        // Остальные функции (корзина, отправка) без изменений
         function saveCartToStorage() {
             localStorage.setItem('cart', JSON.stringify(cart));
         }
