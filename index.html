@@ -234,7 +234,7 @@
             updateCartBar();
             updateProductUI(id);
             if (document.getElementById('cartModal').classList.contains('active')) {
-                renderCartItems();
+                openCart();
             }
         }
 
@@ -252,7 +252,7 @@
             closeCart();
         }
 
-        function renderCartItems() {
+        function openCart() {
             const itemsDiv = document.getElementById('cartItems');
             let total = 0;
             itemsDiv.innerHTML = '';
@@ -276,10 +276,6 @@
                 }
             }
             document.getElementById('modalTotal').textContent = 'Итого: ' + total + ' ₽';
-        }
-
-        function openCart() {
-            renderCartItems();
             document.getElementById('cartModal').classList.add('active');
         }
 
@@ -311,17 +307,11 @@
             localStorage.setItem('preferredMessenger', messenger);
 
             if (messenger === 'telegram') {
-                // Копируем в буфер ОБЯЗАТЕЛЬНО
                 navigator.clipboard.writeText(orderText).then(() => {
-                    // Пробуем предзаполнить (сработает для нового чата)
-                    const encodedText = encodeURIComponent(orderText);
-                    window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
-                    // Даём подсказку
-                    alert('Заказ скопирован! Если сообщение не появилось в чате — вставьте его и отправьте.');
+                    alert('Текст заказа скопирован! Сейчас откроется чат. Если сообщение не появилось — вставьте его и отправьте.');
+                    window.open('https://t.me/Andreik115', '_blank');
                 }).catch(() => {
-                    // Если буфер не сработал (редко), просто открываем чат с предзаполнением
-                    const encodedText = encodeURIComponent(orderText);
-                    window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
+                    window.open('https://t.me/Andreik115', '_blank');
                 });
             } else if (messenger === 'vk') {
                 navigator.clipboard.writeText(orderText).then(() => {
@@ -332,7 +322,6 @@
                 });
             }
 
-            // Очищаем корзину
             cart = {};
             saveCartToStorage();
             updateCartBar();
@@ -342,10 +331,8 @@
             closeCart();
         }
 
-        // Вешаем обработчик на кнопку отправки
         document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
 
-        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('sauceCheckbox').checked = false;
             const savedMessenger = localStorage.getItem('preferredMessenger') || 'telegram';
