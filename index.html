@@ -167,9 +167,27 @@
             const savedMessenger = localStorage.getItem('preferredMessenger') || 'telegram';
             const radio = document.querySelector(`input[name="messenger"][value="${savedMessenger}"]`);
             if (radio) radio.checked = true;
+
+            // Восстановление корзины из localStorage
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                try {
+                    cart = JSON.parse(savedCart);
+                } catch(e) {
+                    cart = {};
+                }
+            }
+            updateCartBar();
+            document.querySelectorAll('.product-card').forEach(card => {
+                updateProductUI(card.dataset.id);
+            });
         });
 
         let cart = {};
+
+        function saveCartToStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
 
         function updateCartBar() {
             let count = 0;
@@ -204,6 +222,7 @@
                 cart[id] = { name: name, price: price, qty: 0 };
             }
             cart[id].qty += 1;
+            saveCartToStorage();
             updateCartBar();
             updateProductUI(id);
         }
@@ -214,6 +233,7 @@
             if (cart[id].qty <= 0) {
                 delete cart[id];
             }
+            saveCartToStorage();
             updateCartBar();
             updateProductUI(id);
             if (document.getElementById('cartModal').classList.contains('active')) {
@@ -283,10 +303,9 @@
             localStorage.setItem('preferredMessenger', messenger);
 
             if (messenger === 'telegram') {
-                // Старая добрая ссылка с предзаполнением
                 const encodedText = encodeURIComponent(orderText);
                 window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
-                // Подстраховка: показываем текст заказа, чтобы клиент мог его скопировать, если не вставилось
+                // Подстраховка
                 alert('Если сообщение не появилось в чате, скопируйте текст заказа:\n\n' + orderText);
             } else if (messenger === 'vk') {
                 navigator.clipboard.writeText(orderText).then(() => {
@@ -297,19 +316,15 @@
                 });
             }
 
-            // Очищаем корзину
+            // Очищаем корзину и localStorage
             cart = {};
+            saveCartToStorage();
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => {
                 updateProductUI(card.dataset.id);
             });
             closeCart();
         }
-
-        updateCartBar();
-        document.querySelectorAll('.product-card').forEach(card => {
-            updateProductUI(card.dataset.id);
-        });
     </script>
 </body>
 </html>
