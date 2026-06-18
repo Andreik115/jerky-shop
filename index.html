@@ -283,19 +283,21 @@
             localStorage.setItem('preferredMessenger', messenger);
 
             if (messenger === 'telegram') {
-                const encodedText = encodeURIComponent(orderText);
-                window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
-            } else if (messenger === 'vk') {
-                const vkId = '18451549';
-                // Копируем заказ в буфер обмена
+                // Копируем заказ в буфер, затем открываем диалог
                 navigator.clipboard.writeText(orderText).then(() => {
-                    // Показываем короткое уведомление (можно заменить на свой alert)
-                    alert('Текст заказа скопирован! Сейчас откроется диалог — вставьте сообщение и отправьте.');
-                    // Открываем диалог ВК (без сообщения)
-                    window.open(`https://vk.me/${vkId}`, '_blank');
+                    alert('Текст заказа скопирован! Сейчас откроется чат. Если сообщение не появилось — вставьте его и отправьте.');
+                    window.open('https://t.me/Andreik115', '_blank');
                 }).catch(() => {
-                    // Если буфер обмена не доступен, просто открываем диалог
-                    window.open(`https://vk.me/${vkId}`, '_blank');
+                    // Если буфер не сработал, пробуем по-старому
+                    const encodedText = encodeURIComponent(orderText);
+                    window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
+                });
+            } else if (messenger === 'vk') {
+                navigator.clipboard.writeText(orderText).then(() => {
+                    alert('Текст заказа скопирован! Сейчас откроется диалог ВК. Вставьте сообщение и отправьте.');
+                    window.open('https://vk.me/18451549', '_blank');
+                }).catch(() => {
+                    window.open('https://vk.me/18451549', '_blank');
                 });
             }
 
