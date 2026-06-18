@@ -174,49 +174,35 @@
     </div>
 
     <script>
-        // ⚙️ НАСТРОЙКИ JSONBIN.IO
+        // ⚙️ НАСТРОЙКИ JSONBIN
         const JSONBIN_BIN_ID = '6a344c94da38895dfed97ca6';
         const JSONBIN_API_KEY = '$2a$10$xKhLz93rIe2zlEuPx.44GO8EGEyxB77OR6.9ExlgqOPMuBqHfWeqy';
 
         let cart = {};
 
         async function loadStockFromJsonBin() {
-    try {
-        const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
-        const response = await fetch(url, {
-            headers: { 
-                'X-Master-Key': JSONBIN_API_KEY 
-            }
-        });
-        const data = await response.json();
-        const stock = data.record;
+            try {
+                const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
+                const response = await fetch(url, {
+                    headers: { 
+                        'X-Master-Key': JSONBIN_API_KEY 
+                    }
+                });
+                const data = await response.json();
+                const stock = data.record;
 
-        for (let [id, info] of Object.entries(stock)) {
-            const stockEl = document.getElementById(`stock_${id}`);
-            const btnEl = document.getElementById(`btn_${id}`);
-            if (!stockEl) continue;
+                for (let [id, info] of Object.entries(stock)) {
+                    const stockEl = document.getElementById(`stock_${id}`);
+                    const btnEl = document.getElementById(`btn_${id}`);
+                    if (!stockEl) continue;
 
-            if (info.qty > 0) {
-                stockEl.textContent = `В наличии: ${info.qty} шт.${info.date ? ' (изготовлено: ' + info.date + ')' : ''}`;
-                stockEl.className = 'stock-info';
-                if (btnEl) {
-                    btnEl.disabled = false;
-                    btnEl.textContent = 'Добавить в корзину';
-                }
-            } else {
-                stockEl.textContent = 'Нет в наличии';
-                stockEl.className = 'stock-info out-of-stock';
-                if (btnEl) {
-                    btnEl.disabled = true;
-                    btnEl.textContent = 'Нет в наличии';
-                }
-            }
-        }
-    } catch (e) {
-        console.error('Ошибка загрузки из JSONBin:', e);
-        document.querySelectorAll('.stock-info').forEach(el => el.textContent = '');
-    }
-}
+                    if (info.qty > 0) {
+                        stockEl.textContent = `В наличии: ${info.qty} шт.${info.date ? ' (изготовлено: ' + info.date + ')' : ''}`;
+                        stockEl.className = 'stock-info';
+                        if (btnEl) {
+                            btnEl.disabled = false;
+                            btnEl.textContent = 'Добавить в корзину';
+                        }
                     } else {
                         stockEl.textContent = 'Нет в наличии';
                         stockEl.className = 'stock-info out-of-stock';
