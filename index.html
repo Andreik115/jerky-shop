@@ -283,15 +283,11 @@
             localStorage.setItem('preferredMessenger', messenger);
 
             if (messenger === 'telegram') {
-                // Копируем заказ в буфер, затем открываем диалог
-                navigator.clipboard.writeText(orderText).then(() => {
-                    alert('Текст заказа скопирован! Сейчас откроется чат. Если сообщение не появилось — вставьте его и отправьте.');
-                    window.open('https://t.me/Andreik115', '_blank');
-                }).catch(() => {
-                    // Если буфер не сработал, пробуем по-старому
-                    const encodedText = encodeURIComponent(orderText);
-                    window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
-                });
+                // Старая добрая ссылка с предзаполнением
+                const encodedText = encodeURIComponent(orderText);
+                window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
+                // Подстраховка: показываем текст заказа, чтобы клиент мог его скопировать, если не вставилось
+                alert('Если сообщение не появилось в чате, скопируйте текст заказа:\n\n' + orderText);
             } else if (messenger === 'vk') {
                 navigator.clipboard.writeText(orderText).then(() => {
                     alert('Текст заказа скопирован! Сейчас откроется диалог ВК. Вставьте сообщение и отправьте.');
