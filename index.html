@@ -1,52 +1,369 @@
-function sendOrder() {
-    if (Object.keys(cart).length === 0) {
-        alert('Корзина пуста!');
-        return;
-    }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KoMeat - Джерки ручной работы</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #1a1a1a; color: #fff; padding: 16px; padding-bottom: 80px; }
+        .header { text-align: center; padding: 20px 0; }
+        .header h1 { font-size: 24px; color: #e74c3c; margin-bottom: 8px; }
+        .header p { color: #aaa; font-size: 14px; }
+        .category-title { font-size: 18px; color: #e74c3c; margin: 20px 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid #333; }
+        .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .product-name { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
+        .product-price { color: #e74c3c; font-size: 18px; font-weight: bold; margin-bottom: 6px; }
+        .product-weight { color: #aaa; font-size: 13px; }
+        .product-comp { color: #888; font-size: 12px; margin-top: 6px; line-height: 1.4; }
 
-    let total = 0;
-    let orderText = '';
-    for (let id in cart) {
-        const item = cart[id];
-        const itemTotal = item.qty * item.price;
-        total += itemTotal;
-        orderText += `${item.name} x${item.qty} = ${itemTotal} ₽\n`;
-    }
-    orderText += `\nИтого: ${total} ₽`;
+        .add-container { display: flex; align-items: center; margin-top: 8px; }
+        .btn { background: #e74c3c; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn:active { background: #c0392b; }
+        .add-btn { width: 100%; }
+        .quantity-control { display: none; align-items: center; background: #27ae60; border-radius: 8px; overflow: hidden; width: 100%; justify-content: space-between; }
+        .qty-btn { background: transparent; color: #fff; border: none; font-size: 18px; padding: 10px 12px; cursor: pointer; }
+        .qty-btn:active { background: rgba(0,0,0,0.2); }
+        .qty-display { padding: 0 12px; font-size: 16px; font-weight: bold; min-width: 20px; text-align: center; }
 
-    if (document.getElementById('sauceCheckbox').checked) {
-        orderText += '\n🌶 С острым соусом!';
-    }
+        .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #2a2a2a; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid #e74c3c; }
+        .cart-info { display: flex; align-items: center; gap: 8px; }
+        .cart-count { background: #e74c3c; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 14px; font-weight: bold; }
+        .cart-total { font-size: 16px; font-weight: bold; }
+        .cart-btn { background: #e74c3c; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .sauce-note { background: #3a1a1a; border: 1px solid #e74c3c; padding: 10px; border-radius: 8px; margin: 16px 0; font-size: 13px; color: #ff9999; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 100; padding: 20px; overflow-y: auto; }
+        .modal.active { display: block; }
+        .modal-content { background: #2a2a2a; border-radius: 12px; padding: 20px; max-width: 400px; margin: 20px auto; }
+        .modal h2 { font-size: 20px; margin-bottom: 16px; color: #e74c3c; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #333; }
+        .cart-item-name { flex: 1; font-size: 14px; }
+        .cart-item-qty { color: #aaa; margin: 0 10px; }
+        .cart-item-price { font-weight: bold; }
+        .remove-btn { background: none; border: none; color: #e74c3c; font-size: 18px; cursor: pointer; padding: 0 8px; }
+        .send-order-btn { display: block; width: 100%; background: #e74c3c; color: #fff; text-align: center; padding: 10px; border-radius: 8px; font-weight: bold; margin-bottom: 8px; border: none; cursor: pointer; }
+        .send-order-btn:active { background: #c0392b; }
+        .clear-cart-btn { background: #555; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; margin-bottom: 8px; }
+        .messenger-choice { margin: 16px 0; display: flex; gap: 12px; align-items: center; }
+        .messenger-choice label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
 
-    const messenger = document.querySelector('input[name="messenger"]:checked').value;
-    localStorage.setItem('preferredMessenger', messenger);
+    <div class="header">
+        <h1>🥩 KoMeat</h1>
+        <p>Джерки ручной работы</p>
+    </div>
 
-    if (messenger === 'telegram') {
-        // Копируем в буфер
-        navigator.clipboard.writeText(orderText).then(() => {
-            // Пытаемся предзаполнить сообщение (сработает для нового чата)
-            const encodedText = encodeURIComponent(orderText);
-            window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
-            alert('Заказ скопирован! Если сообщение не появилось в чате — вставьте его и отправьте.');
-        }).catch(() => {
-            const encodedText = encodeURIComponent(orderText);
-            window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
+    <div class="category-title">🐷 Свиные джерки</div>
+
+    <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
+        <div class="product-name">Свиные джерки «Коньячные»</div>
+        <div class="product-price">450 ₽</div>
+        <div class="product-weight">100 г</div>
+        <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
+        <div class="add-container">
+            <button class="btn add-btn" onclick="addToCart('pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
+            <div class="quantity-control" id="qctrl_pork_cognac">
+                <button class="qty-btn" onclick="changeCartQty('pork_cognac', -1)">−</button>
+                <span class="qty-display" id="qty_pork_cognac">0</span>
+                <button class="qty-btn" onclick="changeCartQty('pork_cognac', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-id="pork_paprika" data-name="Свиные джерки Паприка" data-price="450">
+        <div class="product-name">Свиные джерки «Паприка»</div>
+        <div class="product-price">450 ₽</div>
+        <div class="product-weight">100 г</div>
+        <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
+        <div class="add-container">
+            <button class="btn add-btn" onclick="addToCart('pork_paprika', 'Свиные джерки Паприка', 450)">Добавить в корзину</button>
+            <div class="quantity-control" id="qctrl_pork_paprika">
+                <button class="qty-btn" onclick="changeCartQty('pork_paprika', -1)">−</button>
+                <span class="qty-display" id="qty_pork_paprika">0</span>
+                <button class="qty-btn" onclick="changeCartQty('pork_paprika', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-title">🐔 Куриные джерки</div>
+
+    <div class="product-card" data-id="chicken" data-name="Куриные джерки" data-price="600">
+        <div class="product-name">Куриные джерки</div>
+        <div class="product-price">600 ₽</div>
+        <div class="product-weight">100 г</div>
+        <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
+        <div class="add-container">
+            <button class="btn add-btn" onclick="addToCart('chicken', 'Куриные джерки', 600)">Добавить в корзину</button>
+            <div class="quantity-control" id="qctrl_chicken">
+                <button class="qty-btn" onclick="changeCartQty('chicken', -1)">−</button>
+                <span class="qty-display" id="qty_chicken">0</span>
+                <button class="qty-btn" onclick="changeCartQty('chicken', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-title">🐮 Говяжьи джерки</div>
+
+    <div class="product-card" data-id="beef" data-name="Говяжьи джерки" data-price="900">
+        <div class="product-name">Говяжьи джерки</div>
+        <div class="product-price">900 ₽</div>
+        <div class="product-weight">100 г</div>
+        <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
+        <div class="add-container">
+            <button class="btn add-btn" onclick="addToCart('beef', 'Говяжьи джерки', 900)">Добавить в корзину</button>
+            <div class="quantity-control" id="qctrl_beef">
+                <button class="qty-btn" onclick="changeCartQty('beef', -1)">−</button>
+                <span class="qty-display" id="qty_beef">0</span>
+                <button class="qty-btn" onclick="changeCartQty('beef', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sauce-note">
+        🌶 <b>Бесплатный острый соус</b> добавляется по желанию.<br>
+        <span style="font-size:11px;">Moruga Scorpion, Carolina Reaper, Ghost Pepper</span>
+    </div>
+
+    <div class="cart-bar" id="cartBar">
+        <div class="cart-info">
+            <span>🛒</span>
+            <span class="cart-count" id="cartCount">0</span>
+            <span class="cart-total" id="cartTotal">0 ₽</span>
+        </div>
+        <button class="cart-btn" onclick="openCart()">Оформить</button>
+    </div>
+
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <h2>🛒 Корзина</h2>
+            <div id="cartItems"></div>
+            <div style="margin-top: 16px; font-size: 18px; font-weight: bold; text-align: right;" id="modalTotal">Итого: 0 ₽</div>
+            <div style="margin-top: 16px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                    <input type="checkbox" id="sauceCheckbox" style="width: 18px; height: 18px;">
+                    <span>Добавить острый соус 🌶</span>
+                </label>
+            </div>
+            <div class="messenger-choice">
+                <span>Отправить в:</span>
+                <label>
+                    <input type="radio" name="messenger" value="telegram" checked>
+                    Telegram
+                </label>
+                <label>
+                    <input type="radio" name="messenger" value="vk">
+                    ВКонтакте
+                </label>
+            </div>
+            <button id="sendOrderButton" class="send-order-btn">✅ Отправить заказ</button>
+            <button class="clear-cart-btn" onclick="clearCart()">🗑️ Очистить корзину</button>
+            <button class="btn" onclick="closeCart()" style="background: #555; width: 100%;">🔙 Продолжить покупки</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = {};
+
+        function saveCartToStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function loadCartFromStorage() {
+            const saved = localStorage.getItem('cart');
+            if (saved) {
+                try {
+                    cart = JSON.parse(saved);
+                } catch (e) {
+                    cart = {};
+                }
+            } else {
+                cart = {};
+            }
+        }
+
+        function updateCartBar() {
+            let count = 0;
+            let total = 0;
+            for (let id in cart) {
+                count += cart[id].qty;
+                total += cart[id].qty * cart[id].price;
+            }
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartTotal').textContent = total + ' ₽';
+        }
+
+        function updateProductUI(id) {
+            const qty = cart[id] ? cart[id].qty : 0;
+            const card = document.querySelector(`.product-card[data-id="${id}"]`);
+            if (!card) return;
+            const addBtn = card.querySelector('.add-btn');
+            const qtyControl = card.querySelector('.quantity-control');
+            const qtyDisplay = document.getElementById(`qty_${id}`);
+            if (qty > 0) {
+                addBtn.style.display = 'none';
+                qtyControl.style.display = 'flex';
+                qtyDisplay.textContent = qty;
+            } else {
+                addBtn.style.display = 'block';
+                qtyControl.style.display = 'none';
+            }
+        }
+
+        function addToCart(id, name, price) {
+            if (!cart[id]) {
+                cart[id] = { name: name, price: price, qty: 0 };
+            }
+            cart[id].qty += 1;
+            saveCartToStorage();
+            updateCartBar();
+            updateProductUI(id);
+        }
+
+        function changeCartQty(id, delta) {
+            if (!cart[id]) return;
+            cart[id].qty += delta;
+            if (cart[id].qty <= 0) {
+                delete cart[id];
+            }
+            saveCartToStorage();
+            updateCartBar();
+            updateProductUI(id);
+            if (document.getElementById('cartModal').classList.contains('active')) {
+                renderCartItems();
+            }
+        }
+
+        function clearCart() {
+            if (Object.keys(cart).length === 0) {
+                alert('Корзина уже пуста');
+                return;
+            }
+            cart = {};
+            saveCartToStorage();
+            updateCartBar();
+            document.querySelectorAll('.product-card').forEach(card => {
+                updateProductUI(card.dataset.id);
+            });
+            closeCart();
+        }
+
+        function renderCartItems() {
+            const itemsDiv = document.getElementById('cartItems');
+            let total = 0;
+            itemsDiv.innerHTML = '';
+
+            if (Object.keys(cart).length === 0) {
+                itemsDiv.innerHTML = '<p style="text-align:center;color:#aaa;">Корзина пуста</p>';
+            } else {
+                for (let id in cart) {
+                    const item = cart[id];
+                    const itemTotal = item.qty * item.price;
+                    total += itemTotal;
+                    itemsDiv.innerHTML += `
+                        <div class="cart-item">
+                            <span class="cart-item-name">${item.name}</span>
+                            <button class="remove-btn" onclick="changeCartQty('${id}', -1)">−</button>
+                            <span class="cart-item-qty">${item.qty}</span>
+                            <button class="remove-btn" onclick="changeCartQty('${id}', 1)">+</button>
+                            <span class="cart-item-price">${itemTotal} ₽</span>
+                        </div>
+                    `;
+                }
+            }
+            document.getElementById('modalTotal').textContent = 'Итого: ' + total + ' ₽';
+        }
+
+        function openCart() {
+            renderCartItems();
+            document.getElementById('cartModal').classList.add('active');
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('active');
+        }
+
+        function sendOrder() {
+            if (Object.keys(cart).length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+
+            let total = 0;
+            let orderText = '';
+            for (let id in cart) {
+                const item = cart[id];
+                const itemTotal = item.qty * item.price;
+                total += itemTotal;
+                orderText += `${item.name} x${item.qty} = ${itemTotal} ₽\n`;
+            }
+            orderText += `\nИтого: ${total} ₽`;
+
+            if (document.getElementById('sauceCheckbox').checked) {
+                orderText += '\n🌶 С острым соусом!';
+            }
+
+            const messenger = document.querySelector('input[name="messenger"]:checked').value;
+            localStorage.setItem('preferredMessenger', messenger);
+
+            if (messenger === 'telegram') {
+                // Копируем в буфер ОБЯЗАТЕЛЬНО
+                navigator.clipboard.writeText(orderText).then(() => {
+                    // Пробуем предзаполнить (сработает для нового чата)
+                    const encodedText = encodeURIComponent(orderText);
+                    window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
+                    // Даём подсказку
+                    alert('Заказ скопирован! Если сообщение не появилось в чате — вставьте его и отправьте.');
+                }).catch(() => {
+                    // Если буфер не сработал (редко), просто открываем чат с предзаполнением
+                    const encodedText = encodeURIComponent(orderText);
+                    window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
+                });
+            } else if (messenger === 'vk') {
+                navigator.clipboard.writeText(orderText).then(() => {
+                    alert('Текст заказа скопирован! Сейчас откроется диалог ВК. Вставьте сообщение и отправьте.');
+                    window.open('https://vk.me/18451549', '_blank');
+                }).catch(() => {
+                    window.open('https://vk.me/18451549', '_blank');
+                });
+            }
+
+            // Очищаем корзину
+            cart = {};
+            saveCartToStorage();
+            updateCartBar();
+            document.querySelectorAll('.product-card').forEach(card => {
+                updateProductUI(card.dataset.id);
+            });
+            closeCart();
+        }
+
+        // Вешаем обработчик на кнопку отправки
+        document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('sauceCheckbox').checked = false;
+            const savedMessenger = localStorage.getItem('preferredMessenger') || 'telegram';
+            const radio = document.querySelector(`input[name="messenger"][value="${savedMessenger}"]`);
+            if (radio) radio.checked = true;
+
+            loadCartFromStorage();
+            updateCartBar();
+            document.querySelectorAll('.product-card').forEach(card => {
+                updateProductUI(card.dataset.id);
+            });
+
+            if (Object.keys(cart).length > 0) {
+                setTimeout(() => {
+                    openCart();
+                }, 100);
+            }
         });
-    } else if (messenger === 'vk') {
-        navigator.clipboard.writeText(orderText).then(() => {
-            alert('Текст заказа скопирован! Сейчас откроется диалог ВК. Вставьте сообщение и отправьте.');
-            window.open('https://vk.me/18451549', '_blank');
-        }).catch(() => {
-            window.open('https://vk.me/18451549', '_blank');
-        });
-    }
-
-    // Очищаем корзину
-    cart = {};
-    saveCartToStorage();
-    updateCartBar();
-    document.querySelectorAll('.product-card').forEach(card => {
-        updateProductUI(card.dataset.id);
-    });
-    closeCart();
-}
+    </script>
+</body>
+</html>
