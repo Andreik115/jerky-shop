@@ -162,21 +162,21 @@
     </div>
 
     <script>
-        // Глобальная переменная корзины
+        // Глобальная корзина
         let cart = {};
 
-        // Сохранение корзины в localStorage
+        // Сохранение в localStorage
         function saveCartToStorage() {
             localStorage.setItem('cart', JSON.stringify(cart));
         }
 
-        // Восстановление корзины при загрузке
+        // Загрузка из localStorage
         function loadCartFromStorage() {
-            const savedCart = localStorage.getItem('cart');
-            if (savedCart) {
+            const saved = localStorage.getItem('cart');
+            if (saved) {
                 try {
-                    cart = JSON.parse(savedCart);
-                } catch(e) {
+                    cart = JSON.parse(saved);
+                } catch (e) {
                     cart = {};
                 }
             } else {
@@ -184,7 +184,7 @@
             }
         }
 
-        // Обновление нижней панели корзины
+        // Обновление нижней панели
         function updateCartBar() {
             let count = 0;
             let total = 0;
@@ -196,7 +196,7 @@
             document.getElementById('cartTotal').textContent = total + ' ₽';
         }
 
-        // Обновление интерфейса конкретного товара (кнопка или счётчик)
+        // Обновление кнопки/счётчика конкретного товара
         function updateProductUI(id) {
             const qty = cart[id] ? cart[id].qty : 0;
             const card = document.querySelector(`.product-card[data-id="${id}"]`);
@@ -214,7 +214,7 @@
             }
         }
 
-        // Добавление товара в корзину
+        // Добавление товара
         function addToCart(id, name, price) {
             if (!cart[id]) {
                 cart[id] = { name: name, price: price, qty: 0 };
@@ -225,7 +225,7 @@
             updateProductUI(id);
         }
 
-        // Изменение количества товара
+        // Изменение количества
         function changeCartQty(id, delta) {
             if (!cart[id]) return;
             cart[id].qty += delta;
@@ -235,13 +235,12 @@
             saveCartToStorage();
             updateCartBar();
             updateProductUI(id);
-            // Если модальное окно открыто, обновим его
             if (document.getElementById('cartModal').classList.contains('active')) {
                 openCart();
             }
         }
 
-        // Открытие модального окна корзины
+        // Открытие корзины
         function openCart() {
             const modal = document.getElementById('cartModal');
             const itemsDiv = document.getElementById('cartItems');
@@ -275,13 +274,11 @@
             modal.classList.add('active');
         }
 
-        // Закрытие корзины
         function closeCart() {
             document.getElementById('cartModal').classList.remove('active');
             document.getElementById('sendOrderContainer').innerHTML = '';
         }
 
-        // Отправка заказа
         function sendOrder() {
             if (Object.keys(cart).length === 0) {
                 alert('Корзина пуста!');
@@ -308,7 +305,7 @@
             if (messenger === 'telegram') {
                 const encodedText = encodeURIComponent(orderText);
                 window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
-                // Подстраховка: покажем текст, если вдруг не вставился
+                // Подстраховка на случай, если сообщение не вставилось
                 alert('Если сообщение не появилось в чате, скопируйте текст заказа:\n\n' + orderText);
             } else if (messenger === 'vk') {
                 navigator.clipboard.writeText(orderText).then(() => {
@@ -329,17 +326,14 @@
             closeCart();
         }
 
-        // Инициализация при загрузке страницы
+        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('sauceCheckbox').checked = false;
             const savedMessenger = localStorage.getItem('preferredMessenger') || 'telegram';
             const radio = document.querySelector(`input[name="messenger"][value="${savedMessenger}"]`);
             if (radio) radio.checked = true;
 
-            // Загружаем корзину из localStorage
             loadCartFromStorage();
-            
-            // Обновляем интерфейс
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => {
                 updateProductUI(card.dataset.id);
