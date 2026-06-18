@@ -305,7 +305,6 @@
             if (messenger === 'telegram') {
                 const encodedText = encodeURIComponent(orderText);
                 window.open(`https://t.me/Andreik115?text=${encodedText}`, '_blank');
-                // Подстраховка на случай, если сообщение не вставилось
                 alert('Если сообщение не появилось в чате, скопируйте текст заказа:\n\n' + orderText);
             } else if (messenger === 'vk') {
                 navigator.clipboard.writeText(orderText).then(() => {
@@ -338,6 +337,11 @@
             document.querySelectorAll('.product-card').forEach(card => {
                 updateProductUI(card.dataset.id);
             });
+
+            // Если в корзине есть товары, открываем её автоматически
+            if (Object.keys(cart).length > 0) {
+                openCart();
+            }
         });
     </script>
 </body>
