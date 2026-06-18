@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KoMeat - Джерки ручной работы</title>
+    <!-- Запрещаем кэширование -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #1a1a1a; color: #fff; padding: 16px; padding-bottom: 80px; }
@@ -162,15 +166,12 @@
     </div>
 
     <script>
-        // Глобальная корзина
         let cart = {};
 
-        // Сохранение в localStorage
         function saveCartToStorage() {
             localStorage.setItem('cart', JSON.stringify(cart));
         }
 
-        // Загрузка из localStorage
         function loadCartFromStorage() {
             const saved = localStorage.getItem('cart');
             if (saved) {
@@ -184,7 +185,6 @@
             }
         }
 
-        // Обновление нижней панели
         function updateCartBar() {
             let count = 0;
             let total = 0;
@@ -196,7 +196,6 @@
             document.getElementById('cartTotal').textContent = total + ' ₽';
         }
 
-        // Обновление кнопки/счётчика конкретного товара
         function updateProductUI(id) {
             const qty = cart[id] ? cart[id].qty : 0;
             const card = document.querySelector(`.product-card[data-id="${id}"]`);
@@ -214,7 +213,6 @@
             }
         }
 
-        // Добавление товара
         function addToCart(id, name, price) {
             if (!cart[id]) {
                 cart[id] = { name: name, price: price, qty: 0 };
@@ -225,7 +223,6 @@
             updateProductUI(id);
         }
 
-        // Изменение количества
         function changeCartQty(id, delta) {
             if (!cart[id]) return;
             cart[id].qty += delta;
@@ -240,7 +237,6 @@
             }
         }
 
-        // Открытие корзины
         function openCart() {
             const modal = document.getElementById('cartModal');
             const itemsDiv = document.getElementById('cartItems');
@@ -315,7 +311,6 @@
                 });
             }
 
-            // Очищаем корзину
             cart = {};
             saveCartToStorage();
             updateCartBar();
@@ -325,7 +320,6 @@
             closeCart();
         }
 
-        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('sauceCheckbox').checked = false;
             const savedMessenger = localStorage.getItem('preferredMessenger') || 'telegram';
@@ -338,9 +332,12 @@
                 updateProductUI(card.dataset.id);
             });
 
-            // Если в корзине есть товары, открываем её автоматически
+            // Автоматически открываем корзину, если в ней есть товары
             if (Object.keys(cart).length > 0) {
-                openCart();
+                // Небольшая задержка для уверенности, что DOM готов
+                setTimeout(() => {
+                    openCart();
+                }, 100);
             }
         });
     </script>
