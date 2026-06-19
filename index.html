@@ -54,6 +54,7 @@
         .messenger-choice { margin: 16px 0; display: flex; gap: 12px; align-items: center; }
         .messenger-choice label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
 
+        /* Индикатор статуса (только кружок) */
         .status-panel { position: fixed; top: 10px; right: 10px; z-index: 200; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.8); padding: 6px 12px; border-radius: 20px; font-size: 12px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; }
         .status-dot.green { background: #27ae60; }
@@ -67,9 +68,9 @@
 </head>
 <body>
 
+    <!-- Индикатор статуса (только кружок) -->
     <div class="status-panel" id="statusPanel" style="display:none">
         <span class="status-dot" id="statusDot"></span>
-        <span id="statusText"></span>
         <button class="refresh-cache-btn" onclick="refreshStock()" title="Сбросить кэш и загрузить свежие остатки">🔄</button>
     </div>
 
@@ -223,6 +224,8 @@
             document.getElementById('mainMenu').style.display = 'block';
             document.getElementById('jerkyCatalog').style.display = 'none';
             document.getElementById('delicaciesSection').style.display = 'none';
+            // На главном экране скрываем индикатор
+            document.getElementById('statusPanel').style.display = 'none';
         }
 
         function showJerkyCatalog() {
@@ -231,6 +234,9 @@
             document.getElementById('delicaciesSection').style.display = 'none';
             if (!stockCache) {
                 loadStockFromJsonBin();
+            } else {
+                // Показываем индикатор при входе в каталог
+                document.getElementById('statusPanel').style.display = 'flex';
             }
         }
 
@@ -238,6 +244,7 @@
             document.getElementById('mainMenu').style.display = 'none';
             document.getElementById('jerkyCatalog').style.display = 'none';
             document.getElementById('delicaciesSection').style.display = 'block';
+            document.getElementById('statusPanel').style.display = 'none';
         }
 
         async function refreshStock() {
@@ -247,9 +254,7 @@
         }
 
         async function loadStockFromJsonBin() {
-            const statusPanel = document.getElementById('statusPanel');
             const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
 
             try {
                 const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
@@ -311,14 +316,11 @@
         function showStatus(ok) {
             const panel = document.getElementById('statusPanel');
             const dot = document.getElementById('statusDot');
-            const text = document.getElementById('statusText');
             panel.style.display = 'flex';
             if (ok) {
                 dot.className = 'status-dot green';
-                text.textContent = 'Остатки актуальны';
             } else {
                 dot.className = 'status-dot red';
-                text.textContent = 'Данные с кэша';
             }
         }
 
