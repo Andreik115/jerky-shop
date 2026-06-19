@@ -12,7 +12,8 @@
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #1a1a1a; color: #fff; padding: 16px; padding-bottom: 80px; }
         .header { text-align: center; padding: 20px 0; }
         .header h1 { font-size: 24px; color: #e74c3c; margin-bottom: 8px; }
-        .header p { color: #aaa; font-size: 14px; }
+        .header a { color: #aaa; font-size: 14px; text-decoration: none; }
+        .header a:hover { text-decoration: underline; }
         .category-title { font-size: 18px; color: #e74c3c; margin: 20px 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid #333; }
         .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
         .product-name { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
@@ -58,6 +59,10 @@
         .status-dot.green { background: #27ae60; }
         .status-dot.red { background: #e74c3c; }
         .refresh-cache-btn { background: none; border: 1px solid #888; color: #ccc; border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer; }
+
+        .main-menu-btn { background: #2a2a2a; border: 1px solid #e74c3c; color: #e74c3c; padding: 16px; margin: 8px 0; border-radius: 12px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; text-align: left; }
+        .main-menu-btn:active { background: #3a3a3a; }
+        .back-section-btn { background: #555; margin-bottom: 16px; }
     </style>
 </head>
 <body>
@@ -68,86 +73,106 @@
         <button class="refresh-cache-btn" onclick="refreshStock()" title="Сбросить кэш и загрузить свежие остатки">🔄</button>
     </div>
 
-    <div class="header">
-        <h1>🥩 KoMeat</h1>
-        <p>Джерки ручной работы</p>
+    <!-- Главное меню -->
+    <div id="mainMenu">
+        <div class="header">
+            <h1>🥩 KoMeat</h1>
+            <a href="https://t.me/KoMeat1" target="_blank">Твоё мясное комьюнити</a>
+        </div>
+        <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
+        <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
     </div>
 
-    <div class="category-title">🐷 Свиные джерки</div>
+    <!-- Каталог джерок (скрыт по умолчанию) -->
+    <div id="jerkyCatalog" style="display:none;">
+        <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
+        <div class="category-title">🐷 Свиные джерки</div>
 
-    <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
-        <div class="product-name">Свиные джерки «Коньячные»</div>
-        <div class="product-price">450 ₽</div>
-        <div class="product-weight">100 г</div>
-        <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
-        <div class="stock-info" id="stock_pork_cognac">Загрузка...</div>
-        <div class="add-container">
-            <button class="btn add-btn" id="btn_pork_cognac" onclick="addToCart('pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
-            <div class="quantity-control" id="qctrl_pork_cognac">
-                <button class="qty-btn" onclick="changeCartQty('pork_cognac', -1)">−</button>
-                <span class="qty-display" id="qty_pork_cognac">0</span>
-                <button class="qty-btn" onclick="changeCartQty('pork_cognac', 1)">+</button>
+        <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
+            <div class="product-name">Свиные джерки «Коньячные»</div>
+            <div class="product-price">450 ₽</div>
+            <div class="product-weight">100 г</div>
+            <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
+            <div class="stock-info" id="stock_pork_cognac">Загрузка...</div>
+            <div class="add-container">
+                <button class="btn add-btn" id="btn_pork_cognac" onclick="addToCart('pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
+                <div class="quantity-control" id="qctrl_pork_cognac">
+                    <button class="qty-btn" onclick="changeCartQty('pork_cognac', -1)">−</button>
+                    <span class="qty-display" id="qty_pork_cognac">0</span>
+                    <button class="qty-btn" onclick="changeCartQty('pork_cognac', 1)">+</button>
+                </div>
             </div>
+        </div>
+
+        <div class="product-card" data-id="pork_paprika" data-name="Свиные джерки Паприка" data-price="450">
+            <div class="product-name">Свиные джерки «Паприка»</div>
+            <div class="product-price">450 ₽</div>
+            <div class="product-weight">100 г</div>
+            <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
+            <div class="stock-info" id="stock_pork_paprika">Загрузка...</div>
+            <div class="add-container">
+                <button class="btn add-btn" id="btn_pork_paprika" onclick="addToCart('pork_paprika', 'Свиные джерки Паприка', 450)">Добавить в корзину</button>
+                <div class="quantity-control" id="qctrl_pork_paprika">
+                    <button class="qty-btn" onclick="changeCartQty('pork_paprika', -1)">−</button>
+                    <span class="qty-display" id="qty_pork_paprika">0</span>
+                    <button class="qty-btn" onclick="changeCartQty('pork_paprika', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-title">🐔 Куриные джерки</div>
+
+        <div class="product-card" data-id="chicken" data-name="Куриные джерки" data-price="600">
+            <div class="product-name">Куриные джерки</div>
+            <div class="product-price">600 ₽</div>
+            <div class="product-weight">100 г</div>
+            <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
+            <div class="stock-info" id="stock_chicken">Загрузка...</div>
+            <div class="add-container">
+                <button class="btn add-btn" id="btn_chicken" onclick="addToCart('chicken', 'Куриные джерки', 600)">Добавить в корзину</button>
+                <div class="quantity-control" id="qctrl_chicken">
+                    <button class="qty-btn" onclick="changeCartQty('chicken', -1)">−</button>
+                    <span class="qty-display" id="qty_chicken">0</span>
+                    <button class="qty-btn" onclick="changeCartQty('chicken', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-title">🐮 Говяжьи джерки</div>
+
+        <div class="product-card" data-id="beef" data-name="Говяжьи джерки" data-price="900">
+            <div class="product-name">Говяжьи джерки</div>
+            <div class="product-price">900 ₽</div>
+            <div class="product-weight">100 г</div>
+            <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
+            <div class="stock-info" id="stock_beef">Загрузка...</div>
+            <div class="add-container">
+                <button class="btn add-btn" id="btn_beef" onclick="addToCart('beef', 'Говяжьи джерки', 900)">Добавить в корзину</button>
+                <div class="quantity-control" id="qctrl_beef">
+                    <button class="qty-btn" onclick="changeCartQty('beef', -1)">−</button>
+                    <span class="qty-display" id="qty_beef">0</span>
+                    <button class="qty-btn" onclick="changeCartQty('beef', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sauce-note">
+            🌶 <b>Бесплатный острый соус</b> добавляется по желанию.<br>
+            <span style="font-size:11px;">Moruga Scorpion, Carolina Reaper, Ghost Pepper</span>
         </div>
     </div>
 
-    <div class="product-card" data-id="pork_paprika" data-name="Свиные джерки Паприка" data-price="450">
-        <div class="product-name">Свиные джерки «Паприка»</div>
-        <div class="product-price">450 ₽</div>
-        <div class="product-weight">100 г</div>
-        <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
-        <div class="stock-info" id="stock_pork_paprika">Загрузка...</div>
-        <div class="add-container">
-            <button class="btn add-btn" id="btn_pork_paprika" onclick="addToCart('pork_paprika', 'Свиные джерки Паприка', 450)">Добавить в корзину</button>
-            <div class="quantity-control" id="qctrl_pork_paprika">
-                <button class="qty-btn" onclick="changeCartQty('pork_paprika', -1)">−</button>
-                <span class="qty-display" id="qty_pork_paprika">0</span>
-                <button class="qty-btn" onclick="changeCartQty('pork_paprika', 1)">+</button>
-            </div>
+    <!-- Раздел "Мясные деликатесы" (заглушка) -->
+    <div id="delicaciesSection" style="display:none;">
+        <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
+        <div style="text-align:center; padding: 40px 20px;">
+            <h2 style="color:#e74c3c; margin-bottom:16px;">🍖 Мясные деликатесы</h2>
+            <p style="color:#aaa;">Скоро здесь появится ассортимент мясных деликатесов.</p>
+            <p style="color:#aaa;">Ожидайте!</p>
         </div>
     </div>
 
-    <div class="category-title">🐔 Куриные джерки</div>
-
-    <div class="product-card" data-id="chicken" data-name="Куриные джерки" data-price="600">
-        <div class="product-name">Куриные джерки</div>
-        <div class="product-price">600 ₽</div>
-        <div class="product-weight">100 г</div>
-        <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
-        <div class="stock-info" id="stock_chicken">Загрузка...</div>
-        <div class="add-container">
-            <button class="btn add-btn" id="btn_chicken" onclick="addToCart('chicken', 'Куриные джерки', 600)">Добавить в корзину</button>
-            <div class="quantity-control" id="qctrl_chicken">
-                <button class="qty-btn" onclick="changeCartQty('chicken', -1)">−</button>
-                <span class="qty-display" id="qty_chicken">0</span>
-                <button class="qty-btn" onclick="changeCartQty('chicken', 1)">+</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="category-title">🐮 Говяжьи джерки</div>
-
-    <div class="product-card" data-id="beef" data-name="Говяжьи джерки" data-price="900">
-        <div class="product-name">Говяжьи джерки</div>
-        <div class="product-price">900 ₽</div>
-        <div class="product-weight">100 г</div>
-        <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
-        <div class="stock-info" id="stock_beef">Загрузка...</div>
-        <div class="add-container">
-            <button class="btn add-btn" id="btn_beef" onclick="addToCart('beef', 'Говяжьи джерки', 900)">Добавить в корзину</button>
-            <div class="quantity-control" id="qctrl_beef">
-                <button class="qty-btn" onclick="changeCartQty('beef', -1)">−</button>
-                <span class="qty-display" id="qty_beef">0</span>
-                <button class="qty-btn" onclick="changeCartQty('beef', 1)">+</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="sauce-note">
-        🌶 <b>Бесплатный острый соус</b> добавляется по желанию.<br>
-        <span style="font-size:11px;">Moruga Scorpion, Carolina Reaper, Ghost Pepper</span>
-    </div>
-
+    <!-- Корзина (всегда внизу) -->
     <div class="cart-bar" id="cartBar">
         <div class="cart-info">
             <span>🛒</span>
@@ -193,7 +218,28 @@
         let cart = {};
         let stockCache = null;
 
-        // Функция принудительного обновления (сбрасывает кэш)
+        // Навигация по разделам
+        function showMainMenu() {
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('jerkyCatalog').style.display = 'none';
+            document.getElementById('delicaciesSection').style.display = 'none';
+        }
+
+        function showJerkyCatalog() {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('jerkyCatalog').style.display = 'block';
+            document.getElementById('delicaciesSection').style.display = 'none';
+            if (!stockCache) {
+                loadStockFromJsonBin();
+            }
+        }
+
+        function showDelicacies() {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('jerkyCatalog').style.display = 'none';
+            document.getElementById('delicaciesSection').style.display = 'block';
+        }
+
         async function refreshStock() {
             localStorage.removeItem('stockCache');
             stockCache = null;
@@ -275,8 +321,6 @@
                 text.textContent = 'Данные с кэша';
             }
         }
-
-        loadStockFromJsonBin();
 
         // Корзина
         function saveCartToStorage() {
@@ -455,11 +499,7 @@
                 updateProductUI(card.dataset.id);
             });
 
-            if (Object.keys(cart).length > 0) {
-                setTimeout(() => {
-                    openCart();
-                }, 100);
-            }
+            showMainMenu();
         });
     </script>
 </body>
