@@ -14,7 +14,8 @@
         .header h1 { font-size: 24px; color: #e74c3c; margin-bottom: 8px; }
         .header a { color: #aaa; font-size: 14px; text-decoration: none; }
         .header a:hover { text-decoration: underline; }
-        .category-title { font-size: 18px; color: #e74c3c; margin: 20px 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid #333; }
+        .category-title { font-size: 18px; color: #e74c3c; margin: 20px 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 8px; }
+        .category-title img { height: 1.2em; width: auto; }
         .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
         .product-name { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
         .product-price { color: #e74c3c; font-size: 18px; font-weight: bold; margin-bottom: 6px; }
@@ -54,7 +55,6 @@
         .messenger-choice { margin: 16px 0; display: flex; gap: 12px; align-items: center; }
         .messenger-choice label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
 
-        /* Индикатор статуса (только кружок) */
         .status-panel { position: fixed; top: 10px; right: 10px; z-index: 200; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.8); padding: 6px 12px; border-radius: 20px; font-size: 12px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; }
         .status-dot.green { background: #27ae60; }
@@ -87,7 +87,7 @@
     <!-- Каталог джерок (скрыт по умолчанию) -->
     <div id="jerkyCatalog" style="display:none;">
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
-        <div class="category-title">🐷 Свиные джерки</div>
+        <div class="category-title"><img src="pig.png" alt="Свинина"> Свиные джерки</div>
 
         <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
             <div class="product-name">Свиные джерки «Коньячные»</div>
@@ -121,7 +121,7 @@
             </div>
         </div>
 
-        <div class="category-title">🐔 Куриные джерки</div>
+        <div class="category-title"><img src="chicken.png" alt="Курица"> Куриные джерки</div>
 
         <div class="product-card" data-id="chicken" data-name="Куриные джерки" data-price="600">
             <div class="product-name">Куриные джерки</div>
@@ -139,7 +139,7 @@
             </div>
         </div>
 
-        <div class="category-title">🐮 Говяжьи джерки</div>
+        <div class="category-title"><img src="cow.png" alt="Говядина"> Говяжьи джерки</div>
 
         <div class="product-card" data-id="beef" data-name="Говяжьи джерки" data-price="900">
             <div class="product-name">Говяжьи джерки</div>
@@ -224,7 +224,6 @@
             document.getElementById('mainMenu').style.display = 'block';
             document.getElementById('jerkyCatalog').style.display = 'none';
             document.getElementById('delicaciesSection').style.display = 'none';
-            // На главном экране скрываем индикатор
             document.getElementById('statusPanel').style.display = 'none';
         }
 
@@ -235,7 +234,6 @@
             if (!stockCache) {
                 loadStockFromJsonBin();
             } else {
-                // Показываем индикатор при входе в каталог
                 document.getElementById('statusPanel').style.display = 'flex';
             }
         }
