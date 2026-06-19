@@ -52,9 +52,19 @@
         .clear-cart-btn { background: #555; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; margin-bottom: 8px; }
         .messenger-choice { margin: 16px 0; display: flex; gap: 12px; align-items: center; }
         .messenger-choice label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+        .status-indicator { position: fixed; top: 10px; right: 10px; z-index: 200; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.8); padding: 6px 12px; border-radius: 20px; font-size: 12px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .status-dot.green { background: #27ae60; }
+        .status-dot.red { background: #e74c3c; }
     </style>
 </head>
 <body>
+
+    <div class="status-indicator" id="statusIndicator" style="display:none">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText"></span>
+    </div>
 
     <div class="header">
         <h1>🥩 KoMeat</h1>
@@ -179,47 +189,90 @@
         const JSONBIN_API_KEY = '$2a$10$xKhLz93rIe2zlEuPx.44GO8EGEyxB77OR6.9ExlgqOPMuBqHfWeqy';
 
         let cart = {};
+        let stockCache = null;
 
+        // Загрузка остатков с кэшированием
         async function loadStockFromJsonBin() {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
             try {
                 const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
                 const response = await fetch(url, {
-                    headers: { 
-                        'X-Master-Key': JSONBIN_API_KEY 
-                    }
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
                 });
+                if (!response.ok) throw new Error('Ошибка сети');
                 const data = await response.json();
                 const stock = data.record;
 
-                for (let [id, info] of Object.entries(stock)) {
-                    const stockEl = document.getElementById(`stock_${id}`);
-                    const btnEl = document.getElementById(`btn_${id}`);
-                    if (!stockEl) continue;
+                // Сохраняем в кэш
+                localStorage.setItem('stockCache', JSON.stringify(stock));
+                stockCache = stock;
 
-                    if (info.qty > 0) {
-                        stockEl.textContent = `В наличии: ${info.qty} шт.${info.date ? ' (изготовлено: ' + info.date + ')' : ''}`;
-                        stockEl.className = 'stock-info';
-                        if (btnEl) {
-                            btnEl.disabled = false;
-                            btnEl.textContent = 'Добавить в корзину';
-                        }
-                    } else {
-                        stockEl.textContent = 'Нет в наличии';
-                        stockEl.className = 'stock-info out-of-stock';
-                        if (btnEl) {
-                            btnEl.disabled = true;
-                            btnEl.textContent = 'Нет в наличии';
-                        }
-                    }
-                }
+                applyStock(stock);
+                showStatus(true);
             } catch (e) {
                 console.error('Ошибка загрузки из JSONBin:', e);
-                document.querySelectorAll('.stock-info').forEach(el => el.textContent = '');
+                // Пытаемся загрузить из кэша
+                const cached = localStorage.getItem('stockCache');
+                if (cached) {
+                    try {
+                        stockCache = JSON.parse(cached);
+                        applyStock(stockCache, true);
+                        showStatus(false);
+                    } catch (e2) {
+                        document.querySelectorAll('.stock-info').forEach(el => el.textContent = 'Нет данных');
+                        showStatus(false);
+                    }
+                } else {
+                    document.querySelectorAll('.stock-info').forEach(el => el.textContent = 'Нет данных');
+                    showStatus(false);
+                }
+            }
+        }
+
+        function applyStock(stock, isCached = false) {
+            for (let [id, info] of Object.entries(stock)) {
+                const stockEl = document.getElementById(`stock_${id}`);
+                const btnEl = document.getElementById(`btn_${id}`);
+                if (!stockEl) continue;
+
+                if (info.qty > 0) {
+                    stockEl.textContent = `В наличии: ${info.qty} шт.${info.date ? ' (изготовлено: ' + info.date + ')' : ''}${isCached ? ' (могут быть неактуальны)' : ''}`;
+                    stockEl.className = 'stock-info';
+                    if (btnEl) {
+                        btnEl.disabled = false;
+                        btnEl.textContent = 'Добавить в корзину';
+                    }
+                } else {
+                    stockEl.textContent = 'Нет в наличии';
+                    stockEl.className = 'stock-info out-of-stock';
+                    if (btnEl) {
+                        btnEl.disabled = true;
+                        btnEl.textContent = 'Нет в наличии';
+                    }
+                }
+            }
+        }
+
+        function showStatus(ok) {
+            const indicator = document.getElementById('statusIndicator');
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+            indicator.style.display = 'flex';
+            if (ok) {
+                dot.className = 'status-dot green';
+                text.textContent = 'Остатки актуальны';
+            } else {
+                dot.className = 'status-dot red';
+                text.textContent = 'Данные с кэша';
             }
         }
 
         loadStockFromJsonBin();
 
+        // Корзина
         function saveCartToStorage() {
             localStorage.setItem('cart', JSON.stringify(cart));
         }
