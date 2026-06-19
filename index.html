@@ -53,17 +53,19 @@
         .messenger-choice { margin: 16px 0; display: flex; gap: 12px; align-items: center; }
         .messenger-choice label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
 
-        .status-indicator { position: fixed; top: 10px; right: 10px; z-index: 200; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.8); padding: 6px 12px; border-radius: 20px; font-size: 12px; }
+        .status-panel { position: fixed; top: 10px; right: 10px; z-index: 200; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.8); padding: 6px 12px; border-radius: 20px; font-size: 12px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; }
         .status-dot.green { background: #27ae60; }
         .status-dot.red { background: #e74c3c; }
+        .refresh-cache-btn { background: none; border: 1px solid #888; color: #ccc; border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="status-indicator" id="statusIndicator" style="display:none">
+    <div class="status-panel" id="statusPanel" style="display:none">
         <span class="status-dot" id="statusDot"></span>
         <span id="statusText"></span>
+        <button class="refresh-cache-btn" onclick="refreshStock()" title="Сбросить кэш и загрузить свежие остатки">🔄</button>
     </div>
 
     <div class="header">
@@ -191,9 +193,15 @@
         let cart = {};
         let stockCache = null;
 
-        // Загрузка остатков с кэшированием
+        // Функция принудительного обновления (сбрасывает кэш)
+        async function refreshStock() {
+            localStorage.removeItem('stockCache');
+            stockCache = null;
+            await loadStockFromJsonBin();
+        }
+
         async function loadStockFromJsonBin() {
-            const statusIndicator = document.getElementById('statusIndicator');
+            const statusPanel = document.getElementById('statusPanel');
             const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
 
@@ -206,7 +214,6 @@
                 const data = await response.json();
                 const stock = data.record;
 
-                // Сохраняем в кэш
                 localStorage.setItem('stockCache', JSON.stringify(stock));
                 stockCache = stock;
 
@@ -214,7 +221,6 @@
                 showStatus(true);
             } catch (e) {
                 console.error('Ошибка загрузки из JSONBin:', e);
-                // Пытаемся загрузить из кэша
                 const cached = localStorage.getItem('stockCache');
                 if (cached) {
                     try {
@@ -257,10 +263,10 @@
         }
 
         function showStatus(ok) {
-            const indicator = document.getElementById('statusIndicator');
+            const panel = document.getElementById('statusPanel');
             const dot = document.getElementById('statusDot');
             const text = document.getElementById('statusText');
-            indicator.style.display = 'flex';
+            panel.style.display = 'flex';
             if (ok) {
                 dot.className = 'status-dot green';
                 text.textContent = 'Остатки актуальны';
