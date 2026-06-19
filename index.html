@@ -7,14 +7,12 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <!-- Пиксельный счётчик Яндекс.Метрики (всегда работает) -->
+    <!-- Пиксельный счётчик Яндекс.Метрики -->
     <script>
-        // Отправляем данные через картинку (noscript-метод)
         var img = new Image();
         img.src = "https://mc.yandex.ru/watch/109991779?referrer=" + encodeURIComponent(document.referrer) + "&url=" + encodeURIComponent(location.href);
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/109991779" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Пиксельный счётчик -->
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #1a1a1a; color: #fff; padding: 16px; padding-bottom: 80px; }
@@ -79,13 +77,11 @@
 </head>
 <body>
 
-    <!-- Индикатор статуса (только кружок) -->
     <div class="status-panel" id="statusPanel" style="display:none">
         <span class="status-dot" id="statusDot"></span>
         <button class="refresh-cache-btn" onclick="refreshStock()" title="Сбросить кэш и обновить В наличии">🔄</button>
     </div>
 
-    <!-- Главное меню -->
     <div id="mainMenu">
         <div class="header">
             <a href="https://t.me/KoMeat1" target="_blank" style="text-decoration: none; color: inherit;">
@@ -97,11 +93,9 @@
         <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
     </div>
 
-    <!-- Каталог джерок (скрыт по умолчанию) -->
     <div id="jerkyCatalog" style="display:none;">
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
         
-        <!-- Свиные джерки -->
         <div class="category-title"><img src="pig.png" alt="Свинина"> Свиные джерки</div>
         <div class="category-photo-container">
             <img src="pork.jpg" alt="Свиные джерки" class="category-photo">
@@ -139,7 +133,6 @@
             </div>
         </div>
 
-        <!-- Куриные джерки -->
         <div class="category-title"><img src="chicken.png" alt="Курица"> Куриные джерки</div>
         <div class="category-photo-container">
             <img src="chicken_photo.jpg" alt="Куриные джерки" class="category-photo">
@@ -161,7 +154,6 @@
             </div>
         </div>
 
-        <!-- Говяжьи джерки -->
         <div class="category-title"><img src="cow.png" alt="Говядина"> Говяжьи джерки</div>
         <div class="category-photo-container">
             <img src="beef.jpg" alt="Говяжьи джерки" class="category-photo">
@@ -189,7 +181,6 @@
         </div>
     </div>
 
-    <!-- Раздел "Мясные деликатесы" (заглушка) -->
     <div id="delicaciesSection" style="display:none;">
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
         <div style="text-align:center; padding: 40px 20px;">
@@ -199,7 +190,6 @@
         </div>
     </div>
 
-    <!-- Корзина (всегда внизу) -->
     <div class="cart-bar" id="cartBar">
         <div class="cart-info">
             <span>🛒</span>
@@ -238,64 +228,39 @@
     </div>
 
     <script>
-        // ⚙️ НАСТРОЙКИ JSONBIN
-        const JSONBIN_BIN_ID = '6a344c94da38895dfed97ca6';
-        const JSONBIN_API_KEY = '$2a$10$xKhLz93rIe2zlEuPx.44GO8EGEyxB77OR6.9ExlgqOPMuBqHfWeqy';
+        // ⚙️ НАСТРОЙКИ
+        const SHEET_API_KEY = 'AIzaSyB4Z1IBeGtoBKpuXR-vs0coGunF5O1zKFI';
+        const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
+        const SHEET_RANGE = 'A1:C10';
 
         let cart = {};
         let stockCache = null;
 
-        // Навигация по разделам
-        function showMainMenu() {
-            document.getElementById('mainMenu').style.display = 'block';
-            document.getElementById('jerkyCatalog').style.display = 'none';
-            document.getElementById('delicaciesSection').style.display = 'none';
-            document.getElementById('statusPanel').style.display = 'none';
-        }
-
-        function showJerkyCatalog() {
-            document.getElementById('mainMenu').style.display = 'none';
-            document.getElementById('jerkyCatalog').style.display = 'block';
-            document.getElementById('delicaciesSection').style.display = 'none';
-            if (!stockCache) {
-                loadStockFromJsonBin();
-            } else {
-                document.getElementById('statusPanel').style.display = 'flex';
-            }
-        }
-
-        function showDelicacies() {
-            document.getElementById('mainMenu').style.display = 'none';
-            document.getElementById('jerkyCatalog').style.display = 'none';
-            document.getElementById('delicaciesSection').style.display = 'block';
-            document.getElementById('statusPanel').style.display = 'none';
-        }
-
-        async function refreshStock() {
-            localStorage.removeItem('stockCache');
-            stockCache = null;
-            await loadStockFromJsonBin();
-        }
-
-        async function loadStockFromJsonBin() {
+        async function loadStockFromGoogleSheet() {
             const statusDot = document.getElementById('statusDot');
 
             try {
-                const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
-                const response = await fetch(url, {
-                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
-                });
-                if (!response.ok) throw new Error('Ошибка сети');
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_RANGE}?key=${SHEET_API_KEY}`;
+                const response = await fetch(url);
                 const data = await response.json();
-                const stock = data.record;
-
-                localStorage.setItem('stockCache', JSON.stringify(stock));
-                stockCache = stock;
-
-                applyStock(stock);
-                showStatus(true);
+                
+                if (data.values) {
+                    const stock = {};
+                    for (let i = 1; i < data.values.length; i++) {
+                        const row = data.values[i];
+                        const art = row[0];
+                        const qty = parseInt(row[1]) || 0;
+                        const date = row[2] || '';
+                        stock[art] = { qty, date };
+                    }
+                    
+                    localStorage.setItem('stockCache', JSON.stringify(stock));
+                    stockCache = stock;
+                    applyStock(stock);
+                    showStatus(true);
+                }
             } catch (e) {
-                console.error('Ошибка загрузки из JSONBin:', e);
+                console.error('Ошибка загрузки из Google Таблицы:', e);
                 const cached = localStorage.getItem('stockCache');
                 if (cached) {
                     try {
@@ -346,6 +311,37 @@
             } else {
                 dot.className = 'status-dot red';
             }
+        }
+
+        function showMainMenu() {
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('jerkyCatalog').style.display = 'none';
+            document.getElementById('delicaciesSection').style.display = 'none';
+            document.getElementById('statusPanel').style.display = 'none';
+        }
+
+        function showJerkyCatalog() {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('jerkyCatalog').style.display = 'block';
+            document.getElementById('delicaciesSection').style.display = 'none';
+            if (!stockCache) {
+                loadStockFromGoogleSheet();
+            } else {
+                document.getElementById('statusPanel').style.display = 'flex';
+            }
+        }
+
+        function showDelicacies() {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('jerkyCatalog').style.display = 'none';
+            document.getElementById('delicaciesSection').style.display = 'block';
+            document.getElementById('statusPanel').style.display = 'none';
+        }
+
+        async function refreshStock() {
+            localStorage.removeItem('stockCache');
+            stockCache = null;
+            await loadStockFromGoogleSheet();
         }
 
         // Корзина
