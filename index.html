@@ -16,7 +16,8 @@
         .header a:hover { text-decoration: underline; }
         .category-title { font-size: 18px; color: #e74c3c; margin: 20px 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 8px; }
         .category-title img { height: 1.2em; width: auto; }
-        .category-photo { width: 100%; max-height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; }
+        .category-photo-container { text-align: center; margin-bottom: 12px; }
+        .category-photo { max-width: 400px; width: 100%; height: auto; object-fit: cover; border-radius: 12px; }
         .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
         .product-name { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
         .product-price { color: #e74c3c; font-size: 18px; font-weight: bold; margin-bottom: 6px; }
@@ -92,7 +93,9 @@
         
         <!-- Свиные джерки -->
         <div class="category-title"><img src="pig.png" alt="Свинина"> Свиные джерки</div>
-        <img src="pork.jpg" alt="Свиные джерки" class="category-photo">
+        <div class="category-photo-container">
+            <img src="pork.jpg" alt="Свиные джерки" class="category-photo">
+        </div>
 
         <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
             <div class="product-name">Свиные джерки «Коньячные»</div>
@@ -128,7 +131,9 @@
 
         <!-- Куриные джерки -->
         <div class="category-title"><img src="chicken.png" alt="Курица"> Куриные джерки</div>
-        <img src="chicken_photo.jpg" alt="Куриные джерки" class="category-photo">
+        <div class="category-photo-container">
+            <img src="chicken_photo.jpg" alt="Куриные джерки" class="category-photo">
+        </div>
 
         <div class="product-card" data-id="chicken" data-name="Куриные джерки" data-price="600">
             <div class="product-name">Куриные джерки</div>
@@ -148,7 +153,9 @@
 
         <!-- Говяжьи джерки -->
         <div class="category-title"><img src="cow.png" alt="Говядина"> Говяжьи джерки</div>
-        <img src="beef.jpg" alt="Говяжьи джерки" class="category-photo">
+        <div class="category-photo-container">
+            <img src="beef.jpg" alt="Говяжьи джерки" class="category-photo">
+        </div>
 
         <div class="product-card" data-id="beef" data-name="Говяжьи джерки" data-price="900">
             <div class="product-name">Говяжьи джерки</div>
