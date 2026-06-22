@@ -32,11 +32,11 @@
         .product-comp { color: #888; font-size: 12px; margin-top: 6px; line-height: 1.4; }
         .stock-info { color: #27ae60; font-size: 12px; margin-top: 4px; }
         .stock-info.out-of-stock { color: #e74c3c; }
+        .stock-info.preorder { color: #f39c12; }
 
         .add-container { display: flex; align-items: center; margin-top: 8px; }
         .btn { background: #e74c3c; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
         .btn:active { background: #c0392b; }
-        .btn:disabled { background: #555; cursor: not-allowed; }
         .add-btn { width: 100%; }
         .quantity-control { display: none; align-items: center; background: #27ae60; border-radius: 8px; overflow: hidden; width: 100%; justify-content: space-between; }
         .qty-btn { background: transparent; color: #fff; border: none; font-size: 18px; padding: 10px 12px; cursor: pointer; }
@@ -229,8 +229,8 @@
 
     <script>
         // ⚙️ НАСТРОЙКИ
-        const SHEET_API_KEY = 'AIzaSyB4Z1IBeGtoBKpuXR-vs0coGunF5O1zKFI';
-        const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
+        const SHEET_API_KEY = 'ТВОЙ_API_KEY';
+        const SHEET_ID = 'ТВОЙ_TABLE_ID';
         const SHEET_RANGE = 'A1:C10';
 
         let cart = {};
@@ -284,20 +284,19 @@
                 const btnEl = document.getElementById(`btn_${id}`);
                 if (!stockEl) continue;
 
+                // Всегда разблокируем кнопку (предзаказ доступен)
+                if (btnEl) {
+                    btnEl.disabled = false;
+                }
+
                 if (info.qty > 0) {
                     stockEl.textContent = `В наличии: ${info.qty} шт.${info.date ? ' (изготовлено: ' + info.date + ')' : ''}${isCached ? ' (могут быть неактуальны)' : ''}`;
                     stockEl.className = 'stock-info';
-                    if (btnEl) {
-                        btnEl.disabled = false;
-                        btnEl.textContent = 'Добавить в корзину';
-                    }
+                    if (btnEl) btnEl.textContent = 'Добавить в корзину';
                 } else {
-                    stockEl.textContent = 'Нет в наличии';
-                    stockEl.className = 'stock-info out-of-stock';
-                    if (btnEl) {
-                        btnEl.disabled = true;
-                        btnEl.textContent = 'Нет в наличии';
-                    }
+                    stockEl.textContent = 'Предзаказ — появится скоро';
+                    stockEl.className = 'stock-info preorder';
+                    if (btnEl) btnEl.textContent = 'Предзаказать';
                 }
             }
         }
@@ -440,9 +439,12 @@
                     const item = cart[id];
                     const itemTotal = item.qty * item.price;
                     total += itemTotal;
+                    // Если товара нет в наличии, добавляем пометку "Предзаказ"
+                    const stockInfo = stockCache ? stockCache[id] : null;
+                    const preorderTag = (!stockInfo || stockInfo.qty <= 0) ? ' <span style="color:#f39c12;">(предзаказ)</span>' : '';
                     itemsDiv.innerHTML += `
                         <div class="cart-item">
-                            <span class="cart-item-name">${item.name}</span>
+                            <span class="cart-item-name">${item.name}${preorderTag}</span>
                             <button class="remove-btn" onclick="changeCartQty('${id}', -1)">−</button>
                             <span class="cart-item-qty">${item.qty}</span>
                             <button class="remove-btn" onclick="changeCartQty('${id}', 1)">+</button>
@@ -459,21 +461,33 @@
             document.getElementById('cartModal').classList.remove('active');
         }
 
-        function sendOrder() {
+        async function sendOrder() {
             if (Object.keys(cart).length === 0) {
                 alert('Корзина пуста!');
                 return;
             }
 
+            // Если остатки ещё не загружены, загружаем
+            if (!stockCache) {
+                await loadStockFromGoogleSheet();
+            }
+            
             let total = 0;
             let orderText = '';
+            let hasPreorder = false;
+            
             for (let id in cart) {
                 const item = cart[id];
                 const itemTotal = item.qty * item.price;
                 total += itemTotal;
-                orderText += `${item.name} x${item.qty} = ${itemTotal} ₽\n`;
+                const stockInfo = stockCache ? stockCache[id] : null;
+                const isPreorder = (!stockInfo || stockInfo.qty <= 0);
+                if (isPreorder) hasPreorder = true;
+                
+                orderText += `${item.name} x${item.qty} = ${itemTotal} ₽${isPreorder ? ' (предзаказ)' : ''}\n`;
             }
             orderText += `\nИтого: ${total} ₽`;
+            if (hasPreorder) orderText += '\n⚠️ Часть товаров под предзаказ';
 
             if (document.getElementById('sauceCheckbox').checked) {
                 orderText += '\n🌶 С острым соусом!';
