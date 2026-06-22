@@ -88,6 +88,9 @@
                 <h1>🥩 KoMeat</h1>
                 <p>Твоё мясное комьюнити</p>
             </a>
+            <a href="https://t.me/KoMeat1" target="_blank" style="display: inline-block; margin-top: 12px; background: #e74c3c; border-radius: 8px; padding: 8px 16px; color: #fff; text-decoration: none; font-weight: bold; font-size: 14px;">
+                📢 Подписывайся на наш Telegram
+            </a>
         </div>
         <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
         <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
@@ -284,7 +287,6 @@
                 const btnEl = document.getElementById(`btn_${id}`);
                 if (!stockEl) continue;
 
-                // Всегда разблокируем кнопку (предзаказ доступен)
                 if (btnEl) {
                     btnEl.disabled = false;
                 }
@@ -439,7 +441,6 @@
                     const item = cart[id];
                     const itemTotal = item.qty * item.price;
                     total += itemTotal;
-                    // Если товара нет в наличии, добавляем пометку "Предзаказ"
                     const stockInfo = stockCache ? stockCache[id] : null;
                     const preorderTag = (!stockInfo || stockInfo.qty <= 0) ? ' <span style="color:#f39c12;">(предзаказ)</span>' : '';
                     itemsDiv.innerHTML += `
@@ -467,7 +468,6 @@
                 return;
             }
 
-            // Если остатки ещё не загружены, загружаем
             if (!stockCache) {
                 await loadStockFromGoogleSheet();
             }
