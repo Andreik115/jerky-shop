@@ -627,6 +627,35 @@
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
             showMainMenu();
         });
+        // Админ-доступ через долгое нажатие на логотип
+let longPressTimer;
+const logo = document.querySelector('.header h1');
+
+logo.addEventListener('click', (e) => {
+    // Короткое нажатие — переход в Telegram (как сейчас)
+    window.open('https://t.me/KoMeat1', '_blank');
+});
+
+logo.addEventListener('touchstart', (e) => {
+    longPressTimer = setTimeout(() => {
+        const pin = prompt('Введите пин-код:');
+        if (pin === '1234') {  // Замени 1234 на свой пин-код
+            const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\n2 - Статистика\nВведите номер действия:');
+            if (action === '1') {
+                localStorage.removeItem('lastSpin');
+                alert('Блокировка колеса сброшена!');
+            } else if (action === '2') {
+                alert('Статистика будет доступна позже');
+            }
+        } else if (pin !== null) {
+            alert('Неверный пин-код');
+        }
+    }, 3000); // 3 секунды
+});
+
+logo.addEventListener('touchend', (e) => {
+    clearTimeout(longPressTimer);
+});
     </script>
 </body>
 </html>
