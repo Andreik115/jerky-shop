@@ -100,7 +100,13 @@
         @media (display-mode: standalone) { .app-only { display: block; } }
         
         .wheel-container { text-align: center; padding: 20px 0; }
-        .wheel { width: 280px; height: 280px; border-radius: 50%; border: 6px solid #333; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#e74c3c 0deg 72deg, #f1c40f 72deg 144deg, #2ecc71 144deg 216deg, #e67e22 216deg 288deg, #9b59b6 288deg 360deg); }
+        .wheel { width: 300px; height: 300px; border-radius: 50%; border: 8px solid #e74c3c; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); box-shadow: 0 0 20px rgba(231,76,60,0.5); }
+        .wheel-sector { position: absolute; width: 50%; height: 50%; top: 0; left: 50%; transform-origin: 0% 100%; }
+        .wheel-sector:nth-child(1) { transform: rotate(0deg) skewY(18deg); background: #e74c3c; }
+        .wheel-sector:nth-child(2) { transform: rotate(72deg) skewY(18deg); background: #f1c40f; }
+        .wheel-sector:nth-child(3) { transform: rotate(144deg) skewY(18deg); background: #2ecc71; }
+        .wheel-sector:nth-child(4) { transform: rotate(216deg) skewY(18deg); background: #e67e22; }
+        .wheel-sector:nth-child(5) { transform: rotate(288deg) skewY(18deg); background: #9b59b6; }
         .wheel-pointer { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 30px solid #fff; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
         .spin-btn { background: #e74c3c; color: #fff; border: none; padding: 12px 32px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .spin-btn:disabled { background: #555; }
@@ -234,6 +240,11 @@
             <h2 style="color:#f39c12; margin-bottom:16px;">🎁 Колесо фортуны</h2>
             <p style="color:#aaa; margin-bottom:20px;">Испытай удачу! Вращай колесо и получи приз.</p>
             <div class="wheel" id="wheel">
+                <div class="wheel-sector"></div>
+                <div class="wheel-sector"></div>
+                <div class="wheel-sector"></div>
+                <div class="wheel-sector"></div>
+                <div class="wheel-sector"></div>
                 <div class="wheel-pointer"></div>
             </div>
             <button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎡 Крутить</button>
@@ -291,7 +302,7 @@
         const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
         const SHEET_RANGE = 'A1:C10';
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7zpSzx-BqbUIvpUvyoykGJlCPmmffahNWC1unn27XuUnkXNfhTdBlZ5iCAEYVy4C/exec';
-        const ADMIN_PIN = '2743';
+        const ADMIN_PIN = '2741';
 
         let cart = {};
         let stockCache = null;
@@ -303,8 +314,34 @@
             document.getElementById('iosHint').style.display = 'none';
         }
 
-        document.getElementById('logo').addEventListener('click', function(e) {
-            window.open('https://t.me/KoMeat1', '_blank');
+        // Логотип: короткое нажатие — Telegram, тройное — админ
+        const logo = document.getElementById('logo');
+        let clickCount = 0;
+        let clickTimer;
+
+        logo.addEventListener('click', function(e) {
+            clickCount++;
+            if (clickCount === 1) {
+                clickTimer = setTimeout(function() {
+                    if (clickCount === 1) {
+                        window.open('https://t.me/KoMeat1', '_blank');
+                    }
+                    clickCount = 0;
+                }, 300);
+            } else if (clickCount === 3) {
+                clearTimeout(clickTimer);
+                clickCount = 0;
+                const pin = prompt('Введите пин-код:');
+                if (pin === ADMIN_PIN) {
+                    const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
+                    if (action === '1') {
+                        localStorage.removeItem('lastSpin');
+                        alert('Блокировка колеса сброшена!');
+                    }
+                } else if (pin !== null) {
+                    alert('Неверный пин-код');
+                }
+            }
         });
 
         async function loadWheelConfig() {
@@ -332,23 +369,6 @@
                     { name: 'Пусто', prize: 'Пусто', code: null, chance: 50, remaining: Infinity }
                 ];
             }
-            updateWheelColors();
-        }
-
-        function updateWheelColors() {
-            const wheel = document.getElementById('wheel');
-            if (!wheel || wheelConfig.length === 0) return;
-            const colors = ['#e74c3c', '#f1c40f', '#2ecc71', '#e67e22', '#9b59b6', '#3498db'];
-            let gradient = 'conic-gradient(';
-            let cumulativePercent = 0;
-            wheelConfig.forEach((sector, index) => {
-                const color = colors[index % colors.length];
-                gradient += `${color} ${cumulativePercent * 3.6}deg ${(cumulativePercent + sector.chance) * 3.6}deg`;
-                if (index < wheelConfig.length - 1) gradient += ', ';
-                cumulativePercent += sector.chance;
-            });
-            gradient += ')';
-            wheel.style.background = gradient;
         }
 
         function canSpin() {
@@ -632,34 +652,6 @@
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
             showMainMenu();
-
-            // Админ-доступ через долгое нажатие на корзину
-            const cartInfo = document.querySelector('.cart-info');
-            let pressTimer;
-
-            cartInfo.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                pressTimer = setTimeout(() => {
-                    const pin = prompt('Введите пин-код:');
-                    if (pin === ADMIN_PIN) {
-                        const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
-                        if (action === '1') {
-                            localStorage.removeItem('lastSpin');
-                            alert('Блокировка колеса сброшена!');
-                        }
-                    } else if (pin !== null) {
-                        alert('Неверный пин-код');
-                    }
-                }, 3000);
-            });
-
-            cartInfo.addEventListener('touchend', function(e) {
-                clearTimeout(pressTimer);
-            });
-
-            cartInfo.addEventListener('touchmove', function(e) {
-                clearTimeout(pressTimer);
-            });
         });
     </script>
 </body>
