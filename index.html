@@ -629,32 +629,32 @@
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
             showMainMenu();
 
-            // Секретный жест: тройное нажатие в левом нижнем углу
-            let clickCount = 0;
-            let clickTimer;
-            const secretZone = document.createElement('div');
-            secretZone.style.cssText = 'position:fixed; bottom:0; left:0; width:60px; height:60px; z-index:999;';
-            document.body.appendChild(secretZone);
+            // Админ-доступ через долгое нажатие на корзину
+const cartInfo = document.querySelector('.cart-info');
+let pressTimer;
 
-            secretZone.addEventListener('click', function(e) {
-                clickCount++;
-                clearTimeout(clickTimer);
-                clickTimer = setTimeout(() => { clickCount = 0; }, 1500);
-                if (clickCount >= 3) {
-                    clickCount = 0;
-                    const pin = prompt('Введите пин-код:');
-                    if (pin === ADMIN_PIN) {
-                        const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
-                        if (action === '1') {
-                            localStorage.removeItem('lastSpin');
-                            alert('Блокировка колеса сброшена!');
-                        }
-                    } else if (pin !== null) {
-                        alert('Неверный пин-код');
-                    }
-                }
-            });
-        });
+cartInfo.addEventListener('touchstart', function(e) {
+    pressTimer = setTimeout(() => {
+        const pin = prompt('Введите пин-код:');
+        if (pin === ADMIN_PIN) {
+            const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
+            if (action === '1') {
+                localStorage.removeItem('lastSpin');
+                alert('Блокировка колеса сброшена!');
+            }
+        } else if (pin !== null) {
+            alert('Неверный пин-код');
+        }
+    }, 3000);
+});
+
+cartInfo.addEventListener('touchend', function(e) {
+    clearTimeout(pressTimer);
+});
+
+cartInfo.addEventListener('touchmove', function(e) {
+    clearTimeout(pressTimer);
+});
     </script>
 </body>
 </html>
