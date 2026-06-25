@@ -17,13 +17,10 @@
           return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       }
     </script>
-    <!-- Подсказка для iOS (только в браузере) -->
     <style>
         .ios-hint { display: none; background: #2a2a2a; border: 1px solid #e74c3c; border-radius: 12px; padding: 12px; margin: 12px 0; text-align: center; font-size: 13px; }
         @supports (-webkit-touch-callout: none) { .ios-hint { display: block; } }
-        .ios-hint a { color: #e74c3c; }
     </style>
-    <!-- Пиксельный счётчик Яндекс.Метрики -->
     <script>
         var img = new Image();
         img.src = "https://mc.yandex.ru/watch/109991779?referrer=" + encodeURIComponent(document.referrer) + "&url=" + encodeURIComponent(location.href);
@@ -41,7 +38,7 @@
         .category-title img { height: 1.2em; width: auto; }
         .category-photo-container { text-align: center; margin-bottom: 12px; }
         .category-photo { max-width: 400px; width: 100%; height: auto; object-fit: cover; border-radius: 12px; }
-        .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; position: relative; }
+        .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
         .product-name { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
         .product-price { color: #e74c3c; font-size: 18px; font-weight: bold; margin-bottom: 6px; }
         .product-weight { color: #aaa; font-size: 13px; }
@@ -79,6 +76,10 @@
         .clear-cart-btn { background: #555; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; margin-bottom: 8px; }
         .messenger-choice { margin: 16px 0; display: flex; gap: 12px; align-items: center; }
         .messenger-choice label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .promo-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #555; background: #1a1a1a; color: #fff; margin: 8px 0; font-size: 14px; }
+        .promo-btn { background: #f39c12; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; }
+        .promo-info { color: #27ae60; font-size: 13px; margin-top: 4px; }
+        .promo-error { color: #e74c3c; font-size: 13px; margin-top: 4px; }
 
         .status-panel { position: fixed; top: 10px; right: 10px; z-index: 200; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.8); padding: 6px 12px; border-radius: 20px; font-size: 12px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; }
@@ -90,12 +91,11 @@
         .main-menu-btn:active { background: #3a3a3a; }
         .back-section-btn { background: #555; margin-bottom: 16px; }
 
-        /* Только для приложения: колесо фортуны */
         .app-only { display: none; }
         @media (display-mode: standalone) { .app-only { display: block; } }
         
         .wheel-container { text-align: center; padding: 20px 0; }
-        .wheel { width: 300px; height: 300px; border-radius: 50%; border: 4px solid #e74c3c; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#e74c3c 0deg 90deg, #f39c12 90deg 180deg, #27ae60 180deg 270deg, #3498db 270deg 360deg); }
+        .wheel { width: 300px; height: 300px; border-radius: 50%; border: 4px solid #e74c3c; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); }
         .wheel-pointer { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 30px solid #fff; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 10; }
         .spin-btn { background: #e74c3c; color: #fff; border: none; padding: 12px 32px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .spin-btn:disabled { background: #555; }
@@ -109,24 +109,22 @@
         <button class="refresh-cache-btn" onclick="refreshStock()" title="Сбросить кэш и обновить В наличии">🔄</button>
     </div>
 
-    <!-- Подсказка для iOS (только в браузере) -->
     <div class="ios-hint" id="iosHint">
         📱 Установите приложение: нажмите <strong>«Поделиться»</strong> в Safari и выберите <strong>«На экран Home»</strong>.
     </div>
 
     <div id="mainMenu">
         <div class="header">
-            <a href="https://t.me/@KoMeat1" target="_blank" style="text-decoration: none; color: inherit;">
+            <a href="https://t.me/KoMeat1" target="_blank" style="text-decoration: none; color: inherit;">
                 <h1>🥩 KoMeat</h1>
                 <p>Твоё мясное комьюнити</p>
             </a>
-            <a href="https://t.me/@KoMeat1" target="_blank" style="display: inline-block; margin-top: 12px; background: #e74c3c; border-radius: 8px; padding: 8px 16px; color: #fff; text-decoration: none; font-weight: bold; font-size: 14px;">
+            <a href="https://t.me/KoMeat1" target="_blank" style="display: inline-block; margin-top: 12px; background: #e74c3c; border-radius: 8px; padding: 8px 16px; color: #fff; text-decoration: none; font-weight: bold; font-size: 14px;">
                 📢 Подписывайся на наш Telegram
             </a>
         </div>
         <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
         <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
-        <!-- Колесо видно только в приложении -->
         <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12; color:#f39c12;">🎁 Колесо фортуны</button>
     </div>
 
@@ -227,7 +225,6 @@
         </div>
     </div>
 
-    <!-- Колесо фортуны (только для приложения) -->
     <div id="wheelSection" style="display:none;">
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
         <div class="wheel-container">
@@ -255,7 +252,13 @@
         <div class="modal-content">
             <h2>🛒 Корзина</h2>
             <div id="cartItems"></div>
+            <div id="discountInfo" style="margin-top:8px;"></div>
             <div style="margin-top: 16px; font-size: 18px; font-weight: bold; text-align: right;" id="modalTotal">Итого: 0 ₽</div>
+            <div style="margin-top: 16px;">
+                <input type="text" id="promoInput" class="promo-input" placeholder="Введите промокод">
+                <button class="promo-btn" onclick="applyPromo()">🎫 Применить</button>
+                <div id="promoMessage"></div>
+            </div>
             <div style="margin-top: 16px;">
                 <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
                     <input type="checkbox" id="sauceCheckbox" style="width: 18px; height: 18px;">
@@ -288,68 +291,91 @@
 
         let cart = {};
         let stockCache = null;
+        let wheelConfig = [];
+        let appliedPromo = null;
         let deviceId = localStorage.getItem('deviceId') || (() => { const id = 'KO-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); return id; })();
 
-        // Скрываем подсказку iOS в приложении
         if (isRunningStandalone()) {
             document.getElementById('iosHint').style.display = 'none';
         }
 
-        // Проверка блокировки колеса
+        // Загрузка конфигурации колеса
+        async function loadWheelConfig() {
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Розыгрыши'!A2:F10?key=${SHEET_API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.values) {
+                    wheelConfig = data.values
+                        .filter(row => row[0] === 'Да')
+                        .map(row => ({
+                            name: row[1],
+                            prize: row[2],
+                            code: row[3],
+                            chance: parseFloat(row[4]) || 0,
+                            remaining: parseInt(row[5]) || 0
+                        }));
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки конфигурации колеса:', e);
+                wheelConfig = [
+                    { name: 'Скидка 10%', prize: 'Скидка 10%', code: 'WHEEL10', chance: 20, remaining: 10 },
+                    { name: 'Скидка 5%', prize: 'Скидка 5%', code: 'WHEEL5', chance: 30, remaining: 50 },
+                    { name: 'Пусто', prize: 'Пусто', code: null, chance: 50, remaining: Infinity }
+                ];
+            }
+            updateWheelColors();
+        }
+
+        function updateWheelColors() {
+            const wheel = document.getElementById('wheel');
+            if (!wheel || wheelConfig.length === 0) return;
+            let gradient = 'conic-gradient(';
+            let cumulativePercent = 0;
+            wheelConfig.forEach((sector, index) => {
+                gradient += `${sector.color || '#555'} ${cumulativePercent * 3.6}deg ${(cumulativePercent + sector.chance) * 3.6}deg`;
+                if (index < wheelConfig.length - 1) gradient += ', ';
+                cumulativePercent += sector.chance;
+            });
+            gradient += ')';
+            wheel.style.background = gradient;
+        }
+
         function canSpin() {
             const lastSpin = localStorage.getItem('lastSpin');
             if (!lastSpin) return true;
-            const elapsed = Date.now() - parseInt(lastSpin);
-            return elapsed > 24 * 60 * 60 * 1000;
+            return Date.now() - parseInt(lastSpin) > 24 * 60 * 60 * 1000;
         }
 
         function spinWheel() {
-            if (!canSpin()) {
-                alert('Вы уже крутили колесо сегодня. Приходите завтра!');
-                return;
-            }
+            if (!canSpin()) { alert('Вы уже крутили колесо сегодня. Приходите завтра!'); return; }
+            if (wheelConfig.length === 0) { alert('Розыгрыш пока не настроен.'); return; }
             
             const wheel = document.getElementById('wheel');
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
-            
-            // Случайный угол
-            const spinAngle = 1800 + Math.floor(Math.random() * 360);
-            wheel.style.transform = `rotate(${spinAngle}deg)`;
+            wheel.style.transform = `rotate(${1800 + Math.floor(Math.random() * 360)}deg)`;
             
             setTimeout(() => {
-                const sectors = [
-                    { name: 'Скидка 10%', code: 'WHEEL10', color: '#e74c3c', chance: 20 },
-                    { name: 'Скидка 5%', code: 'WHEEL5', color: '#f39c12', chance: 30 },
-                    { name: 'Повезёт в следующий раз', code: null, color: '#27ae60', chance: 50 }
-                ];
-                
                 const random = Math.random() * 100;
                 let cumulative = 0;
-                let result = sectors[2];
-                
-                for (const sector of sectors) {
+                let result = wheelConfig[wheelConfig.length - 1];
+                for (const sector of wheelConfig) {
                     cumulative += sector.chance;
-                    if (random <= cumulative) {
-                        result = sector;
-                        break;
-                    }
+                    if (random <= cumulative) { result = sector; break; }
                 }
                 
-                // Отправляем данные в Google Apps Script
                 if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'ТВОЙ_APPS_SCRIPT_URL') {
-                    fetch(APPS_SCRIPT_URL + '?deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.name) + '&code=' + encodeURIComponent(result.code || ''))
+                    fetch(APPS_SCRIPT_URL + '?deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code || ''))
                         .catch(() => {});
                 }
                 
                 document.getElementById('resultText').innerHTML = result.code 
-                    ? `🎉 Вы выиграли: ${result.name}!<br>Промокод: <strong>${result.code}</strong><br><small>Скопируйте и вставьте при оформлении заказа</small>`
+                    ? `🎉 Вы выиграли: ${result.prize}!<br>Промокод: <strong>${result.code}</strong><br><small>Скопируйте и вставьте при оформлении заказа</small>`
                     : '😔 ' + result.name;
                 
-                if (result.code) {
-                    navigator.clipboard.writeText(result.code);
-                }
-                
+                if (result.code) navigator.clipboard.writeText(result.code);
                 localStorage.setItem('lastSpin', Date.now().toString());
                 btn.disabled = true;
             }, 4000);
@@ -357,10 +383,7 @@
 
         function updateSpinButton() {
             const btn = document.getElementById('spinBtn');
-            if (btn && !canSpin()) {
-                btn.disabled = true;
-                btn.textContent = '🔒 Приходите завтра';
-            }
+            if (btn && !canSpin()) { btn.disabled = true; btn.textContent = '🔒 Приходите завтра'; }
         }
 
         function showWheel() {
@@ -368,17 +391,31 @@
             document.getElementById('jerkyCatalog').style.display = 'none';
             document.getElementById('delicaciesSection').style.display = 'none';
             document.getElementById('wheelSection').style.display = 'block';
+            if (wheelConfig.length === 0) loadWheelConfig();
             updateSpinButton();
         }
 
-        // Остальные функции
+        // Промокод
+        function applyPromo() {
+            const code = document.getElementById('promoInput').value.trim();
+            if (!code) return;
+            const found = wheelConfig.find(s => s.code === code);
+            if (found) {
+                appliedPromo = { code: found.code, discount: parseInt(found.name) || 0, prize: found.prize };
+                document.getElementById('promoMessage').innerHTML = `<span class="promo-info">✅ Промокод "${code}" применён! Скидка ${appliedPromo.discount}%</span>`;
+            } else {
+                appliedPromo = null;
+                document.getElementById('promoMessage').innerHTML = `<span class="promo-error">❌ Промокод не найден</span>`;
+            }
+            openCart();
+        }
+
+        // Загрузка остатков
         async function loadStockFromGoogleSheet() {
-            const statusDot = document.getElementById('statusDot');
             try {
                 const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_RANGE}?key=${SHEET_API_KEY}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                
                 if (data.values) {
                     const stock = {};
                     for (let i = 1; i < data.values.length; i++) {
@@ -388,7 +425,6 @@
                         const date = row[2] || '';
                         stock[art] = { qty, date };
                     }
-                    
                     localStorage.setItem('stockCache', JSON.stringify(stock));
                     stockCache = stock;
                     applyStock(stock);
@@ -397,19 +433,8 @@
             } catch (e) {
                 console.error('Ошибка загрузки из Google Таблицы:', e);
                 const cached = localStorage.getItem('stockCache');
-                if (cached) {
-                    try {
-                        stockCache = JSON.parse(cached);
-                        applyStock(stockCache, true);
-                        showStatus(false);
-                    } catch (e2) {
-                        document.querySelectorAll('.stock-info').forEach(el => el.textContent = 'Нет данных');
-                        showStatus(false);
-                    }
-                } else {
-                    document.querySelectorAll('.stock-info').forEach(el => el.textContent = 'Нет данных');
-                    showStatus(false);
-                }
+                if (cached) { try { stockCache = JSON.parse(cached); applyStock(stockCache, true); showStatus(false); } catch(e2) {} }
+                else showStatus(false);
             }
         }
 
@@ -488,14 +513,8 @@
             const addBtn = card.querySelector('.add-btn');
             const qtyControl = card.querySelector('.quantity-control');
             const qtyDisplay = document.getElementById(`qty_${id}`);
-            if (qty > 0) {
-                addBtn.style.display = 'none';
-                qtyControl.style.display = 'flex';
-                qtyDisplay.textContent = qty;
-            } else {
-                addBtn.style.display = 'block';
-                qtyControl.style.display = 'none';
-            }
+            if (qty > 0) { addBtn.style.display = 'none'; qtyControl.style.display = 'flex'; qtyDisplay.textContent = qty; }
+            else { addBtn.style.display = 'block'; qtyControl.style.display = 'none'; }
         }
         function addToCart(id, name, price) {
             if (!cart[id]) cart[id] = { name, price, qty: 0 };
@@ -544,7 +563,10 @@
                     `;
                 }
             }
-            document.getElementById('modalTotal').textContent = 'Итого: ' + total + ' ₽';
+            let discount = 0;
+            if (appliedPromo) discount = total * appliedPromo.discount / 100;
+            document.getElementById('discountInfo').innerHTML = discount > 0 ? `<span style="color:#27ae60;">Скидка по промокоду: -${Math.round(discount)} ₽</span>` : '';
+            document.getElementById('modalTotal').textContent = 'Итого: ' + (total - discount) + ' ₽';
             document.getElementById('cartModal').classList.add('active');
         }
         function closeCart() { document.getElementById('cartModal').classList.remove('active'); }
@@ -562,7 +584,12 @@
                 if (isPreorder) hasPreorder = true;
                 orderText += `${item.name} x${item.qty} = ${itemTotal} ₽${isPreorder ? ' (предзаказ)' : ''}\n`;
             }
-            orderText += `\nИтого: ${total} ₽`;
+            let discount = 0;
+            if (appliedPromo) {
+                discount = Math.round(total * appliedPromo.discount / 100);
+                orderText += `\nПромокод: ${appliedPromo.code} (скидка ${appliedPromo.discount}%): -${discount} ₽`;
+            }
+            orderText += `\nИтого: ${total - discount} ₽`;
             if (hasPreorder) orderText += '\n⚠️ Часть товаров под предзаказ';
             if (document.getElementById('sauceCheckbox').checked) orderText += '\n🌶 С острым соусом!';
 
@@ -582,6 +609,9 @@
             }
 
             cart = {};
+            appliedPromo = null;
+            document.getElementById('promoInput').value = '';
+            document.getElementById('promoMessage').innerHTML = '';
             saveCartToStorage();
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
