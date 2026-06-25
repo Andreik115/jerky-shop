@@ -3,8 +3,8 @@
   "short_name": "KoMeat",
   "description": "Натуральные джерки ручной работы. Каталог, предзаказы, доставка.",
   "start_url": "/jerky-shop/",
-  "display": "standalone",
-  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
   "background_color": "#1a1a1a",
   "theme_color": "#e74c3c",
   "icons": [
