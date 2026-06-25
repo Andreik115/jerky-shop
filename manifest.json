@@ -4,7 +4,7 @@
   "description": "Натуральные джерки ручной работы. Каталог, предзаказы, доставка.",
   "start_url": "/jerky-shop/",
   "display": "standalone",
-  "display_override": ["standalone", "fullscreen"],
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
   "background_color": "#1a1a1a",
   "theme_color": "#e74c3c",
   "icons": [
