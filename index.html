@@ -625,32 +625,41 @@
         document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('sauceCheckbox').checked = false;
-            loadCartFromStorage();
-            updateCartBar();
-            document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
-            showMainMenu();
+    document.getElementById('sauceCheckbox').checked = false;
+    loadCartFromStorage();
+    updateCartBar();
+    document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
+    showMainMenu();
 
-            // Кнопка администратора
-            const adminBtn = document.createElement('button');
-            adminBtn.textContent = '⚙️';
-            adminBtn.style.cssText = 'position:fixed; bottom:80px; left:10px; z-index:999; background:rgba(0,0,0,0.5); color:#555; border:none; border-radius:50%; width:40px; height:40px; font-size:20px;';
-            document.body.appendChild(adminBtn);
+    // Секретный жест: тройное нажатие в левом нижнем углу
+    let clickCount = 0;
+    let clickTimer;
 
-            adminBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const pin = prompt('Введите пин-код:');
-                if (pin === ADMIN_PIN) {
-                    const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
-                    if (action === '1') {
-                        localStorage.removeItem('lastSpin');
-                        alert('Блокировка колеса сброшена!');
-                    }
-                } else if (pin !== null) {
-                    alert('Неверный пин-код');
+    // Создаём невидимую область для кликов
+    const secretZone = document.createElement('div');
+    secretZone.style.cssText = 'position:fixed; bottom:0; left:0; width:60px; height:60px; z-index:999;';
+    document.body.appendChild(secretZone);
+
+    secretZone.addEventListener('click', function(e) {
+        clickCount++;
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => { clickCount = 0; }, 1500);
+
+        if (clickCount >= 3) {
+            clickCount = 0;
+            const pin = prompt('Введите пин-код:');
+            if (pin === ADMIN_PIN) {
+                const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
+                if (action === '1') {
+                    localStorage.removeItem('lastSpin');
+                    alert('Блокировка колеса сброшена!');
                 }
-            });
-        });
+            } else if (pin !== null) {
+                alert('Неверный пин-код');
+            }
+        }
+    });
+});
     </script>
 </body>
 </html>
