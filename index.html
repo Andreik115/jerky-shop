@@ -9,6 +9,7 @@
     <meta http-equiv="Expires" content="0">
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a1a">
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
@@ -32,7 +33,7 @@
         .category-title img { height: 1.2em; width: auto; }
         .category-photo-container { text-align: center; margin-bottom: 12px; }
         .category-photo { max-width: 400px; width: 100%; height: auto; object-fit: cover; border-radius: 12px; }
-        .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; position: relative; }
         .product-name { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
         .product-price { color: #e74c3c; font-size: 18px; font-weight: bold; margin-bottom: 6px; }
         .product-weight { color: #aaa; font-size: 13px; }
@@ -80,9 +81,22 @@
         .main-menu-btn { background: #2a2a2a; border: 1px solid #e74c3c; color: #e74c3c; padding: 16px; margin: 8px 0; border-radius: 12px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; text-align: left; }
         .main-menu-btn:active { background: #3a3a3a; }
         .back-section-btn { background: #555; margin-bottom: 16px; }
+
+        /* Избранное */
+        .fav-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; color: #555; }
+        .fav-btn.active { color: #e74c3c; }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 24px; border-radius: 20px; z-index: 300; font-size: 14px; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+        /* Офлайн-заглушка */
+        .offline-banner { display: none; text-align: center; padding: 10px; background: #e74c3c; color: #fff; position: fixed; top: 0; left: 0; right: 0; z-index: 400; }
     </style>
 </head>
 <body>
+
+    <div class="offline-banner" id="offlineBanner">Вы офлайн. Данные могут быть неактуальны.</div>
 
     <div class="status-panel" id="statusPanel" style="display:none">
         <span class="status-dot" id="statusDot"></span>
@@ -101,6 +115,7 @@
         </div>
         <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
         <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
+        <button class="main-menu-btn" onclick="shareApp()" style="background:#2a2a2a; border:1px solid #888; color:#aaa;">📤 Поделиться приложением</button>
     </div>
 
     <div id="jerkyCatalog" style="display:none;">
@@ -112,6 +127,7 @@
         </div>
 
         <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
+            <button class="fav-btn" onclick="toggleFav(this, 'pork_cognac')">♡</button>
             <div class="product-name">Свиные джерки «Коньячные»</div>
             <div class="product-price">450 ₽</div>
             <div class="product-weight">100 г</div>
@@ -128,6 +144,7 @@
         </div>
 
         <div class="product-card" data-id="pork_paprika" data-name="Свиные джерки Паприка" data-price="450">
+            <button class="fav-btn" onclick="toggleFav(this, 'pork_paprika')">♡</button>
             <div class="product-name">Свиные джерки «Паприка»</div>
             <div class="product-price">450 ₽</div>
             <div class="product-weight">100 г</div>
@@ -149,6 +166,7 @@
         </div>
 
         <div class="product-card" data-id="chicken" data-name="Куриные джерки" data-price="600">
+            <button class="fav-btn" onclick="toggleFav(this, 'chicken')">♡</button>
             <div class="product-name">Куриные джерки</div>
             <div class="product-price">600 ₽</div>
             <div class="product-weight">100 г</div>
@@ -170,6 +188,7 @@
         </div>
 
         <div class="product-card" data-id="beef" data-name="Говяжьи джерки" data-price="900">
+            <button class="fav-btn" onclick="toggleFav(this, 'beef')">♡</button>
             <div class="product-name">Говяжьи джерки</div>
             <div class="product-price">900 ₽</div>
             <div class="product-weight">100 г</div>
@@ -237,6 +256,8 @@
         </div>
     </div>
 
+    <div id="toastContainer"></div>
+
     <script>
         // ⚙️ НАСТРОЙКИ
         const SHEET_API_KEY = 'AIzaSyB4Z1IBeGtoBKpuXR-vs0coGunF5O1zKFI';
@@ -245,6 +266,100 @@
 
         let cart = {};
         let stockCache = null;
+        let db;
+
+        // Инициализация локальной БД
+        const request = indexedDB.open('KoMeatDB', 1);
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            if (!db.objectStoreNames.contains('cart')) {
+                db.createObjectStore('cart');
+            }
+            if (!db.objectStoreNames.contains('fav')) {
+                db.createObjectStore('fav');
+            }
+            if (!db.objectStoreNames.contains('stockCache')) {
+                db.createObjectStore('stockCache');
+            }
+        };
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            loadPersistedData();
+        };
+
+        function loadPersistedData() {
+            if (!db) return;
+            const tx = db.transaction(['cart', 'fav', 'stockCache'], 'readonly');
+            tx.objectStore('cart').get('cart').onsuccess = (e) => {
+                if (e.target.result) {
+                    cart = e.target.result;
+                    updateCartBar();
+                    document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
+                }
+            };
+            tx.objectStore('fav').get('fav').onsuccess = (e) => {
+                if (e.target.result) {
+                    document.querySelectorAll('.fav-btn').forEach(btn => {
+                        if (e.target.result.includes(btn.dataset.id)) {
+                            btn.classList.add('active');
+                            btn.textContent = '♥';
+                        }
+                    });
+                }
+            };
+            tx.objectStore('stockCache').get('stockCache').onsuccess = (e) => {
+                if (e.target.result) {
+                    stockCache = e.target.result;
+                    applyStock(stockCache);
+                }
+            };
+        }
+
+        function persistData() {
+            if (!db) return;
+            const tx = db.transaction(['cart', 'fav', 'stockCache'], 'readwrite');
+            tx.objectStore('cart').put(cart, 'cart');
+            tx.objectStore('fav').put(getFavorites(), 'fav');
+            if (stockCache) tx.objectStore('stockCache').put(stockCache, 'stockCache');
+        }
+
+        function getFavorites() {
+            return Array.from(document.querySelectorAll('.fav-btn.active')).map(btn => btn.dataset.id);
+        }
+
+        function toggleFav(btn, id) {
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active')) {
+                btn.textContent = '♥';
+            } else {
+                btn.textContent = '♡';
+            }
+            persistData();
+        }
+
+        function shareApp() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'KoMeat - Джерки ручной работы',
+                    text: 'Натуральные джерки и деликатесы. Заказывай прямо из приложения!',
+                    url: 'https://Andreik115.github.io/jerky-shop/'
+                });
+            } else {
+                alert('Поделиться можно через браузер');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        // Офлайн-баннер
+        window.addEventListener('online', () => document.getElementById('offlineBanner').style.display = 'none');
+        window.addEventListener('offline', () => document.getElementById('offlineBanner').style.display = 'block');
 
         async function loadStockFromGoogleSheet() {
             const statusDot = document.getElementById('statusDot');
@@ -266,12 +381,13 @@
                     
                     localStorage.setItem('stockCache', JSON.stringify(stock));
                     stockCache = stock;
+                    persistData();
                     applyStock(stock);
                     showStatus(true);
                 }
             } catch (e) {
                 console.error('Ошибка загрузки из Google Таблицы:', e);
-                const cached = localStorage.getItem('stockCache');
+                const cached = localStorage.getItem('stockCache') || (stockCache ? JSON.stringify(stockCache) : null);
                 if (cached) {
                     try {
                         stockCache = JSON.parse(cached);
@@ -355,6 +471,7 @@
         // Корзина
         function saveCartToStorage() {
             localStorage.setItem('cart', JSON.stringify(cart));
+            persistData();
         }
 
         function loadCartFromStorage() {
@@ -406,6 +523,7 @@
             saveCartToStorage();
             updateCartBar();
             updateProductUI(id);
+            showToast(`${name} добавлены в корзину`);
         }
 
         function changeCartQty(id, delta) {
@@ -529,6 +647,15 @@
         }
 
         document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
+
+        // Pull-to-refresh
+        let touchStartY = 0;
+        document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; });
+        document.addEventListener('touchend', (e) => {
+            if (window.scrollY === 0 && e.changedTouches[0].clientY - touchStartY > 80) {
+                refreshStock();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('sauceCheckbox').checked = false;
