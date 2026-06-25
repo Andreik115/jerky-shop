@@ -1,4 +1,4 @@
-const CACHE_NAME = 'komeat-cache-v1';
+const CACHE_NAME = 'komeat-cache-v2';
 const urlsToCache = [
   '/jerky-shop/',
   '/jerky-shop/index.html',
@@ -23,6 +23,12 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
-      .then(response => response || fetch(event.request))
+      .then(response => {
+        return response || fetch(event.request).catch(() => {
+          if (event.request.mode === 'navigate') {
+            return caches.match('/jerky-shop/');
+          }
+        });
+      })
   );
 });
