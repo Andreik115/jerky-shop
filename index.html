@@ -299,30 +299,39 @@
         }
 
         // Админ-доступ через долгое нажатие на логотип
-        let longPressTimer;
-        const logo = document.getElementById('logo');
-        logo.addEventListener('click', (e) => {
-            window.open('https://t.me/KoMeat1', '_blank');
-        });
-        logo.addEventListener('touchstart', (e) => {
-            longPressTimer = setTimeout(() => {
-                const pin = prompt('Введите пин-код:');
-                if (pin === ADMIN_PIN) {
-                    const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\n2 - Статистика\nВведите номер действия:');
-                    if (action === '1') {
-                        localStorage.removeItem('lastSpin');
-                        alert('Блокировка колеса сброшена!');
-                    } else if (action === '2') {
-                        alert('Статистика будет доступна позже');
-                    }
-                } else if (pin !== null) {
-                    alert('Неверный пин-код');
-                }
-            }, 3000);
-        });
-        logo.addEventListener('touchend', (e) => {
-            clearTimeout(longPressTimer);
-        });
+let longPressTimer;
+const logo = document.getElementById('logo');
+
+// Короткое нажатие — Telegram
+logo.addEventListener('click', function(e) {
+    window.open('https://t.me/KoMeat1', '_blank');
+});
+
+// Долгое нажатие — админ
+logo.addEventListener('touchstart', function(e) {
+    longPressTimer = setTimeout(function() {
+        const pin = prompt('Введите пин-код:');
+        if (pin === '1234') {
+            const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\n2 - Статистика\nВведите номер:');
+            if (action === '1') {
+                localStorage.removeItem('lastSpin');
+                alert('Блокировка колеса сброшена!');
+            }
+        } else if (pin !== null) {
+            alert('Неверный пин-код');
+        }
+    }, 3000);
+});
+
+// Отмена долгого нажатия
+logo.addEventListener('touchend', function(e) {
+    clearTimeout(longPressTimer);
+});
+
+// Предотвращаем выделение текста
+logo.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+});
 
         // Загрузка конфигурации колеса
         async function loadWheelConfig() {
