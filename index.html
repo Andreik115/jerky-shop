@@ -639,7 +639,7 @@ logo.addEventListener('click', (e) => {
 logo.addEventListener('touchstart', (e) => {
     longPressTimer = setTimeout(() => {
         const pin = prompt('Введите пин-код:');
-        if (pin === '1234') {  // Замени 1234 на свой пин-код
+        if (pin === '27431') {  // Замени 1234 на свой пин-код
             const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\n2 - Статистика\nВведите номер действия:');
             if (action === '1') {
                 localStorage.removeItem('lastSpin');
