@@ -310,7 +310,16 @@
     })();
     
     const isAdmin = urlParams.get('admin') === 'true';
+const isApp = (() => {
+    if (urlParams.get('app') === 'true') return true;
+    if (navigator.standalone) return true;
+    if (window.matchMedia('(display-mode: standalone)').matches) return true;
+    return false;
+})();
 
+if (isApp) {
+    document.querySelector('.app-only').style.display = 'block';
+}
     let cart = {};
     let stockCache = null;
     let wheelConfig = [];
