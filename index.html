@@ -302,7 +302,6 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         
-        // Определяем приложение (а не браузер)
         const isApp = (() => {
           if (urlParams.get('app') === 'true') return true;
           if (navigator.standalone) return true;
@@ -336,10 +335,13 @@
                 if (data.values) {
                     const now = new Date();
                     for (const row of data.values) {
+                        if (!row[0] || !row[1]) continue;
                         const recordDate = new Date(row[0]);
                         const recordDeviceId = row[1];
                         const status = row[2] || '';
-                        if (recordDeviceId === deviceId && status !== 'unblocked' && (now - recordDate) < 24 * 60 * 60 * 1000) {
+                        const diffHours = (now - recordDate) / (1000 * 60 * 60);
+                        if (recordDeviceId === deviceId && status !== 'unblocked' && diffHours < 24) {
+                            console.log('Заблокирован! Прошло часов: ' + diffHours);
                             return true;
                         }
                     }
@@ -352,8 +354,15 @@
 
         async function addBlockRecord() {
             try {
-                const now = new Date().toISOString();
-                await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(now) + '&deviceId=' + encodeURIComponent(deviceId));
+                const now = new Date();
+                const dateStr = now.getFullYear() + '-' + 
+                                String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                                String(now.getDate()).padStart(2, '0') + ' ' +
+                                String(now.getHours()).padStart(2, '0') + ':' +
+                                String(now.getMinutes()).padStart(2, '0') + ':' +
+                                String(now.getSeconds()).padStart(2, '0');
+                await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(dateStr) + '&deviceId=' + encodeURIComponent(deviceId));
+                console.log('Блокировка добавлена: ' + dateStr);
             } catch (e) {
                 console.error('Ошибка добавления блокировки:', e);
             }
@@ -434,7 +443,6 @@
                 
                 await addBlockRecord();
                 
-                // Запись в историю и уменьшение remaining
                 if (result.code) {
                     try {
                         await fetch(APPS_SCRIPT_URL + '?sheet=History&deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code));
@@ -449,6 +457,7 @@
                     resultDiv.innerHTML = '😔 ' + result.name;
                 }
                 btn.disabled = true;
+                updateSpinButton();
             }, 4000);
         }
 
