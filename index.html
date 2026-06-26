@@ -13,6 +13,9 @@
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
       }
+      function isRunningStandalone() {
+          return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      }
     </script>
     <style>
         .ios-hint { display: none; background: #2a2a2a; border: 1px solid #e74c3c; border-radius: 12px; padding: 12px; margin: 12px 0; text-align: center; font-size: 13px; }
@@ -87,17 +90,19 @@
         .main-menu-btn:active { background: #3a3a3a; }
         .back-section-btn { background: #555; margin-bottom: 16px; }
 
-        .app-only { display: block; }
+        .app-only { display: none; }
+        @media (display-mode: standalone) { .app-only { display: block; } }
         
         .wheel-container { text-align: center; padding: 20px 0; }
-        .wheel { width: 300px; height: 300px; border-radius: 50%; border: 8px solid #e74c3c; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); box-shadow: 0 0 20px rgba(231,76,60,0.5); }
+        .wheel { width: 300px; height: 300px; border-radius: 50%; border: 6px solid #e74c3c; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#e74c3c 0deg 60deg, #f1c40f 60deg 120deg, #2ecc71 120deg 180deg, #3498db 180deg 240deg, #9b59b6 240deg 300deg, #e67e22 300deg 360deg); box-shadow: 0 0 20px rgba(231,76,60,0.5); }
         .wheel-sector { position: absolute; width: 50%; height: 50%; top: 0; left: 50%; transform-origin: 0% 100%; }
-        .wheel-sector:nth-child(1) { transform: rotate(0deg) skewY(18deg); background: #e74c3c; }
-        .wheel-sector:nth-child(2) { transform: rotate(72deg) skewY(18deg); background: #f1c40f; }
-        .wheel-sector:nth-child(3) { transform: rotate(144deg) skewY(18deg); background: #2ecc71; }
-        .wheel-sector:nth-child(4) { transform: rotate(216deg) skewY(18deg); background: #e67e22; }
-        .wheel-sector:nth-child(5) { transform: rotate(288deg) skewY(18deg); background: #9b59b6; }
-        .wheel-pointer { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 30px solid #fff; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        .wheel-sector:nth-child(1) { transform: rotate(0deg) skewY(30deg); background: #e74c3c; }
+        .wheel-sector:nth-child(2) { transform: rotate(60deg) skewY(30deg); background: #f1c40f; }
+        .wheel-sector:nth-child(3) { transform: rotate(120deg) skewY(30deg); background: #2ecc71; }
+        .wheel-sector:nth-child(4) { transform: rotate(180deg) skewY(30deg); background: #3498db; }
+        .wheel-sector:nth-child(5) { transform: rotate(240deg) skewY(30deg); background: #9b59b6; }
+        .wheel-sector:nth-child(6) { transform: rotate(300deg) skewY(30deg); background: #e67e22; }
+        .wheel-pointer { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #fff; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
         .spin-btn { background: #e74c3c; color: #fff; border: none; padding: 12px 32px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .spin-btn:disabled { background: #555; }
         .result-text { margin-top: 16px; font-size: 20px; font-weight: bold; min-height: 30px; }
@@ -235,6 +240,7 @@
                 <div class="wheel-sector"></div>
                 <div class="wheel-sector"></div>
                 <div class="wheel-sector"></div>
+                <div class="wheel-sector"></div>
                 <div class="wheel-pointer"></div>
             </div>
             <button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎡 Крутить</button>
@@ -292,6 +298,7 @@
         const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
         const SHEET_RANGE = 'A1:C10';
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7zpSzx-BqbUIvpUvyoykGJlCPmmffahNWC1unn27XuUnkXNfhTdBlZ5iCAEYVy4C/exec';
+        const ADMIN_PIN = '1234';
 
         let cart = {};
         let stockCache = null;
@@ -607,6 +614,28 @@
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
             showMainMenu();
+
+            // Админ-кнопка только на сайте (не в PWA)
+            if (!isRunningStandalone()) {
+                const adminBtn = document.createElement('button');
+                adminBtn.textContent = '⚙️';
+                adminBtn.style.cssText = 'position:fixed; bottom:80px; left:10px; z-index:999; background:rgba(0,0,0,0.3); color:#555; border:none; border-radius:50%; width:30px; height:30px; font-size:16px;';
+                document.body.appendChild(adminBtn);
+
+                adminBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const pin = prompt('Введите пин-код:');
+                    if (pin === ADMIN_PIN) {
+                        const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
+                        if (action === '1') {
+                            localStorage.removeItem('lastSpin');
+                            alert('Блокировка колеса сброшена!');
+                        }
+                    } else if (pin !== null) {
+                        alert('Неверный пин-код');
+                    }
+                });
+            }
         });
     </script>
 </body>
