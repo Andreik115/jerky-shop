@@ -307,7 +307,19 @@
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQk8m9s3d2f1g5h7j4k6l8p0o9i1u2y3t4r5e6w7q8/exec';
 
         const urlParams = new URLSearchParams(window.location.search);
-        const isApp = urlParams.get('app') === 'true';
+        // Определяем, что мы в приложении (а не в браузере)
+const isApp = (() => {
+  // Способ 1: Параметр ?app=true (если вручную передали)
+  if (urlParams.get('app') === 'true') return true;
+  
+  // Способ 2: WebIntoApp добавляет этот заголовок
+  if (navigator.standalone) return true;
+  
+  // Способ 3: Display-mode = standalone (PWA)
+  if (window.matchMedia('(display-mode: standalone)').matches) return true;
+  
+  return false;
+})();
         // 🔑 Режим администратора: добавляем ?admin=true к URL
         const isAdmin = urlParams.get('admin') === 'true';
 
