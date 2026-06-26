@@ -620,6 +620,10 @@
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
             showMainMenu();
+            const wheelBtn = document.querySelector('.app-only');
+if (wheelBtn && !isRunningStandalone()) {
+    wheelBtn.style.display = 'none';
+}
         });
     </script>
 </body>
