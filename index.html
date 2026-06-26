@@ -13,17 +13,8 @@
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
       }
-      function isRunningStandalone() {
-          return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      }
     </script>
     <style>
-        * {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
         .ios-hint { display: none; background: #2a2a2a; border: 1px solid #e74c3c; border-radius: 12px; padding: 12px; margin: 12px 0; text-align: center; font-size: 13px; }
         @supports (-webkit-touch-callout: none) { .ios-hint { display: block; } }
     </style>
@@ -96,8 +87,7 @@
         .main-menu-btn:active { background: #3a3a3a; }
         .back-section-btn { background: #555; margin-bottom: 16px; }
 
-        .app-only { display: none; }
-        @media (display-mode: standalone) { .app-only { display: block; } }
+        .app-only { display: block; }
         
         .wheel-container { text-align: center; padding: 20px 0; }
         .wheel { width: 300px; height: 300px; border-radius: 50%; border: 8px solid #e74c3c; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); box-shadow: 0 0 20px rgba(231,76,60,0.5); }
@@ -126,7 +116,7 @@
 
     <div id="mainMenu">
         <div class="header">
-            <h1 id="logo" style="cursor:pointer;">🥩 KoMeat</h1>
+            <h1>🥩 KoMeat</h1>
             <p>Твоё мясное комьюнити</p>
             <a href="https://t.me/KoMeat1" target="_blank" style="display: inline-block; margin-top: 12px; background: #e74c3c; border-radius: 8px; padding: 8px 16px; color: #fff; text-decoration: none; font-weight: bold; font-size: 14px;">
                 📢 Подписывайся на наш Telegram
@@ -302,47 +292,12 @@
         const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
         const SHEET_RANGE = 'A1:C10';
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7zpSzx-BqbUIvpUvyoykGJlCPmmffahNWC1unn27XuUnkXNfhTdBlZ5iCAEYVy4C/exec';
-        const ADMIN_PIN = '2743';
 
         let cart = {};
         let stockCache = null;
         let wheelConfig = [];
         let appliedPromo = null;
         let deviceId = localStorage.getItem('deviceId') || (() => { const id = 'KO-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); return id; })();
-
-        if (isRunningStandalone()) {
-            document.getElementById('iosHint').style.display = 'none';
-        }
-
-        // Логотип: короткое нажатие — Telegram, тройное — админ
-        const logo = document.getElementById('logo');
-        let clickCount = 0;
-        let clickTimer;
-
-        logo.addEventListener('click', function(e) {
-            clickCount++;
-            if (clickCount === 1) {
-                clickTimer = setTimeout(function() {
-                    if (clickCount === 1) {
-                        window.open('https://t.me/KoMeat1', '_blank');
-                    }
-                    clickCount = 0;
-                }, 300);
-            } else if (clickCount === 3) {
-                clearTimeout(clickTimer);
-                clickCount = 0;
-                const pin = prompt('Введите пин-код:');
-                if (pin === ADMIN_PIN) {
-                    const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
-                    if (action === '1') {
-                        localStorage.removeItem('lastSpin');
-                        alert('Блокировка колеса сброшена!');
-                    }
-                } else if (pin !== null) {
-                    alert('Неверный пин-код');
-                }
-            }
-        });
 
         async function loadWheelConfig() {
             try {
