@@ -13,9 +13,6 @@
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
       }
-      function isRunningStandalone() {
-          return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      }
     </script>
     <style>
         .ios-hint { display: none; background: #2a2a2a; border: 1px solid #e74c3c; border-radius: 12px; padding: 12px; margin: 12px 0; text-align: center; font-size: 13px; }
@@ -298,7 +295,6 @@
         const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
         const SHEET_RANGE = 'A1:C10';
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7zpSzx-BqbUIvpUvyoykGJlCPmmffahNWC1unn27XuUnkXNfhTdBlZ5iCAEYVy4C/exec';
-        const ADMIN_PIN = '2743';
 
         let cart = {};
         let stockCache = null;
@@ -614,28 +610,6 @@
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
             showMainMenu();
-
-            // Админ-кнопка только на сайте (не в PWA)
-            if (!window.matchMedia('(display-mode: standalone)').matches) {
-                const adminBtn = document.createElement('button');
-                adminBtn.textContent = '⚙️';
-                adminBtn.style.cssText = 'position:fixed; bottom:80px; left:10px; z-index:999; background:rgba(0,0,0,0.3); color:#555; border:none; border-radius:50%; width:30px; height:30px; font-size:16px;';
-                document.body.appendChild(adminBtn);
-
-                adminBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const pin = prompt('Введите пин-код:');
-                    if (pin === ADMIN_PIN) {
-                        const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
-                        if (action === '1') {
-                            localStorage.removeItem('lastSpin');
-                            alert('Блокировка колеса сброшена!');
-                        }
-                    } else if (pin !== null) {
-                        alert('Неверный пин-код');
-                    }
-                });
-            }
         });
     </script>
 </body>
