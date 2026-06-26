@@ -449,12 +449,22 @@
         }
 
         function showMainMenu() {
-            document.getElementById('mainMenu').style.display = 'block';
-            document.getElementById('jerkyCatalog').style.display = 'none';
-            document.getElementById('delicaciesSection').style.display = 'none';
-            document.getElementById('wheelSection').style.display = 'none';
-            document.getElementById('statusPanel').style.display = 'none';
+    document.getElementById('mainMenu').style.display = 'block';
+    document.getElementById('jerkyCatalog').style.display = 'none';
+    document.getElementById('delicaciesSection').style.display = 'none';
+    document.getElementById('wheelSection').style.display = 'none';
+    document.getElementById('statusPanel').style.display = 'none';
+
+    // Показываем кнопку колеса только в PWA
+    const wheelBtn = document.querySelector('.app-only');
+    if (wheelBtn) {
+        if (isRunningStandalone()) {
+            wheelBtn.style.display = 'block';
+        } else {
+            wheelBtn.style.display = 'none';
         }
+    }
+}
 
         function showJerkyCatalog() {
             document.getElementById('mainMenu').style.display = 'none';
