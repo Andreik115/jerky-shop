@@ -124,7 +124,7 @@
         <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
         <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
         <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12; color:#f39c12; display:none;">🎁 Колесо фортуны</button>
-        <button class="main-menu-btn admin-only" onclick="adminPanel()" style="border-color:#888; color:#888; display:none;">🔧 Админ</button>
+        <button class="main-menu-btn admin-btn" onclick="adminPanel()" style="border-color:#555; color:#555;">⋯</button>
     </div>
 
     <div id="jerkyCatalog" style="display:none;">
@@ -293,7 +293,7 @@
         const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
         const SHEET_RANGE = 'A1:C10';
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7zpSzx-BqbUIvpUvyoykGJlCPmmffahNWC1unn27XuUnkXNfhTdBlZ5iCAEYVy4C/exec';
-        const ADMIN_PIN = '2743'; // Замени на свой пин-код
+        const ADMIN_PIN = '2743';
 
         const urlParams = new URLSearchParams(window.location.search);
         const isApp = urlParams.get('app') === 'true';
@@ -305,19 +305,21 @@
         let appliedPromo = null;
         let deviceId = localStorage.getItem('deviceId') || (() => { const id = 'KO-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); return id; })();
 
-        // Показываем кнопки в зависимости от режима
+        // Показываем колесо только в приложении
         if (isApp) {
             document.querySelector('.app-only').style.display = 'block';
         }
-        if (isApp && isAdmin) {
-            document.querySelector('.admin-only').style.display = 'block';
-        }
 
         function adminPanel() {
-            const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
-            if (action === '1') {
-                localStorage.removeItem('lastSpin');
-                alert('Блокировка колеса сброшена!');
+            const pin = prompt('Введите пин-код:');
+            if (pin === ADMIN_PIN) {
+                const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
+                if (action === '1') {
+                    localStorage.removeItem('lastSpin');
+                    alert('Блокировка колеса сброшена!');
+                }
+            } else if (pin !== null) {
+                alert('Неверный пин-код');
             }
         }
 
@@ -629,6 +631,11 @@
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
             showMainMenu();
+
+            // Скрываем кнопку админа в приложении
+            if (isApp) {
+                document.querySelector('.admin-btn').style.display = 'none';
+            }
         });
     </script>
 </body>
