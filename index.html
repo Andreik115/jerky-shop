@@ -87,9 +87,6 @@
         .main-menu-btn:active { background: #3a3a3a; }
         .back-section-btn { background: #555; margin-bottom: 16px; }
 
-        .app-only { display: none; }
-        @media (display-mode: standalone) { .app-only { display: block; } }
-        
         .wheel-container { text-align: center; padding: 20px 0; }
         .wheel { width: 300px; height: 300px; border-radius: 50%; border: 6px solid #e74c3c; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#e74c3c 0deg 60deg, #f1c40f 60deg 120deg, #2ecc71 120deg 180deg, #3498db 180deg 240deg, #9b59b6 240deg 300deg, #e67e22 300deg 360deg); box-shadow: 0 0 20px rgba(231,76,60,0.5); }
         .wheel-sector { position: absolute; width: 50%; height: 50%; top: 0; left: 50%; transform-origin: 0% 100%; }
@@ -126,7 +123,8 @@
         </div>
         <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
         <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
-        <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12; color:#f39c12;">🎁 Колесо фортуны</button>
+        <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12; color:#f39c12; display:none;">🎁 Колесо фортуны</button>
+        <button class="main-menu-btn admin-only" onclick="adminPanel()" style="border-color:#888; color:#888; display:none;">🔧 Админ</button>
     </div>
 
     <div id="jerkyCatalog" style="display:none;">
@@ -295,12 +293,33 @@
         const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
         const SHEET_RANGE = 'A1:C10';
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7zpSzx-BqbUIvpUvyoykGJlCPmmffahNWC1unn27XuUnkXNfhTdBlZ5iCAEYVy4C/exec';
+        const ADMIN_PIN = '2743'; // Замени на свой пин-код
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const isApp = urlParams.get('app') === 'true';
+        const isAdmin = urlParams.get('admin') === ADMIN_PIN;
 
         let cart = {};
         let stockCache = null;
         let wheelConfig = [];
         let appliedPromo = null;
         let deviceId = localStorage.getItem('deviceId') || (() => { const id = 'KO-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); return id; })();
+
+        // Показываем кнопки в зависимости от режима
+        if (isApp) {
+            document.querySelector('.app-only').style.display = 'block';
+        }
+        if (isApp && isAdmin) {
+            document.querySelector('.admin-only').style.display = 'block';
+        }
+
+        function adminPanel() {
+            const action = prompt('Админ-меню:\n1 - Сбросить блокировку колеса\nВведите номер:');
+            if (action === '1') {
+                localStorage.removeItem('lastSpin');
+                alert('Блокировка колеса сброшена!');
+            }
+        }
 
         async function loadWheelConfig() {
             try {
@@ -449,22 +468,12 @@
         }
 
         function showMainMenu() {
-    document.getElementById('mainMenu').style.display = 'block';
-    document.getElementById('jerkyCatalog').style.display = 'none';
-    document.getElementById('delicaciesSection').style.display = 'none';
-    document.getElementById('wheelSection').style.display = 'none';
-    document.getElementById('statusPanel').style.display = 'none';
-
-    // Показываем кнопку колеса только в PWA
-    const wheelBtn = document.querySelector('.app-only');
-    if (wheelBtn) {
-        if (isRunningStandalone()) {
-            wheelBtn.style.display = 'block';
-        } else {
-            wheelBtn.style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('jerkyCatalog').style.display = 'none';
+            document.getElementById('delicaciesSection').style.display = 'none';
+            document.getElementById('wheelSection').style.display = 'none';
+            document.getElementById('statusPanel').style.display = 'none';
         }
-    }
-}
 
         function showJerkyCatalog() {
             document.getElementById('mainMenu').style.display = 'none';
@@ -620,10 +629,6 @@
             updateCartBar();
             document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
             showMainMenu();
-            const wheelBtn = document.querySelector('.app-only');
-if (wheelBtn && !isRunningStandalone()) {
-    wheelBtn.style.display = 'none';
-}
         });
     </script>
 </body>
