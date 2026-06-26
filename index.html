@@ -93,6 +93,8 @@
         .admin-unblock h3 { font-size: 14px; color: #aaa; margin: 0 0 12px; }
         .device-id-display { background: #1a1a1a; padding: 8px; border-radius: 6px; font-family: monospace; font-size: 12px; color: #f39c12; word-break: break-all; margin-bottom: 12px; }
         .unblock-status { font-size: 13px; margin-top: 8px; min-height: 20px; }
+        .prizes-list { background: #222; border-radius: 10px; padding: 14px; margin-bottom: 16px; text-align: left; }
+        .prizes-list p { margin: 4px 0; }
     </style>
 </head>
 <body>
@@ -200,7 +202,10 @@
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
         <div class="wheel-container">
             <h2 style="color:#f39c12;">🎁 Колесо фортуны</h2>
-            <p style="color:#aaa;">Испытай удачу!</p>
+            <p style="color:#aaa;margin-bottom:12px;">Испытай удачу! Вращай колесо и получи приз.</p>
+            
+            <div class="prizes-list" id="activePrizesList"></div>
+            
             <div class="wheel-wrapper">
                 <div class="wheel" id="wheel"></div>
                 <div class="wheel-pointer"></div>
@@ -307,13 +312,44 @@
             try {
                 const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Prizes'!A2:F10?key=${SHEET_API_KEY}`);
                 const d = await r.json();
-                if (d.values) wheelConfig = d.values.filter(r => r[0] === 'Да').map(r => ({ name: r[1], prize: r[2], code: r[3], chance: parseFloat(r[4]) || 0, remaining: parseInt(r[5]) || 0 }));
-                if (!wheelConfig.length) wheelConfig = [
-                    { name: 'Скидка 10%', prize: 'Скидка 10%', code: 'WHEEL10', chance: 20, remaining: 10 },
-                    { name: 'Скидка 5%', prize: 'Скидка 5%', code: 'WHEEL5', chance: 30, remaining: 50 },
-                    { name: 'Пусто', prize: 'Пусто', code: null, chance: 50, remaining: Infinity }
-                ];
+                if (d.values) {
+                    wheelConfig = d.values
+                        .filter(r => r[0] === 'Да')
+                        .map(r => ({ name: r[1], prize: r[2], code: r[3], chance: parseFloat(r[4]) || 0, remaining: parseInt(r[5]) || 0 }));
+                }
+                if (!wheelConfig.length) {
+                    wheelConfig = [
+                        { name: 'Скидка 10%', prize: 'Скидка 10%', code: 'WHEEL10', chance: 20, remaining: 0 },
+                        { name: 'Скидка 5%', prize: 'Скидка 5%', code: 'WHEEL5', chance: 30, remaining: 0 },
+                        { name: 'Пусто', prize: 'Пусто', code: null, chance: 50, remaining: Infinity }
+                    ];
+                }
             } catch (e) {}
+        }
+
+        function hasActivePrizes() {
+            return wheelConfig.some(s => s.code && s.remaining > 0);
+        }
+
+        function getActivePrizes() {
+            return wheelConfig.filter(s => s.code && s.remaining > 0);
+        }
+
+        function renderActivePrizes() {
+            const container = document.getElementById('activePrizesList');
+            if (!container) return;
+            const activePrizes = getActivePrizes();
+            if (activePrizes.length === 0) {
+                container.innerHTML = '<p style="color:#e74c3c;text-align:center;font-size:16px;">🎰 Сейчас розыгрышей не проводится.<br><span style="font-size:13px;">Загляните позже!</span></p>';
+                document.getElementById('spinBtn').style.display = 'none';
+                document.getElementById('wheel').style.opacity = '0.4';
+                document.getElementById('resultText').innerHTML = '';
+            } else {
+                document.getElementById('spinBtn').style.display = '';
+                document.getElementById('wheel').style.opacity = '1';
+                container.innerHTML = '<p style="color:#27ae60;font-weight:bold;margin-bottom:8px;">🎁 Активные призы:</p>' +
+                    activePrizes.map(s => `<p style="color:#f1c40f;font-size:14px;">• ${s.prize} — осталось: ${s.remaining} шт.</p>`).join('');
+            }
         }
 
         async function canSpin() { return !(await isBlockedInSheet()); }
@@ -321,23 +357,40 @@
         async function spinWheel() {
             if (!(await canSpin())) { alert('Вы уже крутили сегодня!'); return; }
             if (!wheelConfig.length) { alert('Розыгрыш не настроен.'); return; }
+            if (!hasActivePrizes()) { alert('Сейчас розыгрышей не проводится.'); return; }
+            
             const wheel = document.getElementById('wheel'), btn = document.getElementById('spinBtn');
             btn.disabled = true;
             wheel.style.transform = `rotate(${1800 + Math.floor(Math.random() * 360)}deg)`;
+            
             setTimeout(async () => {
-                let rnd = Math.random() * 100, cum = 0, result = wheelConfig[wheelConfig.length - 1];
-                for (const s of wheelConfig) { cum += s.chance; if (rnd <= cum) { result = s; break; } }
+                const activePrizes = getActivePrizes();
+                let rnd = Math.random() * 100, cum = 0, result = activePrizes[activePrizes.length - 1];
+                for (const s of activePrizes) { cum += s.chance; if (rnd <= cum) { result = s; break; } }
+                
                 await addBlockRecord();
-                if (result.code) try { await fetch(APPS_SCRIPT_URL + '?sheet=History&deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code)); } catch (e) {}
+                if (result.code) {
+                    try { await fetch(APPS_SCRIPT_URL + '?sheet=History&deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code)); } catch (e) {}
+                }
+                
                 document.getElementById('resultText').innerHTML = result.code ? `🎉 ${result.prize}!<br>Промокод: <strong>${result.code}</strong>` : '😔 ' + result.name;
                 if (result.code) try { navigator.clipboard.writeText(result.code); } catch (e) {}
+                
+                await loadWheelConfig();
                 updateSpinButton();
+                renderActivePrizes();
             }, 4000);
         }
 
         function updateSpinButton() {
             const btn = document.getElementById('spinBtn');
             if (!btn) return;
+            if (!hasActivePrizes()) {
+                btn.disabled = true;
+                btn.textContent = '🔒 Нет призов';
+                btn.style.display = 'none';
+                return;
+            }
             canSpin().then(a => { btn.disabled = !a; btn.textContent = a ? '🎡 Крутить' : '🔒 Приходите завтра'; });
         }
 
@@ -345,8 +398,12 @@
             ['mainMenu','jerkyCatalog','delicaciesSection'].forEach(id => document.getElementById(id).style.display = 'none');
             document.getElementById('wheelSection').style.display = 'block';
             document.getElementById('deviceIdDisplay').textContent = 'Device ID: ' + deviceId;
-            if (!wheelConfig.length) loadWheelConfig();
-            updateSpinButton();
+            if (!wheelConfig.length) {
+                loadWheelConfig().then(() => { renderActivePrizes(); updateSpinButton(); });
+            } else {
+                renderActivePrizes();
+                updateSpinButton();
+            }
         }
 
         function applyPromo() {
