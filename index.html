@@ -203,9 +203,7 @@
         <div class="wheel-container">
             <h2 style="color:#f39c12;">🎁 Колесо фортуны</h2>
             <p style="color:#aaa;margin-bottom:12px;">Испытай удачу! Вращай колесо и получи приз.</p>
-            
             <div class="prizes-list" id="activePrizesList"></div>
-            
             <div class="wheel-wrapper">
                 <div class="wheel" id="wheel"></div>
                 <div class="wheel-pointer"></div>
@@ -275,6 +273,13 @@
 
         if (isApp) { const b = document.querySelector('.app-only'); if (b) b.style.display = 'block'; }
         if (!isAdmin) { const p = document.getElementById('adminUnblockPanel'); if (p) p.style.display = 'none'; }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+        }
 
         async function isBlockedInSheet() {
             try {
@@ -373,12 +378,25 @@
                     try { await fetch(APPS_SCRIPT_URL + '?sheet=History&deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code)); } catch (e) {}
                 }
                 
-                document.getElementById('resultText').innerHTML = result.code ? `🎉 ${result.prize}!<br>Промокод: <strong>${result.code}</strong>` : '😔 ' + result.name;
-                if (result.code) try { navigator.clipboard.writeText(result.code); } catch (e) {}
+                // Показываем результат ДО обновления
+                const resultDiv = document.getElementById('resultText');
+                if (result.code) {
+                    resultDiv.innerHTML = `🎉 ${result.prize}!<br>Промокод: <strong>${result.code}</strong><br><small>Промокод скопирован!</small>`;
+                    try { navigator.clipboard.writeText(result.code); } catch(e) { fallbackCopy(result.code); }
+                } else {
+                    resultDiv.innerHTML = '😔 ' + result.name;
+                }
                 
-                await loadWheelConfig();
-                updateSpinButton();
+                // Уменьшаем remaining локально сразу
+                const found = wheelConfig.find(s => s.code === result.code);
+                if (found && found.remaining > 0) found.remaining--;
+                
+                // Обновляем отображение
                 renderActivePrizes();
+                updateSpinButton();
+                
+                // Фоновое обновление из таблицы через 2 секунды
+                setTimeout(async () => { await loadWheelConfig(); renderActivePrizes(); updateSpinButton(); }, 2000);
             }, 4000);
         }
 
@@ -519,13 +537,6 @@
             document.getElementById('cartModal').classList.add('active');
         }
         function closeCart() { document.getElementById('cartModal').classList.remove('active'); }
-
-        function fallbackCopy(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px';
-            document.body.appendChild(ta); ta.select();
-            document.execCommand('copy'); document.body.removeChild(ta);
-        }
 
         async function sendOrder() {
             if (!Object.keys(cart).length) { alert('Корзина пуста!'); return; }
