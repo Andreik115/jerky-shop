@@ -328,29 +328,40 @@
         // ============ БЛОКИРОВКИ ============
 
         async function isBlockedInSheet() {
-            try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Blocks'!A2:C100?key=${SHEET_API_KEY}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.values) {
-                    const now = new Date();
-                    for (const row of data.values) {
-                        if (!row[0] || !row[1]) continue;
-                        const recordDate = new Date(row[0]);
-                        const recordDeviceId = row[1];
-                        const status = row[2] || '';
-                        const diffHours = (now - recordDate) / (1000 * 60 * 60);
-                        if (recordDeviceId === deviceId && status !== 'unblocked' && diffHours < 24) {
-                            console.log('Заблокирован! Прошло часов: ' + diffHours);
-                            return true;
-                        }
-                    }
+    try {
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Blocks'!A2:C100?key=${SHEET_API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        console.log('📊 Данные из Blocks:', JSON.stringify(data));
+        console.log('🔑 Мой deviceId:', deviceId);
+        
+        if (data.values) {
+            const now = new Date();
+            console.log('🕐 Сейчас:', now);
+            
+            for (const row of data.values) {
+                if (!row[0] || !row[1]) continue;
+                const recordDate = new Date(row[0]);
+                const recordDeviceId = row[1];
+                const status = row[2] || '';
+                const diffHours = (now - recordDate) / (1000 * 60 * 60);
+                
+                console.log('📋 Строка:', row[0], '|', recordDeviceId, '|', status, '| Разница часов:', diffHours);
+                
+                if (recordDeviceId === deviceId && status !== 'unblocked' && diffHours < 24) {
+                    console.log('🚫 ЗАБЛОКИРОВАН!');
+                    return true;
                 }
-            } catch (e) {
-                console.error('Ошибка проверки блокировки:', e);
             }
-            return false;
         }
+        console.log('✅ НЕ заблокирован');
+        return false;
+    } catch (e) {
+        console.error('Ошибка:', e);
+        return false;
+    }
+}
 
         async function addBlockRecord() {
             try {
