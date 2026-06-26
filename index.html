@@ -35,24 +35,21 @@
         .category-title img { height: 1.4em; width: auto; }
         .category-photo-container { text-align: center; margin-bottom: 12px; }
         .category-photo { max-width: 100%; height: auto; max-height: 250px; object-fit: cover; border-radius: 12px; }
-        .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; transition: background 0.2s; }
+        .product-card { background: #2a2a2a; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
         .product-name { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
         .product-price { color: #e74c3c; font-size: 18px; font-weight: bold; margin-bottom: 6px; }
         .product-weight { color: #aaa; font-size: 13px; }
         .product-comp { color: #888; font-size: 12px; margin-top: 6px; line-height: 1.4; }
         .stock-info { color: #27ae60; font-size: 12px; margin-top: 6px; font-weight: 500; }
-        .stock-info.out-of-stock { color: #e74c3c; }
         .stock-info.preorder { color: #f39c12; }
-
         .add-container { display: flex; align-items: center; margin-top: 10px; }
-        .btn { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
         .btn:active { background: #c0392b; }
         .add-btn { width: 100%; }
         .quantity-control { display: none; align-items: center; background: #27ae60; border-radius: 8px; overflow: hidden; width: 100%; justify-content: space-between; }
         .qty-btn { background: transparent; color: #fff; border: none; font-size: 20px; padding: 10px 16px; cursor: pointer; }
         .qty-btn:active { background: rgba(0,0,0,0.2); }
         .qty-display { padding: 0 12px; font-size: 16px; font-weight: bold; min-width: 24px; text-align: center; }
-
         .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #2a2a2a; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid #e74c3c; z-index: 150; }
         .cart-info { display: flex; align-items: center; gap: 8px; }
         .cart-count { background: #e74c3c; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 14px; font-weight: bold; min-width: 24px; text-align: center; }
@@ -77,17 +74,14 @@
         .promo-btn { background: #f39c12; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; font-weight: bold; }
         .promo-info { color: #27ae60; font-size: 13px; margin-top: 4px; }
         .promo-error { color: #e74c3c; font-size: 13px; margin-top: 4px; }
-
         .status-panel { position: fixed; top: 10px; right: 10px; z-index: 300; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.85); padding: 6px 12px; border-radius: 20px; font-size: 12px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; }
         .status-dot.green { background: #27ae60; }
         .status-dot.red { background: #e74c3c; }
         .refresh-cache-btn { background: none; border: 1px solid #888; color: #ccc; border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; }
-
-        .main-menu-btn { background: #2a2a2a; border: 2px solid #e74c3c; color: #e74c3c; padding: 18px; margin: 10px 0; border-radius: 14px; font-size: 20px; font-weight: bold; width: 100%; cursor: pointer; text-align: left; transition: background 0.2s; }
+        .main-menu-btn { background: #2a2a2a; border: 2px solid #e74c3c; color: #e74c3c; padding: 18px; margin: 10px 0; border-radius: 14px; font-size: 20px; font-weight: bold; width: 100%; cursor: pointer; text-align: left; }
         .main-menu-btn:active { background: #3a3a3a; }
         .back-section-btn { background: #444; margin-bottom: 20px; width: auto; padding: 10px 20px; }
-
         .wheel-container { text-align: center; padding: 20px 0; }
         .wheel-wrapper { position: relative; width: 300px; height: 300px; margin: 0 auto 20px; }
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #e74c3c; position: relative; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#e74c3c 0deg 60deg, #f1c40f 60deg 120deg, #2ecc71 120deg 180deg, #3498db 180deg 240deg, #9b59b6 240deg 300deg, #e67e22 300deg 360deg); box-shadow: 0 0 30px rgba(231,76,60,0.4); }
@@ -95,7 +89,6 @@
         .spin-btn { background: #e74c3c; color: #fff; border: none; padding: 14px 40px; border-radius: 10px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 20px; }
         .spin-btn:disabled { background: #555; color: #999; }
         .result-text { margin-top: 20px; font-size: 22px; font-weight: bold; min-height: 40px; color: #f1c40f; }
-
         .admin-unblock { margin-top: 20px; padding: 16px; background: #2a2a2a; border-radius: 12px; border: 1px dashed #555; }
         .admin-unblock h3 { font-size: 14px; color: #aaa; margin: 0 0 12px; }
         .device-id-display { background: #1a1a1a; padding: 8px; border-radius: 6px; font-family: monospace; font-size: 12px; color: #f39c12; word-break: break-all; margin-bottom: 12px; }
@@ -106,36 +99,28 @@
 
     <div class="status-panel" id="statusPanel" style="display:none">
         <span class="status-dot" id="statusDot"></span>
-        <button class="refresh-cache-btn" onclick="refreshStock()" title="Сбросить кэш и обновить остатки">🔄 Обновить</button>
+        <button class="refresh-cache-btn" onclick="refreshStock()">🔄 Обновить</button>
     </div>
 
     <div class="ios-hint" id="iosHint">
-        📱 Установите приложение: нажмите <strong>«Поделиться»</strong> в Safari и выберите <strong>«На экран Home»</strong>.
+        📱 Установите приложение: нажмите <strong>«Поделиться»</strong> в Safari → <strong>«На экран Home»</strong>.
     </div>
 
-    <!-- ГЛАВНОЕ МЕНЮ -->
     <div id="mainMenu">
         <div class="header">
             <h1>🥩 KoMeat</h1>
             <p>Твоё мясное комьюнити</p>
-            <a href="https://t.me/KoMeat1" target="_blank" rel="noopener" style="display: inline-block; margin-top: 12px; background: #e74c3c; border-radius: 8px; padding: 10px 20px; color: #fff; text-decoration: none; font-weight: bold; font-size: 15px;">
-                📢 Подписывайся на наш Telegram
-            </a>
+            <a href="https://t.me/KoMeat1" target="_blank" rel="noopener" style="display:inline-block;margin-top:12px;background:#e74c3c;border-radius:8px;padding:10px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:15px;">📢 Подписывайся на наш Telegram</a>
         </div>
         <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
         <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
-        <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12; color:#f39c12; display:none;">🎁 Колесо фортуны</button>
+        <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12;color:#f39c12;display:none;">🎁 Колесо фортуны</button>
     </div>
 
-    <!-- КАТАЛОГ ДЖЕРКОВ -->
     <div id="jerkyCatalog" style="display:none;">
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
-        
-        <div class="category-title"><img src="pig.png" alt="Свинина"> Свиные джерки</div>
-        <div class="category-photo-container">
-            <img src="pork.jpg" alt="Свиные джерки" class="category-photo" onerror="this.style.display='none'">
-        </div>
-
+        <div class="category-title"><img src="pig.png" alt=""> Свиные джерки</div>
+        <div class="category-photo-container"><img src="pork.jpg" class="category-photo" onerror="this.style.display='none'"></div>
         <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
             <div class="product-name">Свиные джерки «Коньячные»</div>
             <div class="product-price">450 ₽</div>
@@ -143,15 +128,14 @@
             <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
             <div class="stock-info" id="stock_pork_cognac">Загрузка...</div>
             <div class="add-container">
-                <button class="btn add-btn" id="btn_pork_cognac" onclick="addToCart('pork_cognac', 'Свиные джерки Коньячные', 450)">Добавить в корзину</button>
+                <button class="btn add-btn" id="btn_pork_cognac" onclick="addToCart('pork_cognac','Свиные джерки Коньячные',450)">Добавить в корзину</button>
                 <div class="quantity-control" id="qctrl_pork_cognac">
-                    <button class="qty-btn" onclick="changeCartQty('pork_cognac', -1)">−</button>
+                    <button class="qty-btn" onclick="changeCartQty('pork_cognac',-1)">−</button>
                     <span class="qty-display" id="qty_pork_cognac">0</span>
-                    <button class="qty-btn" onclick="changeCartQty('pork_cognac', 1)">+</button>
+                    <button class="qty-btn" onclick="changeCartQty('pork_cognac',1)">+</button>
                 </div>
             </div>
         </div>
-
         <div class="product-card" data-id="pork_paprika" data-name="Свиные джерки Паприка" data-price="450">
             <div class="product-name">Свиные джерки «Паприка»</div>
             <div class="product-price">450 ₽</div>
@@ -159,20 +143,16 @@
             <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
             <div class="stock-info" id="stock_pork_paprika">Загрузка...</div>
             <div class="add-container">
-                <button class="btn add-btn" id="btn_pork_paprika" onclick="addToCart('pork_paprika', 'Свиные джерки Паприка', 450)">Добавить в корзину</button>
+                <button class="btn add-btn" id="btn_pork_paprika" onclick="addToCart('pork_paprika','Свиные джерки Паприка',450)">Добавить в корзину</button>
                 <div class="quantity-control" id="qctrl_pork_paprika">
-                    <button class="qty-btn" onclick="changeCartQty('pork_paprika', -1)">−</button>
+                    <button class="qty-btn" onclick="changeCartQty('pork_paprika',-1)">−</button>
                     <span class="qty-display" id="qty_pork_paprika">0</span>
-                    <button class="qty-btn" onclick="changeCartQty('pork_paprika', 1)">+</button>
+                    <button class="qty-btn" onclick="changeCartQty('pork_paprika',1)">+</button>
                 </div>
             </div>
         </div>
-
-        <div class="category-title"><img src="chicken.png" alt="Курица"> Куриные джерки</div>
-        <div class="category-photo-container">
-            <img src="chicken_photo.jpg" alt="Куриные джерки" class="category-photo" onerror="this.style.display='none'">
-        </div>
-
+        <div class="category-title"><img src="chicken.png" alt=""> Куриные джерки</div>
+        <div class="category-photo-container"><img src="chicken_photo.jpg" class="category-photo" onerror="this.style.display='none'"></div>
         <div class="product-card" data-id="chicken" data-name="Куриные джерки" data-price="600">
             <div class="product-name">Куриные джерки</div>
             <div class="product-price">600 ₽</div>
@@ -180,20 +160,16 @@
             <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
             <div class="stock-info" id="stock_chicken">Загрузка...</div>
             <div class="add-container">
-                <button class="btn add-btn" id="btn_chicken" onclick="addToCart('chicken', 'Куриные джерки', 600)">Добавить в корзину</button>
+                <button class="btn add-btn" id="btn_chicken" onclick="addToCart('chicken','Куриные джерки',600)">Добавить в корзину</button>
                 <div class="quantity-control" id="qctrl_chicken">
-                    <button class="qty-btn" onclick="changeCartQty('chicken', -1)">−</button>
+                    <button class="qty-btn" onclick="changeCartQty('chicken',-1)">−</button>
                     <span class="qty-display" id="qty_chicken">0</span>
-                    <button class="qty-btn" onclick="changeCartQty('chicken', 1)">+</button>
+                    <button class="qty-btn" onclick="changeCartQty('chicken',1)">+</button>
                 </div>
             </div>
         </div>
-
-        <div class="category-title"><img src="cow.png" alt="Говядина"> Говяжьи джерки</div>
-        <div class="category-photo-container">
-            <img src="beef.jpg" alt="Говяжьи джерки" class="category-photo" onerror="this.style.display='none'">
-        </div>
-
+        <div class="category-title"><img src="cow.png" alt=""> Говяжьи джерки</div>
+        <div class="category-photo-container"><img src="beef.jpg" class="category-photo" onerror="this.style.display='none'"></div>
         <div class="product-card" data-id="beef" data-name="Говяжьи джерки" data-price="900">
             <div class="product-name">Говяжьи джерки</div>
             <div class="product-price">900 ₽</div>
@@ -201,55 +177,46 @@
             <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
             <div class="stock-info" id="stock_beef">Загрузка...</div>
             <div class="add-container">
-                <button class="btn add-btn" id="btn_beef" onclick="addToCart('beef', 'Говяжьи джерки', 900)">Добавить в корзину</button>
+                <button class="btn add-btn" id="btn_beef" onclick="addToCart('beef','Говяжьи джерки',900)">Добавить в корзину</button>
                 <div class="quantity-control" id="qctrl_beef">
-                    <button class="qty-btn" onclick="changeCartQty('beef', -1)">−</button>
+                    <button class="qty-btn" onclick="changeCartQty('beef',-1)">−</button>
                     <span class="qty-display" id="qty_beef">0</span>
-                    <button class="qty-btn" onclick="changeCartQty('beef', 1)">+</button>
+                    <button class="qty-btn" onclick="changeCartQty('beef',1)">+</button>
                 </div>
             </div>
         </div>
-
-        <div class="sauce-note">
-            🌶 <b>Бесплатный острый соус</b> добавляется по желанию.<br>
-            <span style="font-size:11px;">Moruga Scorpion, Carolina Reaper, Ghost Pepper</span>
-        </div>
+        <div class="sauce-note">🌶 <b>Бесплатный острый соус</b> по желанию.<br><span style="font-size:11px;">Moruga Scorpion, Carolina Reaper, Ghost Pepper</span></div>
     </div>
 
-    <!-- ДЕЛИКАТЕСЫ (заглушка) -->
     <div id="delicaciesSection" style="display:none;">
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
-        <div style="text-align:center; padding: 60px 20px;">
-            <h2 style="color:#e74c3c; margin-bottom:16px;">🍖 Мясные деликатесы</h2>
-            <p style="color:#aaa; font-size: 16px;">Скоро здесь появится ассортимент мясных деликатесов.</p>
-            <p style="color:#aaa;">Ожидайте!</p>
+        <div style="text-align:center;padding:60px 20px;">
+            <h2 style="color:#e74c3c;">🍖 Мясные деликатесы</h2>
+            <p style="color:#aaa;">Скоро здесь появится ассортимент.</p>
         </div>
     </div>
 
-    <!-- КОЛЕСО ФОРТУНЫ -->
     <div id="wheelSection" style="display:none;">
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
         <div class="wheel-container">
-            <h2 style="color:#f39c12; margin-bottom:16px;">🎁 Колесо фортуны</h2>
-            <p style="color:#aaa; margin-bottom:20px;">Испытай удачу! Вращай колесо и получи приз.</p>
+            <h2 style="color:#f39c12;">🎁 Колесо фортуны</h2>
+            <p style="color:#aaa;">Испытай удачу!</p>
             <div class="wheel-wrapper">
                 <div class="wheel" id="wheel"></div>
                 <div class="wheel-pointer"></div>
             </div>
             <button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎡 Крутить</button>
             <div class="result-text" id="resultText"></div>
-            <p style="color:#aaa; font-size:12px; margin-top:12px;">* Можно крутить 1 раз в 24 часа</p>
-            
+            <p style="color:#aaa;font-size:12px;">* Можно крутить 1 раз в 24 часа</p>
             <div class="admin-unblock" id="adminUnblockPanel">
-                <h3>🔧 Сброс блокировки (для администратора)</h3>
+                <h3>🔧 Сброс блокировки</h3>
                 <div class="device-id-display" id="deviceIdDisplay"></div>
-                <button class="btn" onclick="requestUnblock()" style="background:#f39c12; width:100%;">🔓 Разблокировать колесо</button>
+                <button class="btn" onclick="requestUnblock()" style="background:#f39c12;width:100%;">🔓 Разблокировать</button>
                 <div class="unblock-status" id="unblockStatus"></div>
             </div>
         </div>
     </div>
 
-    <!-- КОРЗИНА (нижняя панель) -->
     <div class="cart-bar" id="cartBar">
         <div class="cart-info">
             <span>🛒</span>
@@ -259,480 +226,281 @@
         <button class="cart-btn" onclick="openCart()">Оформить</button>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО КОРЗИНЫ -->
     <div class="modal" id="cartModal">
         <div class="modal-content">
             <h2>🛒 Корзина</h2>
             <div id="cartItems"></div>
-            <div id="discountInfo" style="margin-top:8px;"></div>
-            <div style="margin-top: 16px; font-size: 20px; font-weight: bold; text-align: right;" id="modalTotal">Итого: 0 ₽</div>
-            <div style="margin-top: 16px;">
+            <div id="discountInfo"></div>
+            <div style="margin-top:16px;font-size:20px;font-weight:bold;text-align:right;" id="modalTotal">Итого: 0 ₽</div>
+            <div style="margin-top:16px;">
                 <input type="text" id="promoInput" class="promo-input" placeholder="Введите промокод">
                 <button class="promo-btn" onclick="applyPromo()">🎫 Применить</button>
                 <div id="promoMessage"></div>
             </div>
-            <div style="margin-top: 16px;">
-                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
-                    <input type="checkbox" id="sauceCheckbox" style="width: 18px; height: 18px;">
-                    <span>Добавить острый соус 🌶</span>
+            <div style="margin-top:16px;">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                    <input type="checkbox" id="sauceCheckbox"> Добавить острый соус 🌶
                 </label>
             </div>
             <div class="messenger-choice">
                 <span>Отправить в:</span>
-                <label>
-                    <input type="radio" name="messenger" value="telegram" checked>
-                    Telegram
-                </label>
-                <label>
-                    <input type="radio" name="messenger" value="vk">
-                    ВКонтакте
-                </label>
+                <label><input type="radio" name="messenger" value="telegram" checked> Telegram</label>
+                <label><input type="radio" name="messenger" value="vk"> ВКонтакте</label>
             </div>
             <button id="sendOrderButton" class="send-order-btn">✅ Отправить заказ</button>
-            <button class="clear-cart-btn" onclick="clearCart()">🗑️ Очистить корзину</button>
-            <button class="btn" onclick="closeCart()" style="background: #555; width: 100%;">🔙 Продолжить покупки</button>
+            <button class="clear-cart-btn" onclick="clearCart()">🗑️ Очистить</button>
+            <button class="btn" onclick="closeCart()" style="background:#555;width:100%;">🔙 Продолжить</button>
         </div>
     </div>
 
     <script>
-    // ⚙️ НАСТРОЙКИ
-    const SHEET_API_KEY = 'AIzaSyB4Z1IBeGtoBKpuXR-vs0coGunF5O1zKFI';
-    const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwufgIIZdLEqLjRcTmycmVmI41lNZdT6_WnNWdty2rmKG7cSf9w3ahqT_tNmc8ejPM3/exec';
+        const SHEET_API_KEY = 'AIzaSyB4Z1IBeGtoBKpuXR-vs0coGunF5O1zKFI';
+        const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwufgIIZdLEqLjRcTmycmVmI41lNZdT6_WnNWdty2rmKG7cSf9w3ahqT_tNmc8ejPM3/exec';
+        const urlParams = new URLSearchParams(window.location.search);
+        const isApp = (() => {
+            if (urlParams.get('app') === 'true') return true;
+            if (navigator.standalone) return true;
+            if (window.matchMedia('(display-mode: standalone)').matches) return true;
+            return false;
+        })();
+        const isAdmin = urlParams.get('admin') === 'true';
+        let cart = {}, stockCache = null, wheelConfig = [], appliedPromo = null;
+        let deviceId = localStorage.getItem('deviceId') || (() => { const id = 'KO-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); return id; })();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    const isApp = (() => {
-      if (urlParams.get('app') === 'true') return true;
-      if (navigator.standalone) return true;
-      if (window.matchMedia('(display-mode: standalone)').matches) return true;
-      return false;
-    })();
-    
-    const isAdmin = urlParams.get('admin') === 'true';
-const isApp = (() => {
-    if (urlParams.get('app') === 'true') return true;
-    if (navigator.standalone) return true;
-    if (window.matchMedia('(display-mode: standalone)').matches) return true;
-    return false;
-})();
+        if (isApp) { const b = document.querySelector('.app-only'); if (b) b.style.display = 'block'; }
+        if (!isAdmin) { const p = document.getElementById('adminUnblockPanel'); if (p) p.style.display = 'none'; }
 
-if (isApp) {
-    document.querySelector('.app-only').style.display = 'block';
-}
-    let cart = {};
-    let stockCache = null;
-    let wheelConfig = [];
-    let appliedPromo = null;
-    let deviceId = localStorage.getItem('deviceId') || (() => { const id = 'KO-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); return id; })();
-
-    if (isApp) {
-        const appBtn = document.querySelector('.app-only');
-        if (appBtn) appBtn.style.display = 'block';
-    }
-
-    if (!isAdmin) {
-        const adminPanel = document.getElementById('adminUnblockPanel');
-        if (adminPanel) adminPanel.style.display = 'none';
-    }
-
-    // ============ БЛОКИРОВКИ ============
-
-    async function isBlockedInSheet() {
-        try {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Blocks'!A2:C100?key=${SHEET_API_KEY}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if (data.values) {
-                const now = new Date();
-                for (const row of data.values) {
-                    if (!row[0] || !row[1]) continue;
-                    
-                    const parts = row[0].split(/[.\s:]/);
-                    const recordDate = new Date(
-                        parseInt(parts[2]),
-                        parseInt(parts[1]) - 1,
-                        parseInt(parts[0]),
-                        parseInt(parts[3]) || 0,
-                        parseInt(parts[4]) || 0,
-                        parseInt(parts[5]) || 0
-                    );
-                    
-                    const recordDeviceId = row[1];
-                    const status = row[2] || '';
-                    const diffHours = (now - recordDate) / (1000 * 60 * 60);
-                    
-                    if (recordDeviceId === deviceId && status !== 'unblocked' && diffHours < 24) {
-                        return true;
+        async function isBlockedInSheet() {
+            try {
+                const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Blocks'!A2:C100?key=${SHEET_API_KEY}`);
+                const d = await r.json();
+                if (d.values) {
+                    const now = new Date();
+                    for (const row of d.values) {
+                        if (!row[0] || !row[1]) continue;
+                        const parts = row[0].split(/[.\s:]/);
+                        const rd = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]), parseInt(parts[3]) || 0, parseInt(parts[4]) || 0, parseInt(parts[5]) || 0);
+                        const diff = (now - rd) / 3600000;
+                        if (row[1] === deviceId && (row[2] || '') !== 'unblocked' && diff < 24) return true;
                     }
                 }
-            }
-            return false;
-        } catch (e) {
-            console.error('Ошибка проверки блокировки:', e);
+            } catch (e) {}
             return false;
         }
-    }
 
-    async function addBlockRecord() {
-        try {
-            const now = new Date();
-            const dateStr = now.toISOString();
-            await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(dateStr) + '&deviceId=' + encodeURIComponent(deviceId));
-        } catch (e) {
-            console.error('Ошибка добавления блокировки:', e);
+        async function addBlockRecord() {
+            try { await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(new Date().toISOString()) + '&deviceId=' + encodeURIComponent(deviceId)); } catch (e) {}
         }
-    }
 
-    async function requestUnblock() {
-        const statusDiv = document.getElementById('unblockStatus');
-        statusDiv.innerHTML = '<span style="color:#f39c12;">⏳ Разблокировка...</span>';
-        try {
-            const response = await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=requestUnblock&deviceId=' + encodeURIComponent(deviceId));
-            const result = await response.json();
-            if (result.success) {
-                statusDiv.innerHTML = '<span style="color:#27ae60;">✅ Разблокировано!</span>';
-                updateSpinButton();
-            } else {
-                statusDiv.innerHTML = '<span style="color:#e74c3c;">❌ Ошибка</span>';
-            }
-        } catch (e) {
-            statusDiv.innerHTML = '<span style="color:#e74c3c;">❌ Ошибка</span>';
+        async function requestUnblock() {
+            const s = document.getElementById('unblockStatus');
+            s.innerHTML = '<span style="color:#f39c12;">⏳ Разблокировка...</span>';
+            try {
+                const r = await (await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=requestUnblock&deviceId=' + encodeURIComponent(deviceId))).json();
+                s.innerHTML = r.success ? '<span style="color:#27ae60;">✅ Готово!</span>' : '<span style="color:#e74c3c;">❌ Ошибка</span>';
+                if (r.success) updateSpinButton();
+            } catch (e) { s.innerHTML = '<span style="color:#e74c3c;">❌ Ошибка</span>'; }
         }
-    }
 
-    // ============ КОЛЕСО ============
-
-    async function loadWheelConfig() {
-        try {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Prizes'!A2:F10?key=${SHEET_API_KEY}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.values) {
-                wheelConfig = data.values
-                    .filter(row => row[0] === 'Да')
-                    .map(row => ({
-                        name: row[1],
-                        prize: row[2],
-                        code: row[3],
-                        chance: parseFloat(row[4]) || 0,
-                        remaining: parseInt(row[5]) || 0
-                    }));
-            }
-            if (wheelConfig.length === 0) {
-                wheelConfig = [
+        async function loadWheelConfig() {
+            try {
+                const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Prizes'!A2:F10?key=${SHEET_API_KEY}`);
+                const d = await r.json();
+                if (d.values) wheelConfig = d.values.filter(r => r[0] === 'Да').map(r => ({ name: r[1], prize: r[2], code: r[3], chance: parseFloat(r[4]) || 0, remaining: parseInt(r[5]) || 0 }));
+                if (!wheelConfig.length) wheelConfig = [
                     { name: 'Скидка 10%', prize: 'Скидка 10%', code: 'WHEEL10', chance: 20, remaining: 10 },
                     { name: 'Скидка 5%', prize: 'Скидка 5%', code: 'WHEEL5', chance: 30, remaining: 50 },
                     { name: 'Пусто', prize: 'Пусто', code: null, chance: 50, remaining: Infinity }
                 ];
-            }
-        } catch (e) {
-            console.error('Ошибка загрузки колеса:', e);
+            } catch (e) {}
         }
-    }
 
-    async function canSpin() {
-        return !(await isBlockedInSheet());
-    }
+        async function canSpin() { return !(await isBlockedInSheet()); }
 
-    async function spinWheel() {
-        const allowed = await canSpin();
-        if (!allowed) { 
-            alert('Вы уже крутили колесо сегодня!');
-            return; 
-        }
-        if (wheelConfig.length === 0) { alert('Розыгрыш не настроен.'); return; }
-        
-        const wheel = document.getElementById('wheel');
-        const btn = document.getElementById('spinBtn');
-        btn.disabled = true;
-        wheel.style.transform = `rotate(${1800 + Math.floor(Math.random() * 360)}deg)`;
-        
-        setTimeout(async () => {
-            const random = Math.random() * 100;
-            let cumulative = 0;
-            let result = wheelConfig[wheelConfig.length - 1];
-            for (const sector of wheelConfig) {
-                cumulative += sector.chance;
-                if (random <= cumulative) { result = sector; break; }
-            }
-            
-            await addBlockRecord();
-            
-            if (result.code) {
-                try {
-                    await fetch(APPS_SCRIPT_URL + '?sheet=History&deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code));
-                } catch(e) {}
-            }
-            
-            const resultDiv = document.getElementById('resultText');
-            if (result.code) {
-                resultDiv.innerHTML = `🎉 ${result.prize}!<br>Промокод: <strong>${result.code}</strong>`;
-                try { navigator.clipboard.writeText(result.code); } catch(e) {}
-            } else {
-                resultDiv.innerHTML = '😔 ' + result.name;
-            }
+        async function spinWheel() {
+            if (!(await canSpin())) { alert('Вы уже крутили сегодня!'); return; }
+            if (!wheelConfig.length) { alert('Розыгрыш не настроен.'); return; }
+            const wheel = document.getElementById('wheel'), btn = document.getElementById('spinBtn');
             btn.disabled = true;
+            wheel.style.transform = `rotate(${1800 + Math.floor(Math.random() * 360)}deg)`;
+            setTimeout(async () => {
+                let rnd = Math.random() * 100, cum = 0, result = wheelConfig[wheelConfig.length - 1];
+                for (const s of wheelConfig) { cum += s.chance; if (rnd <= cum) { result = s; break; } }
+                await addBlockRecord();
+                if (result.code) try { await fetch(APPS_SCRIPT_URL + '?sheet=History&deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code)); } catch (e) {}
+                document.getElementById('resultText').innerHTML = result.code ? `🎉 ${result.prize}!<br>Промокод: <strong>${result.code}</strong>` : '😔 ' + result.name;
+                if (result.code) try { navigator.clipboard.writeText(result.code); } catch (e) {}
+                updateSpinButton();
+            }, 4000);
+        }
+
+        function updateSpinButton() {
+            const btn = document.getElementById('spinBtn');
+            if (!btn) return;
+            canSpin().then(a => { btn.disabled = !a; btn.textContent = a ? '🎡 Крутить' : '🔒 Приходите завтра'; });
+        }
+
+        function showWheel() {
+            ['mainMenu','jerkyCatalog','delicaciesSection'].forEach(id => document.getElementById(id).style.display = 'none');
+            document.getElementById('wheelSection').style.display = 'block';
+            document.getElementById('deviceIdDisplay').textContent = 'Device ID: ' + deviceId;
+            if (!wheelConfig.length) loadWheelConfig();
             updateSpinButton();
-        }, 4000);
-    }
-
-    function updateSpinButton() {
-        const btn = document.getElementById('spinBtn');
-        if (!btn) return;
-        canSpin().then(allowed => {
-            btn.disabled = !allowed;
-            btn.textContent = allowed ? '🎡 Крутить' : '🔒 Приходите завтра';
-        });
-    }
-
-    function showWheel() {
-        document.getElementById('mainMenu').style.display = 'none';
-        document.getElementById('jerkyCatalog').style.display = 'none';
-        document.getElementById('delicaciesSection').style.display = 'none';
-        document.getElementById('wheelSection').style.display = 'block';
-        document.getElementById('deviceIdDisplay').textContent = 'Device ID: ' + deviceId;
-        if (wheelConfig.length === 0) loadWheelConfig();
-        updateSpinButton();
-    }
-
-    // ============ ПРОМОКОДЫ ============
-
-    function applyPromo() {
-        const code = document.getElementById('promoInput').value.trim();
-        if (!code) return;
-        const found = wheelConfig.find(s => s.code === code);
-        const msgDiv = document.getElementById('promoMessage');
-        if (found) {
-            const discountPercent = parseInt(found.name) || 0;
-            appliedPromo = { code: found.code, discount: discountPercent, prize: found.prize };
-            msgDiv.innerHTML = `<span class="promo-info">✅ Промокод "${code}" применён! Скидка ${discountPercent}%</span>`;
-        } else {
-            appliedPromo = null;
-            msgDiv.innerHTML = `<span class="promo-error">❌ Промокод не найден</span>`;
         }
-        openCart();
-    }
 
-    // ============ ОСТАТКИ ============
+        function applyPromo() {
+            const code = document.getElementById('promoInput').value.trim();
+            if (!code) return;
+            const found = wheelConfig.find(s => s.code === code);
+            const msg = document.getElementById('promoMessage');
+            if (found) { appliedPromo = { code: found.code, discount: parseInt(found.name) || 0 }; msg.innerHTML = `<span class="promo-info">✅ Промокод "${code}" применён! Скидка ${appliedPromo.discount}%</span>`; }
+            else { appliedPromo = null; msg.innerHTML = '<span class="promo-error">❌ Не найден</span>'; }
+            openCart();
+        }
 
-    async function loadStockFromGoogleSheet() {
-        try {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Stock'!A2:C20?key=${SHEET_API_KEY}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.values) {
-                const stock = {};
-                for (const row of data.values) {
-                    if (row.length < 2) continue;
-                    const art = row[0];
-                    const qty = parseFloat(String(row[1]).replace(',', '.')) || 0;
-                    const date = row[2] || '';
-                    stock[art] = { qty, date };
+        async function loadStockFromGoogleSheet() {
+            try {
+                const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Stock'!A2:C20?key=${SHEET_API_KEY}`);
+                const d = await r.json();
+                if (d.values) {
+                    const stock = {};
+                    for (const row of d.values) { if (row.length >= 2) stock[row[0]] = { qty: parseFloat(String(row[1]).replace(',', '.')) || 0, date: row[2] || '' }; }
+                    localStorage.setItem('stockCache', JSON.stringify(stock));
+                    stockCache = stock;
+                    applyStock(stock);
+                    showStatus(true);
                 }
-                localStorage.setItem('stockCache', JSON.stringify(stock));
-                stockCache = stock;
-                applyStock(stock);
-                showStatus(true);
-            }
-        } catch (e) {
-            console.error('Ошибка загрузки остатков:', e);
-            const cached = localStorage.getItem('stockCache');
-            if (cached) { try { stockCache = JSON.parse(cached); applyStock(stockCache, true); showStatus(false); } catch(e2) {} }
-            else showStatus(false);
-        }
-    }
-
-    function applyStock(stock, isCached = false) {
-        for (let [id, info] of Object.entries(stock)) {
-            const stockEl = document.getElementById(`stock_${id}`);
-            const btnEl = document.getElementById(`btn_${id}`);
-            if (!stockEl) continue;
-            if (btnEl) btnEl.disabled = false;
-            if (info.qty > 0) {
-                stockEl.textContent = `В наличии: ${info.qty} шт.${info.date ? ' (изг: ' + info.date + ')' : ''}${isCached ? ' (кэш)' : ''}`;
-                stockEl.className = 'stock-info';
-                if (btnEl) btnEl.textContent = 'Добавить в корзину';
-            } else {
-                stockEl.textContent = 'Предзаказ';
-                stockEl.className = 'stock-info preorder';
-                if (btnEl) btnEl.textContent = 'Предзаказать';
+            } catch (e) {
+                const c = localStorage.getItem('stockCache');
+                if (c) { try { stockCache = JSON.parse(c); applyStock(stockCache, true); showStatus(false); } catch (e2) {} } else showStatus(false);
             }
         }
-    }
 
-    function showStatus(ok) {
-        const panel = document.getElementById('statusPanel');
-        const dot = document.getElementById('statusDot');
-        panel.style.display = 'flex';
-        dot.className = ok ? 'status-dot green' : 'status-dot red';
-    }
-
-    // ============ НАВИГАЦИЯ ============
-
-    function showMainMenu() {
-        document.getElementById('mainMenu').style.display = 'block';
-        document.getElementById('jerkyCatalog').style.display = 'none';
-        document.getElementById('delicaciesSection').style.display = 'none';
-        document.getElementById('wheelSection').style.display = 'none';
-        document.getElementById('statusPanel').style.display = 'none';
-    }
-
-    function showJerkyCatalog() {
-        document.getElementById('mainMenu').style.display = 'none';
-        document.getElementById('jerkyCatalog').style.display = 'block';
-        document.getElementById('delicaciesSection').style.display = 'none';
-        document.getElementById('wheelSection').style.display = 'none';
-        if (!stockCache) loadStockFromGoogleSheet();
-        else document.getElementById('statusPanel').style.display = 'flex';
-    }
-
-    function showDelicacies() {
-        document.getElementById('mainMenu').style.display = 'none';
-        document.getElementById('jerkyCatalog').style.display = 'none';
-        document.getElementById('delicaciesSection').style.display = 'block';
-        document.getElementById('wheelSection').style.display = 'none';
-        document.getElementById('statusPanel').style.display = 'none';
-    }
-
-    async function refreshStock() {
-        localStorage.removeItem('stockCache');
-        stockCache = null;
-        await loadStockFromGoogleSheet();
-    }
-
-    // ============ КОРЗИНА ============
-
-    function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
-    function loadCartFromStorage() {
-        const saved = localStorage.getItem('cart');
-        cart = saved ? (() => { try { return JSON.parse(saved); } catch(e) { return {}; } })() : {};
-    }
-    function updateCartBar() {
-        let count = 0, total = 0;
-        for (let id in cart) { count += cart[id].qty; total += cart[id].qty * cart[id].price; }
-        document.getElementById('cartCount').textContent = count;
-        document.getElementById('cartTotal').textContent = total + ' ₽';
-    }
-    function updateProductUI(id) {
-        const qty = cart[id] ? cart[id].qty : 0;
-        const card = document.querySelector(`.product-card[data-id="${id}"]`);
-        if (!card) return;
-        const addBtn = card.querySelector('.add-btn');
-        const qtyControl = card.querySelector('.quantity-control');
-        const qtyDisplay = document.getElementById(`qty_${id}`);
-        if (qty > 0) { addBtn.style.display = 'none'; qtyControl.style.display = 'flex'; qtyDisplay.textContent = qty; }
-        else { addBtn.style.display = 'block'; qtyControl.style.display = 'none'; }
-    }
-    function addToCart(id, name, price) {
-        if (!cart[id]) cart[id] = { name, price, qty: 0 };
-        cart[id].qty++;
-        saveCartToStorage();
-        updateCartBar();
-        updateProductUI(id);
-    }
-    function changeCartQty(id, delta) {
-        if (!cart[id]) return;
-        cart[id].qty += delta;
-        if (cart[id].qty <= 0) delete cart[id];
-        saveCartToStorage();
-        updateCartBar();
-        updateProductUI(id);
-        if (document.getElementById('cartModal').classList.contains('active')) openCart();
-    }
-    function clearCart() {
-        cart = {};
-        saveCartToStorage();
-        updateCartBar();
-        document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
-        closeCart();
-    }
-    function openCart() {
-        const itemsDiv = document.getElementById('cartItems');
-        let total = 0;
-        itemsDiv.innerHTML = '';
-        if (Object.keys(cart).length === 0) {
-            itemsDiv.innerHTML = '<p style="text-align:center;color:#aaa;">Корзина пуста</p>';
-        } else {
-            for (let id in cart) {
-                const item = cart[id];
-                const itemTotal = item.qty * item.price;
-                total += itemTotal;
-                const stockInfo = stockCache ? stockCache[id] : null;
-                const preorderTag = (!stockInfo || stockInfo.qty <= 0) ? ' <span style="color:#f39c12;">(предзаказ)</span>' : '';
-                itemsDiv.innerHTML += `
-                    <div class="cart-item">
-                        <span class="cart-item-name">${item.name}${preorderTag}</span>
-                        <button class="remove-btn" onclick="changeCartQty('${id}', -1)">−</button>
-                        <span class="cart-item-qty">${item.qty}</span>
-                        <button class="remove-btn" onclick="changeCartQty('${id}', 1)">+</button>
-                        <span class="cart-item-price">${itemTotal} ₽</span>
-                    </div>
-                `;
+        function applyStock(stock, isCached = false) {
+            for (const [id, info] of Object.entries(stock)) {
+                const el = document.getElementById(`stock_${id}`), btn = document.getElementById(`btn_${id}`);
+                if (!el) continue;
+                if (btn) btn.disabled = false;
+                if (info.qty > 0) { el.textContent = `В наличии: ${info.qty} шт.${info.date ? ' (' + info.date + ')' : ''}${isCached ? ' (кэш)' : ''}`; el.className = 'stock-info'; if (btn) btn.textContent = 'Добавить в корзину'; }
+                else { el.textContent = 'Предзаказ'; el.className = 'stock-info preorder'; if (btn) btn.textContent = 'Предзаказать'; }
             }
         }
-        let discount = 0;
-        if (appliedPromo) discount = Math.round(total * appliedPromo.discount / 100);
-        document.getElementById('discountInfo').innerHTML = discount > 0 ? `<span style="color:#27ae60;">Скидка: -${discount} ₽</span>` : '';
-        document.getElementById('modalTotal').textContent = 'Итого: ' + (total - discount) + ' ₽';
-        document.getElementById('cartModal').classList.add('active');
-    }
-    function closeCart() { document.getElementById('cartModal').classList.remove('active'); }
 
-    function fallbackCopy(text) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.cssText = 'position:fixed;left:-9999px';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-    }
-
-    async function sendOrder() {
-        if (Object.keys(cart).length === 0) { alert('Корзина пуста!'); return; }
-        let total = 0, orderText = '';
-        for (let id in cart) {
-            const item = cart[id];
-            const itemTotal = item.qty * item.price;
-            total += itemTotal;
-            const stockInfo = stockCache ? stockCache[id] : null;
-            const preorder = (!stockInfo || stockInfo.qty <= 0) ? ' (предзаказ)' : '';
-            orderText += `${item.name} x${item.qty} = ${itemTotal} ₽${preorder}\n`;
+        function showStatus(ok) {
+            document.getElementById('statusPanel').style.display = 'flex';
+            document.getElementById('statusDot').className = ok ? 'status-dot green' : 'status-dot red';
         }
-        if (appliedPromo) {
-            const discount = Math.round(total * appliedPromo.discount / 100);
-            orderText += `\nПромокод: ${appliedPromo.code} (-${discount} ₽)`;
-            total -= discount;
+
+        function showMainMenu() {
+            ['jerkyCatalog','delicaciesSection','wheelSection','statusPanel'].forEach(id => document.getElementById(id).style.display = 'none');
+            document.getElementById('mainMenu').style.display = 'block';
         }
-        orderText += `\nИтого: ${total} ₽`;
-        if (document.getElementById('sauceCheckbox').checked) orderText += '\n🌶 С острым соусом!';
 
-        const messenger = document.querySelector('input[name="messenger"]:checked').value;
-        try { await navigator.clipboard.writeText(orderText); } catch(e) { fallbackCopy(orderText); }
+        function showJerkyCatalog() {
+            ['mainMenu','delicaciesSection','wheelSection'].forEach(id => document.getElementById(id).style.display = 'none');
+            document.getElementById('jerkyCatalog').style.display = 'block';
+            if (!stockCache) loadStockFromGoogleSheet(); else document.getElementById('statusPanel').style.display = 'flex';
+        }
 
-        window.open(messenger === 'telegram' ? 'https://t.me/Andreik115' : 'https://vk.me/18451549', '_blank');
+        function showDelicacies() {
+            ['mainMenu','jerkyCatalog','wheelSection','statusPanel'].forEach(id => document.getElementById(id).style.display = 'none');
+            document.getElementById('delicaciesSection').style.display = 'block';
+        }
 
-        cart = {};
-        appliedPromo = null;
-        document.getElementById('promoInput').value = '';
-        document.getElementById('promoMessage').innerHTML = '';
-        saveCartToStorage();
-        updateCartBar();
-        document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
-        closeCart();
-    }
+        async function refreshStock() { localStorage.removeItem('stockCache'); stockCache = null; await loadStockFromGoogleSheet(); }
 
-    document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
+        function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
+        function loadCartFromStorage() { const s = localStorage.getItem('cart'); cart = s ? (() => { try { return JSON.parse(s); } catch (e) { return {}; } })() : {}; }
+        function updateCartBar() {
+            let count = 0, total = 0;
+            for (const id in cart) { count += cart[id].qty; total += cart[id].qty * cart[id].price; }
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartTotal').textContent = total + ' ₽';
+        }
+        function updateProductUI(id) {
+            const qty = cart[id] ? cart[id].qty : 0;
+            const card = document.querySelector(`.product-card[data-id="${id}"]`);
+            if (!card) return;
+            const add = card.querySelector('.add-btn'), ctrl = card.querySelector('.quantity-control'), dis = document.getElementById(`qty_${id}`);
+            if (qty > 0) { add.style.display = 'none'; ctrl.style.display = 'flex'; dis.textContent = qty; }
+            else { add.style.display = 'block'; ctrl.style.display = 'none'; }
+        }
+        function addToCart(id, name, price) {
+            if (!cart[id]) cart[id] = { name, price, qty: 0 };
+            cart[id].qty++;
+            saveCartToStorage(); updateCartBar(); updateProductUI(id);
+        }
+        function changeCartQty(id, delta) {
+            if (!cart[id]) return;
+            cart[id].qty += delta;
+            if (cart[id].qty <= 0) delete cart[id];
+            saveCartToStorage(); updateCartBar(); updateProductUI(id);
+            if (document.getElementById('cartModal').classList.contains('active')) openCart();
+        }
+        function clearCart() {
+            cart = {}; saveCartToStorage(); updateCartBar();
+            document.querySelectorAll('.product-card').forEach(c => updateProductUI(c.dataset.id));
+            closeCart();
+        }
+        function openCart() {
+            const div = document.getElementById('cartItems');
+            let total = 0;
+            div.innerHTML = '';
+            if (!Object.keys(cart).length) div.innerHTML = '<p style="text-align:center;color:#aaa;">Корзина пуста</p>';
+            else for (const id in cart) {
+                const item = cart[id], it = item.qty * item.price;
+                total += it;
+                const si = stockCache ? stockCache[id] : null;
+                const pre = (!si || si.qty <= 0) ? ' <span style="color:#f39c12;">(предзаказ)</span>' : '';
+                div.innerHTML += `<div class="cart-item"><span class="cart-item-name">${item.name}${pre}</span><button class="remove-btn" onclick="changeCartQty('${id}',-1)">−</button><span class="cart-item-qty">${item.qty}</span><button class="remove-btn" onclick="changeCartQty('${id}',1)">+</button><span class="cart-item-price">${it} ₽</span></div>`;
+            }
+            let disc = 0;
+            if (appliedPromo) disc = Math.round(total * appliedPromo.discount / 100);
+            document.getElementById('discountInfo').innerHTML = disc > 0 ? `<span style="color:#27ae60;">Скидка: -${disc} ₽</span>` : '';
+            document.getElementById('modalTotal').textContent = 'Итого: ' + (total - disc) + ' ₽';
+            document.getElementById('cartModal').classList.add('active');
+        }
+        function closeCart() { document.getElementById('cartModal').classList.remove('active'); }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('sauceCheckbox').checked = false;
-        loadCartFromStorage();
-        updateCartBar();
-        document.querySelectorAll('.product-card').forEach(card => updateProductUI(card.dataset.id));
-        showMainMenu();
-    });
-</script>
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+        }
+
+        async function sendOrder() {
+            if (!Object.keys(cart).length) { alert('Корзина пуста!'); return; }
+            let total = 0, text = '';
+            for (const id in cart) {
+                const item = cart[id], it = item.qty * item.price;
+                total += it;
+                const si = stockCache ? stockCache[id] : null;
+                text += `${item.name} x${item.qty} = ${it} ₽${(!si || si.qty <= 0) ? ' (предзаказ)' : ''}\n`;
+            }
+            if (appliedPromo) { const d = Math.round(total * appliedPromo.discount / 100); text += `\nПромокод: ${appliedPromo.code} (-${d} ₽)`; total -= d; }
+            text += `\nИтого: ${total} ₽`;
+            if (document.getElementById('sauceCheckbox').checked) text += '\n🌶 С острым соусом!';
+            const msg = document.querySelector('input[name="messenger"]:checked').value;
+            try { await navigator.clipboard.writeText(text); } catch (e) { fallbackCopy(text); }
+            window.open(msg === 'telegram' ? 'https://t.me/Andreik115' : 'https://vk.me/18451549', '_blank');
+            cart = {}; appliedPromo = null;
+            document.getElementById('promoInput').value = '';
+            document.getElementById('promoMessage').innerHTML = '';
+            saveCartToStorage(); updateCartBar();
+            document.querySelectorAll('.product-card').forEach(c => updateProductUI(c.dataset.id));
+            closeCart();
+        }
+
+        document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('sauceCheckbox').checked = false;
+            loadCartFromStorage(); updateCartBar();
+            document.querySelectorAll('.product-card').forEach(c => updateProductUI(c.dataset.id));
+            showMainMenu();
+        });
+    </script>
 </body>
 </html>
