@@ -333,27 +333,39 @@
         const response = await fetch(url);
         const data = await response.json();
         
-        console.log('📊 Данные из Blocks:', JSON.stringify(data));
-        console.log('🔑 Мой deviceId:', deviceId);
-        
         if (data.values) {
             const now = new Date();
-            console.log('🕐 Сейчас:', now);
-            
             for (const row of data.values) {
                 if (!row[0] || !row[1]) continue;
-                const recordDate = new Date(row[0]);
+                
+                // Парсим дату из таблицы (формат: 26.06.2026 22:24:08)
+                const parts = row[0].split(/[.\s:]/);
+                // parts = ["26", "06", "2026", "22", "24", "08"]
+                const recordDate = new Date(
+                    parseInt(parts[2]),  // год
+                    parseInt(parts[1]) - 1, // месяц (0-11)
+                    parseInt(parts[0]),  // день
+                    parseInt(parts[3]) || 0, // часы
+                    parseInt(parts[4]) || 0, // минуты
+                    parseInt(parts[5]) || 0  // секунды
+                );
+                
                 const recordDeviceId = row[1];
                 const status = row[2] || '';
                 const diffHours = (now - recordDate) / (1000 * 60 * 60);
                 
-                console.log('📋 Строка:', row[0], '|', recordDeviceId, '|', status, '| Разница часов:', diffHours);
-                
                 if (recordDeviceId === deviceId && status !== 'unblocked' && diffHours < 24) {
-                    console.log('🚫 ЗАБЛОКИРОВАН!');
+                    console.log('Заблокирован! Прошло часов: ' + diffHours);
                     return true;
                 }
             }
+        }
+        return false;
+    } catch (e) {
+        console.error('Ошибка проверки блокировки:', e);
+        return false;
+    }
+}
         }
         console.log('✅ НЕ заблокирован');
         return false;
@@ -364,20 +376,15 @@
 }
 
         async function addBlockRecord() {
-            try {
-                const now = new Date();
-                const dateStr = now.getFullYear() + '-' + 
-                                String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                                String(now.getDate()).padStart(2, '0') + ' ' +
-                                String(now.getHours()).padStart(2, '0') + ':' +
-                                String(now.getMinutes()).padStart(2, '0') + ':' +
-                                String(now.getSeconds()).padStart(2, '0');
-                await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(dateStr) + '&deviceId=' + encodeURIComponent(deviceId));
-                console.log('Блокировка добавлена: ' + dateStr);
-            } catch (e) {
-                console.error('Ошибка добавления блокировки:', e);
-            }
-        }
+    try {
+        const now = new Date();
+        const dateStr = now.toISOString(); // 2026-06-26T19:29:59.000Z
+        await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(dateStr) + '&deviceId=' + encodeURIComponent(deviceId));
+        console.log('Блокировка добавлена: ' + dateStr);
+    } catch (e) {
+        console.error('Ошибка добавления блокировки:', e);
+    }
+}
 
         async function requestUnblock() {
             const statusDiv = document.getElementById('unblockStatus');
