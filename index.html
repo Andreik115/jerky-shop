@@ -89,13 +89,12 @@
 
         .wheel-container { text-align: center; padding: 20px 0; }
         .wheel { width: 300px; height: 300px; border-radius: 50%; border: 6px solid #e74c3c; margin: 0 auto 20px; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#e74c3c 0deg 60deg, #f1c40f 60deg 120deg, #2ecc71 120deg 180deg, #3498db 180deg 240deg, #9b59b6 240deg 300deg, #e67e22 300deg 360deg); box-shadow: 0 0 20px rgba(231,76,60,0.5); }
-        .wheel-sector { position: absolute; width: 50%; height: 50%; top: 0; left: 50%; transform-origin: 0% 100%; }
-        .wheel-sector:nth-child(1) { transform: rotate(0deg) skewY(30deg); background: #e74c3c; }
-        .wheel-sector:nth-child(2) { transform: rotate(60deg) skewY(30deg); background: #f1c40f; }
-        .wheel-sector:nth-child(3) { transform: rotate(120deg) skewY(30deg); background: #2ecc71; }
-        .wheel-sector:nth-child(4) { transform: rotate(180deg) skewY(30deg); background: #3498db; }
-        .wheel-sector:nth-child(5) { transform: rotate(240deg) skewY(30deg); background: #9b59b6; }
-        .wheel-sector:nth-child(6) { transform: rotate(300deg) skewY(30deg); background: #e67e22; }
+        .wheel .wheel-sector:nth-child(1) { transform: rotate(0deg) skewY(30deg); background: #e74c3c; }
+        .wheel .wheel-sector:nth-child(2) { transform: rotate(60deg) skewY(30deg); background: #f1c40f; }
+        .wheel .wheel-sector:nth-child(3) { transform: rotate(120deg) skewY(30deg); background: #2ecc71; }
+        .wheel .wheel-sector:nth-child(4) { transform: rotate(180deg) skewY(30deg); background: #3498db; }
+        .wheel .wheel-sector:nth-child(5) { transform: rotate(240deg) skewY(30deg); background: #9b59b6; }
+        .wheel .wheel-sector:nth-child(6) { transform: rotate(300deg) skewY(30deg); background: #e67e22; }
         .wheel-pointer { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #fff; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
         .spin-btn { background: #e74c3c; color: #fff; border: none; padding: 12px 32px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .spin-btn:disabled { background: #555; }
