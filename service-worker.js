@@ -1,4 +1,4 @@
-const CACHE_NAME = 'komeat-cache-v3';
+const CACHE_NAME = 'komeat-cache-v4';
 const urlsToCache = [
   '/jerky-shop/',
   '/jerky-shop/index.html',
@@ -33,6 +33,12 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Пропускаем запросы к Google API и Apps Script
+  if (event.request.url.includes('googleapis.com') || 
+      event.request.url.includes('script.google.com')) {
+    return; // Не кэшируем, пропускаем напрямую
+  }
+  
   event.respondWith(
     fetch(event.request)
       .then(response => {
