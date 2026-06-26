@@ -616,7 +616,7 @@
             showMainMenu();
 
             // Админ-кнопка только на сайте (не в PWA)
-            if (!isRunningStandalone()) {
+            if (!window.matchMedia('(display-mode: standalone)').matches) {
                 const adminBtn = document.createElement('button');
                 adminBtn.textContent = '⚙️';
                 adminBtn.style.cssText = 'position:fixed; bottom:80px; left:10px; z-index:999; background:rgba(0,0,0,0.3); color:#555; border:none; border-radius:50%; width:30px; height:30px; font-size:16px;';
