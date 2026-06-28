@@ -550,35 +550,47 @@
         function closeCart() { document.getElementById('cartModal').classList.remove('active'); }
 
         async function sendOrder() {
-            if (!Object.keys(cart).length) { alert('Корзина пуста!'); return; }
-            let t = 0, text = '';
-            for (const id in cart) { const it = cart[id], total = it.qty * it.price; t += total; const si = stockCache ? stockCache[id] : null; text += `${it.name} x${it.qty} = ${total} ₽${(!si || si.qty <= 0) ? ' (предзаказ)' : ''}\n`; }
-            if (appliedPromo) {
-                if (appliedPromo.isFree) {
-                    text += `\n🎁 Приз с колеса фортуны: ${appliedPromo.prize}`;
-                    text += `\nПромокод: ${appliedPromo.code}`;
-                } else {
-                    const d = Math.round(t * appliedPromo.discount / 100);
-                    text += `\nПромокод: ${appliedPromo.code} (-${d} ₽)`;
-                    t -= d;
-                }
-            }
-            text += `\nИтого: ${t} ₽`;
-            if (document.getElementById('sauceCheckbox').checked) text += '\n🌶 С острым соусом!';
-            const msg = document.querySelector('input[name="messenger"]:checked').value;
-            try { await navigator.clipboard.writeText(text); } catch(e) { fallbackCopy(text); }
-            window.open(msg === 'telegram' ? 'https://t.me/Andreik115' : 'https://vk.me/18451549', '_blank');
-            cart = {}; appliedPromo = null; document.getElementById('promoInput').value = ''; document.getElementById('promoMessage').innerHTML = '';
-            saveCartToStorage(); updateCartBar(); document.querySelectorAll('.product-card').forEach(c => updateProductUI(c.dataset.id)); closeCart();
+    if (!Object.keys(cart).length && !appliedPromo) { alert('Корзина пуста!'); return; }
+    if (!Object.keys(cart).length && appliedPromo && !appliedPromo.isFree) { alert('Добавьте товары в корзину!'); return; }
+    
+    let t = 0, text = '';
+    for (const id in cart) { 
+        const it = cart[id], total = it.qty * it.price; 
+        t += total; 
+        const si = stockCache ? stockCache[id] : null; 
+        text += `${it.name} x${it.qty} = ${total} ₽${(!si || si.qty <= 0) ? ' (предзаказ)' : ''}\n`; 
+    }
+    
+    if (appliedPromo) {
+        if (appliedPromo.isFree) {
+            text += `\n🎁 Приз с колеса фортуны: ${appliedPromo.prize}`;
+            text += `\nПромокод: ${appliedPromo.code}`;
+        } else {
+            const d = Math.round(t * appliedPromo.discount / 100);
+            text += `\nПромокод: ${appliedPromo.code} (-${d} ₽)`;
+            t -= d;
         }
-
-        document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('sauceCheckbox').checked = false;
-            loadCartFromStorage(); updateCartBar();
-            document.querySelectorAll('.product-card').forEach(c => updateProductUI(c.dataset.id));
-            showMainMenu();
-        });
+    }
+    
+    if (t === 0 && appliedPromo && appliedPromo.isFree) {
+        text += `\n💰 Итого: 0 ₽ (только призовой товар)`;
+    } else {
+        text += `\n💰 Итого: ${t} ₽`;
+    }
+    
+    if (document.getElementById('sauceCheckbox').checked) text += '\n🌶 С острым соусом!';
+    
+    const msg = document.querySelector('input[name="messenger"]:checked').value;
+    try { await navigator.clipboard.writeText(text); } catch(e) { fallbackCopy(text); }
+    window.open(msg === 'telegram' ? 'https://t.me/Andreik115' : 'https://vk.me/18451549', '_blank');
+    
+    cart = {}; appliedPromo = null; 
+    document.getElementById('promoInput').value = ''; 
+    document.getElementById('promoMessage').innerHTML = '';
+    saveCartToStorage(); updateCartBar();
+    document.querySelectorAll('.product-card').forEach(c => updateProductUI(c.dataset.id));
+    closeCart();
+});
     </script>
 </body>
 </html>
