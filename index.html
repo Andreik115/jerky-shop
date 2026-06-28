@@ -123,7 +123,7 @@
     <div class="header">
         <h1>🥩 KoMeat</h1>
         <p>Твоё мясное комьюнити</p>
-        <a href="https://t.me/KoMeat1" target="_blank" rel="noopener" style="display:inline-block;margin-top:12px;background:#e74c3c;border-radius:8px;padding:10px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:15px;">📢 Подписывайся на наш Telegram</a>
+        <a href="#" onclick="openTelegram()" style="display:inline-block;margin-top:12px;background:#e74c3c;border-radius:8px;padding:10px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:15px;">📢 Подписывайся на наш Telegram</a>
     </div>
     <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
     <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
@@ -237,6 +237,11 @@ window.addEventListener('offline',showOfflineBanner);
 window.addEventListener('online',hideOfflineBanner);
 if(!navigator.onLine)showOfflineBanner();
 
+function openTelegram(){
+if(!navigator.onLine){alert('📡 Нет подключения к интернету');return;}
+window.open('https://t.me/KoMeat1','_blank');
+}
+
 setTimeout(()=>{const s=document.getElementById('splashScreen');if(s){s.style.transition='opacity 0.5s';s.style.opacity='0';setTimeout(()=>s.remove(),500);}},2000);
 if(isApp){const b=document.querySelector('.app-only');if(b)b.style.display='block';}
 if(!isAdmin){const p=document.getElementById('adminUnblockPanel');if(p)p.style.display='none';}
@@ -261,7 +266,7 @@ return false;
 async function addBlockRecord(){if(!navigator.onLine)return;try{await fetch(APPS_SCRIPT_URL+'?sheet=Blocks&action=addBlock&date='+encodeURIComponent(new Date().toISOString())+'&deviceId='+encodeURIComponent(deviceId));}catch(e){showOfflineBanner();}}
 
 async function requestUnblock(){
-if(!navigator.onLine){alert('Нет сети');return;}
+if(!navigator.onLine){alert('📡 Нет подключения к интернету');return;}
 const s=document.getElementById('unblockStatus');s.innerHTML='<span style="color:#f39c12;">⏳ Разблокировка...</span>';
 try{const r=await(await fetch(APPS_SCRIPT_URL+'?sheet=Blocks&action=requestUnblock&deviceId='+encodeURIComponent(deviceId))).json();s.innerHTML=r.success?'<span style="color:#27ae60;">✅ Готово!</span>':'<span style="color:#e74c3c;">❌ Ошибка</span>';if(r.success)updateSpinButton();}
 catch(e){s.innerHTML='<span style="color:#e74c3c;">❌ Нет сети</span>';showOfflineBanner();}
@@ -286,6 +291,7 @@ else{document.getElementById('spinBtn').style.display='';document.getElementById
 async function canSpin(){return!(await isBlockedInSheet());}
 
 async function spinWheel(){
+if(!navigator.onLine){alert('📡 Нет подключения к интернету');return;}
 if(!(await canSpin())){alert('Вы уже крутили сегодня!');return;}
 if(!wheelConfig.length){alert('Розыгрыш не настроен.');return;}
 if(!hasActivePrizes()){alert('Розыгрышей нет.');return;}
@@ -355,6 +361,7 @@ document.getElementById('cartModal').classList.add('active');
 function closeCart(){document.getElementById('cartModal').classList.remove('active');}
 
 async function sendOrder(){
+if(!navigator.onLine){alert('📡 Нет подключения к интернету. Заказ отправить нельзя.');return;}
 const hasItems=Object.keys(cart).length>0;
 const hasFreePrize=appliedPromo&&appliedPromo.isFree;
 if(!hasItems&&!hasFreePrize){alert('Корзина пуста!');return;}
