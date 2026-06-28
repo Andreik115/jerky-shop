@@ -2,7 +2,7 @@ const CACHE_NAME = 'komeat-cache-v6';
 const urlsToCache = [
   '/jerky-shop/',
   '/jerky-shop/index.html',
-  '/jerky-shop/offline.html',  // ← добавили
+  '/jerky-shop/offline.html',
   '/jerky-shop/pig.png',
   '/jerky-shop/chicken.png',
   '/jerky-shop/cow.png',
@@ -33,25 +33,12 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Пропускаем запросы к внешним API
-  if (event.request.url.includes('googleapis.com') || 
-      event.request.url.includes('script.google.com')) {
-    return;
-  }
-  
+  if (event.request.url.includes('googleapis.com') || event.request.url.includes('script.google.com')) return;
   event.respondWith(
     fetch(event.request)
-      .then(response => {
-        const clonedResponse = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
-        return response;
-      })
+      .then(response => { const cloned = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned)); return response; })
       .catch(() => {
-        // Если запрос был на страницу (HTML), показываем офлайн-заглушку
-        if (event.request.mode === 'navigate') {
-          return caches.match('/jerky-shop/offline.html');
-        }
-        // Для остальных ресурсов пытаемся найти в кэше
+        if (event.request.mode === 'navigate') return caches.match('/jerky-shop/offline.html');
         return caches.match(event.request);
       })
   );
