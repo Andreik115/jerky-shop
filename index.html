@@ -304,6 +304,12 @@
             localStorage.setItem('lastPromoCode', code);
         }
 
+        async function markPromoAsUsed(code) {
+            try {
+                await fetch(APPS_SCRIPT_URL + '?sheet=PromoUsage&action=markUsed&code=' + encodeURIComponent(code));
+            } catch(e) {}
+        }
+
         async function isBlockedInSheet() {
             if (!navigator.onLine) return false;
             try {
@@ -406,7 +412,6 @@
                             <button class="copy-btn" id="copyBtn" onclick="copyPromoCode('${uniqueCode}')">📋 Скопировать промокод</button>
                             <p style="color:#aaa;font-size:12px;margin-top:8px;">Примените в корзине при заказе</p>
                         </div>`;
-                    // Сохраняем полную информацию о призе
                     localStorage.setItem('lastPrizeInfo', JSON.stringify({
                         code: uniqueCode,
                         prize: result.prize,
@@ -445,38 +450,37 @@
             if (!code) return;
             const msg = document.getElementById('promoMessage');
             
-            // Проверяем сохранённую информацию о призе
-            const savedPrize = localStorage.getItem('lastPrizeInfo');
-            if (savedPrize) {
-                const prizeInfo = JSON.parse(savedPrize);
-                if (code === prizeInfo.code) {
-                    appliedPromo = {
-                        code: prizeInfo.code,
-                        discount: prizeInfo.discount,
-                        prize: prizeInfo.prize,
-                        isFree: prizeInfo.isFree
-                    };
-                    if (prizeInfo.isFree) {
-                        msg.innerHTML = `<span class="promo-info">✅ Приз «${prizeInfo.prize}» применён! Бесплатный товар будет добавлен к заказу.</span>`;
-                    } else {
-                        msg.innerHTML = `<span class="promo-info">✅ Промокод применён! Скидка ${prizeInfo.discount}%</span>`;
-                    }
+            const storedCode = localStorage.getItem('lastPromoCode');
+            if (storedCode && code === storedCode) {
+                const savedPrize = localStorage.getItem('lastPrizeInfo');
+                if (savedPrize) {
+                    const prizeInfo = JSON.parse(savedPrize);
+                    appliedPromo = { code: prizeInfo.code, discount: prizeInfo.discount, prize: prizeInfo.prize, isFree: prizeInfo.isFree };
+                    msg.innerHTML = prizeInfo.isFree ? `<span class="promo-info">✅ Приз «${prizeInfo.prize}» применён!</span>` : `<span class="promo-info">✅ Промокод применён! Скидка ${prizeInfo.discount}%</span>`;
+                    markPromoAsUsed(prizeInfo.code);
                     openCart();
                     return;
                 }
             }
             
-            // Проверяем стандартные коды
             const found = wheelConfig.find(s => s.code === code);
             if (found) {
-                const discountPercent = parseInt(found.name) || 0;
-                const isFree = discountPercent === 0;
-                appliedPromo = { code: code, discount: discountPercent, prize: found.prize, isFree: isFree };
-                if (isFree) {
-                    msg.innerHTML = `<span class="promo-info">✅ Приз «${found.prize}» применён! Бесплатный товар будет добавлен к заказу.</span>`;
-                } else {
-                    msg.innerHTML = `<span class="promo-info">✅ Промокод применён! Скидка ${discountPercent}%</span>`;
-                }
+                const dp = parseInt(found.name) || 0;
+                const isFree = dp === 0;
+                appliedPromo = { code: code, discount: dp, prize: found.prize, isFree: isFree };
+                msg.innerHTML = isFree ? `<span class="promo-info">✅ Приз «${found.prize}» применён!</span>` : `<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`;
+                openCart();
+                return;
+            }
+            
+            const baseCode = code.split('-')[0];
+            const baseFound = wheelConfig.find(s => s.code === baseCode);
+            if (baseFound) {
+                const dp = parseInt(baseFound.name) || 0;
+                const isFree = dp === 0;
+                appliedPromo = { code: code, discount: dp, prize: baseFound.prize, isFree: isFree };
+                msg.innerHTML = isFree ? `<span class="promo-info">✅ Приз «${baseFound.prize}» применён!</span>` : `<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`;
+                markPromoAsUsed(code);
                 openCart();
                 return;
             }
