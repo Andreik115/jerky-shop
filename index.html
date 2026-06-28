@@ -117,9 +117,7 @@
         <button class="refresh-cache-btn" onclick="refreshStock()">🔄 Обновить</button>
     </div>
 
-    <div class="ios-hint" id="iosHint">
-        📱 Установите приложение: нажмите <strong>«Поделиться»</strong> в Safari → <strong>«На экран Home»</strong>.
-    </div>
+    <div class="ios-hint" id="iosHint">📱 Установите: <strong>Поделиться</strong> → <strong>На экран Home</strong></div>
 
     <div id="mainMenu">
         <div class="header">
@@ -137,67 +135,43 @@
         <div class="category-title"><img src="pig.png" alt=""> Свиные джерки</div>
         <div class="category-photo-container"><img src="pork.jpg" class="category-photo" onerror="this.style.display='none'"></div>
         <div class="product-card" data-id="pork_cognac" data-name="Свиные джерки Коньячные" data-price="450">
-            <div class="product-name">Свиные джерки «Коньячные»</div>
-            <div class="product-price">450 ₽</div>
-            <div class="product-weight">100 г</div>
+            <div class="product-name">Свиные джерки «Коньячные»</div><div class="product-price">450 ₽</div><div class="product-weight">100 г</div>
             <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
             <div class="stock-info" id="stock_pork_cognac">Загрузка...</div>
             <div class="add-container">
                 <button class="btn add-btn" id="btn_pork_cognac" onclick="addToCart('pork_cognac','Свиные джерки Коньячные',450)">Добавить в корзину</button>
-                <div class="quantity-control" id="qctrl_pork_cognac">
-                    <button class="qty-btn" onclick="changeCartQty('pork_cognac',-1)">−</button>
-                    <span class="qty-display" id="qty_pork_cognac">0</span>
-                    <button class="qty-btn" onclick="changeCartQty('pork_cognac',1)">+</button>
-                </div>
+                <div class="quantity-control" id="qctrl_pork_cognac"><button class="qty-btn" onclick="changeCartQty('pork_cognac',-1)">−</button><span class="qty-display" id="qty_pork_cognac">0</span><button class="qty-btn" onclick="changeCartQty('pork_cognac',1)">+</button></div>
             </div>
         </div>
         <div class="product-card" data-id="pork_paprika" data-name="Свиные джерки Паприка" data-price="450">
-            <div class="product-name">Свиные джерки «Паприка»</div>
-            <div class="product-price">450 ₽</div>
-            <div class="product-weight">100 г</div>
+            <div class="product-name">Свиные джерки «Паприка»</div><div class="product-price">450 ₽</div><div class="product-weight">100 г</div>
             <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
             <div class="stock-info" id="stock_pork_paprika">Загрузка...</div>
             <div class="add-container">
                 <button class="btn add-btn" id="btn_pork_paprika" onclick="addToCart('pork_paprika','Свиные джерки Паприка',450)">Добавить в корзину</button>
-                <div class="quantity-control" id="qctrl_pork_paprika">
-                    <button class="qty-btn" onclick="changeCartQty('pork_paprika',-1)">−</button>
-                    <span class="qty-display" id="qty_pork_paprika">0</span>
-                    <button class="qty-btn" onclick="changeCartQty('pork_paprika',1)">+</button>
-                </div>
+                <div class="quantity-control" id="qctrl_pork_paprika"><button class="qty-btn" onclick="changeCartQty('pork_paprika',-1)">−</button><span class="qty-display" id="qty_pork_paprika">0</span><button class="qty-btn" onclick="changeCartQty('pork_paprika',1)">+</button></div>
             </div>
         </div>
         <div class="category-title"><img src="chicken.png" alt=""> Куриные джерки</div>
         <div class="category-photo-container"><img src="chicken_photo.jpg" class="category-photo" onerror="this.style.display='none'"></div>
         <div class="product-card" data-id="chicken" data-name="Куриные джерки" data-price="600">
-            <div class="product-name">Куриные джерки</div>
-            <div class="product-price">600 ₽</div>
-            <div class="product-weight">100 г</div>
+            <div class="product-name">Куриные джерки</div><div class="product-price">600 ₽</div><div class="product-weight">100 г</div>
             <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
             <div class="stock-info" id="stock_chicken">Загрузка...</div>
             <div class="add-container">
                 <button class="btn add-btn" id="btn_chicken" onclick="addToCart('chicken','Куриные джерки',600)">Добавить в корзину</button>
-                <div class="quantity-control" id="qctrl_chicken">
-                    <button class="qty-btn" onclick="changeCartQty('chicken',-1)">−</button>
-                    <span class="qty-display" id="qty_chicken">0</span>
-                    <button class="qty-btn" onclick="changeCartQty('chicken',1)">+</button>
-                </div>
+                <div class="quantity-control" id="qctrl_chicken"><button class="qty-btn" onclick="changeCartQty('chicken',-1)">−</button><span class="qty-display" id="qty_chicken">0</span><button class="qty-btn" onclick="changeCartQty('chicken',1)">+</button></div>
             </div>
         </div>
         <div class="category-title"><img src="cow.png" alt=""> Говяжьи джерки</div>
         <div class="category-photo-container"><img src="beef.jpg" class="category-photo" onerror="this.style.display='none'"></div>
         <div class="product-card" data-id="beef" data-name="Говяжьи джерки" data-price="900">
-            <div class="product-name">Говяжьи джерки</div>
-            <div class="product-price">900 ₽</div>
-            <div class="product-weight">100 г</div>
+            <div class="product-name">Говяжьи джерки</div><div class="product-price">900 ₽</div><div class="product-weight">100 г</div>
             <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
             <div class="stock-info" id="stock_beef">Загрузка...</div>
             <div class="add-container">
                 <button class="btn add-btn" id="btn_beef" onclick="addToCart('beef','Говяжьи джерки',900)">Добавить в корзину</button>
-                <div class="quantity-control" id="qctrl_beef">
-                    <button class="qty-btn" onclick="changeCartQty('beef',-1)">−</button>
-                    <span class="qty-display" id="qty_beef">0</span>
-                    <button class="qty-btn" onclick="changeCartQty('beef',1)">+</button>
-                </div>
+                <div class="quantity-control" id="qctrl_beef"><button class="qty-btn" onclick="changeCartQty('beef',-1)">−</button><span class="qty-display" id="qty_beef">0</span><button class="qty-btn" onclick="changeCartQty('beef',1)">+</button></div>
             </div>
         </div>
         <div class="sauce-note">🌶 <b>Бесплатный острый соус</b> по желанию.<br><span style="font-size:11px;">Moruga Scorpion, Carolina Reaper, Ghost Pepper</span></div>
@@ -205,10 +179,7 @@
 
     <div id="delicaciesSection" style="display:none;">
         <button class="btn back-section-btn" onclick="showMainMenu()">← Назад в меню</button>
-        <div style="text-align:center;padding:60px 20px;">
-            <h2 style="color:#e74c3c;">🍖 Мясные деликатесы</h2>
-            <p style="color:#aaa;">Скоро здесь появится ассортимент.</p>
-        </div>
+        <div style="text-align:center;padding:60px 20px;"><h2 style="color:#e74c3c;">🍖 Мясные деликатесы</h2><p style="color:#aaa;">Скоро здесь появится ассортимент.</p></div>
     </div>
 
     <div id="wheelSection" style="display:none;">
@@ -217,10 +188,7 @@
             <h2 style="color:#f39c12;">🎁 Колесо фортуны</h2>
             <p style="color:#aaa;margin-bottom:12px;">Испытай удачу! Вращай колесо и получи приз.</p>
             <div class="prizes-list" id="activePrizesList"></div>
-            <div class="wheel-wrapper">
-                <div class="wheel" id="wheel"></div>
-                <div class="wheel-pointer"></div>
-            </div>
+            <div class="wheel-wrapper"><div class="wheel" id="wheel"></div><div class="wheel-pointer"></div></div>
             <button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎡 Крутить</button>
             <div class="result-text" id="resultText"></div>
             <p style="color:#aaa;font-size:12px;">* Можно крутить 1 раз в 24 часа</p>
@@ -258,12 +226,7 @@
         const SHEET_ID = '137pHkwZDnTgTnIIWBKcp3UNLXbynuzrB-aaoa91uhRo';
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwufgIIZdLEqLjRcTmycmVmI41lNZdT6_WnNWdty2rmKG7cSf9w3ahqT_tNmc8ejPM3/exec';
         const urlParams = new URLSearchParams(window.location.search);
-        const isApp = (() => {
-            if (urlParams.get('app') === 'true') return true;
-            if (navigator.standalone) return true;
-            if (window.matchMedia('(display-mode: standalone)').matches) return true;
-            return false;
-        })();
+        const isApp = (() => { if (urlParams.get('app')==='true') return true; if (navigator.standalone) return true; if (window.matchMedia('(display-mode: standalone)').matches) return true; return false; })();
         const isAdmin = urlParams.get('admin') === 'true';
         let cart = {}, stockCache = null, wheelConfig = [], appliedPromo = null;
         let deviceId = localStorage.getItem('deviceId') || (() => { const id = 'KO-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); return id; })();
@@ -274,114 +237,50 @@
         window.addEventListener('online', hideOfflineBanner);
         if (!navigator.onLine) showOfflineBanner();
 
-        setTimeout(() => {
-            const splash = document.getElementById('splashScreen');
-            if (splash) { splash.style.transition = 'opacity 0.5s'; splash.style.opacity = '0'; setTimeout(() => splash.remove(), 500); }
-        }, 2000);
-
+        setTimeout(() => { const s = document.getElementById('splashScreen'); if (s) { s.style.transition = 'opacity 0.5s'; s.style.opacity = '0'; setTimeout(() => s.remove(), 500); } }, 2000);
         if (isApp) { const b = document.querySelector('.app-only'); if (b) b.style.display = 'block'; }
         if (!isAdmin) { const p = document.getElementById('adminUnblockPanel'); if (p) p.style.display = 'none'; }
 
-        function fallbackCopy(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px';
-            document.body.appendChild(ta); ta.focus(); ta.select();
-            document.execCommand('copy'); document.body.removeChild(ta);
-        }
+        function fallbackCopy(text) { const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
 
         function copyPromoCode(code) {
             const btn = document.getElementById('copyBtn');
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(code).then(() => {
-                    if (btn) { btn.textContent = '✅ Скопировано!'; btn.classList.add('copied'); }
-                    setTimeout(() => { if (btn) { btn.textContent = '📋 Скопировать промокод'; btn.classList.remove('copied'); } }, 2000);
-                }).catch(() => fallbackCopy(code));
-            } else {
-                fallbackCopy(code);
-                if (btn) { btn.textContent = '✅ Скопировано!'; btn.classList.add('copied'); }
-                setTimeout(() => { if (btn) { btn.textContent = '📋 Скопировать промокод'; btn.classList.remove('copied'); } }, 2000);
-            }
+            if (navigator.clipboard) { navigator.clipboard.writeText(code).then(() => { if (btn) { btn.textContent = '✅ Скопировано!'; btn.classList.add('copied'); } setTimeout(() => { if (btn) { btn.textContent = '📋 Скопировать промокод'; btn.classList.remove('copied'); } }, 2000); }).catch(() => fallbackCopy(code)); }
+            else { fallbackCopy(code); if (btn) { btn.textContent = '✅ Скопировано!'; btn.classList.add('copied'); } setTimeout(() => { if (btn) { btn.textContent = '📋 Скопировать промокод'; btn.classList.remove('copied'); } }, 2000); }
             localStorage.setItem('lastPromoCode', code);
         }
 
-        async function markPromoAsUsed(code) {
-    try {
-        console.log('Отмечаем использование кода:', code);
-        const resp = await fetch(APPS_SCRIPT_URL + '?sheet=PromoUsage&action=markUsed&code=' + encodeURIComponent(code));
-        const result = await resp.json();
-        console.log('Результат отметки:', result);
-        if (!result.success) {
-            console.error('Не удалось отметить:', result.error);
-        }
-    } catch(e) {
-        console.error('Ошибка отметки использования:', e);
-    }
-}
+        async function markPromoAsUsed(code) { try { await fetch(APPS_SCRIPT_URL + '?sheet=PromoUsage&action=markUsed&code=' + encodeURIComponent(code)); } catch(e) {} }
 
         async function isBlockedInSheet() {
             if (!navigator.onLine) return false;
-            try {
-                const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Blocks'!A2:C100?key=${SHEET_API_KEY}`);
-                const d = await r.json();
-                if (d.values) {
-                    const now = new Date();
-                    for (const row of d.values) {
-                        if (!row[0] || !row[1]) continue;
-                        const parts = row[0].split(/[.\s:]/);
-                        const rd = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]), parseInt(parts[3]) || 0, parseInt(parts[4]) || 0, parseInt(parts[5]) || 0);
-                        if (row[1] === deviceId && (row[2] || '') !== 'unblocked' && (now - rd) / 3600000 < 24) return true;
-                    }
-                }
-            } catch (e) { showOfflineBanner(); }
+            try { const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Blocks'!A2:C100?key=${SHEET_API_KEY}`); const d = await r.json(); if (d.values) { const now = new Date(); for (const row of d.values) { if (!row[0]||!row[1]) continue; const p = row[0].split(/[.\s:]/); const rd = new Date(parseInt(p[2]),parseInt(p[1])-1,parseInt(p[0]),parseInt(p[3])||0,parseInt(p[4])||0,parseInt(p[5])||0); if (row[1]===deviceId&&(row[2]||'')!=='unblocked'&&(now-rd)/3600000<24) return true; } } } catch(e) { showOfflineBanner(); }
             return false;
         }
 
-        async function addBlockRecord() {
-            if (!navigator.onLine) return;
-            try { await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(new Date().toISOString()) + '&deviceId=' + encodeURIComponent(deviceId)); } catch (e) { showOfflineBanner(); }
-        }
+        async function addBlockRecord() { if (!navigator.onLine) return; try { await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(new Date().toISOString()) + '&deviceId=' + encodeURIComponent(deviceId)); } catch(e) { showOfflineBanner(); } }
 
         async function requestUnblock() {
-            if (!navigator.onLine) { alert('Нет подключения к интернету'); return; }
-            const s = document.getElementById('unblockStatus');
-            s.innerHTML = '<span style="color:#f39c12;">⏳ Разблокировка...</span>';
-            try {
-                const r = await (await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=requestUnblock&deviceId=' + encodeURIComponent(deviceId))).json();
-                s.innerHTML = r.success ? '<span style="color:#27ae60;">✅ Готово!</span>' : '<span style="color:#e74c3c;">❌ Ошибка</span>';
-                if (r.success) updateSpinButton();
-            } catch (e) { s.innerHTML = '<span style="color:#e74c3c;">❌ Нет сети</span>'; showOfflineBanner(); }
+            if (!navigator.onLine) { alert('Нет сети'); return; }
+            const s = document.getElementById('unblockStatus'); s.innerHTML = '<span style="color:#f39c12;">⏳ Разблокировка...</span>';
+            try { const r = await (await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=requestUnblock&deviceId=' + encodeURIComponent(deviceId))).json(); s.innerHTML = r.success ? '<span style="color:#27ae60;">✅ Готово!</span>' : '<span style="color:#e74c3c;">❌ Ошибка</span>'; if (r.success) updateSpinButton(); }
+            catch(e) { s.innerHTML = '<span style="color:#e74c3c;">❌ Нет сети</span>'; showOfflineBanner(); }
         }
 
         async function loadWheelConfig() {
             if (!navigator.onLine) return;
-            try {
-                const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Prizes'!A2:F10?key=${SHEET_API_KEY}`);
-                const d = await r.json();
-                if (d.values) wheelConfig = d.values.filter(r => r[0] === 'Да').map(r => ({ name: r[1], prize: r[2], code: r[3], chance: parseFloat(r[4]) || 0, remaining: parseInt(r[5]) || 0 }));
-                if (!wheelConfig.length) wheelConfig = [
-                    { name: '0', prize: 'Бесплатные джерки', code: 'FREEJERK', chance: 20, remaining: 0 },
-                    { name: '10', prize: 'Скидка 10%', code: 'WHEEL10', chance: 30, remaining: 0 },
-                    { name: 'Пусто', prize: 'Пусто', code: null, chance: 50, remaining: Infinity }
-                ];
-            } catch (e) { showOfflineBanner(); }
+            try { const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Prizes'!A2:F10?key=${SHEET_API_KEY}`); const d = await r.json(); if (d.values) wheelConfig = d.values.filter(r=>r[0]==='Да').map(r=>({name:r[1],prize:r[2],code:r[3],chance:parseFloat(r[4])||0,remaining:parseInt(r[5])||0})); if (!wheelConfig.length) wheelConfig = [{name:'0',prize:'Бесплатные джерки',code:'JERKYFREE',chance:20,remaining:0},{name:'10',prize:'Скидка 10%',code:'WHEEL10',chance:30,remaining:0},{name:'Пусто',prize:'Пусто',code:null,chance:50,remaining:Infinity}]; }
+            catch(e) { showOfflineBanner(); }
         }
 
-        function hasActivePrizes() { return wheelConfig.some(s => s.code && s.remaining > 0); }
-        function getActivePrizes() { return wheelConfig.filter(s => s.code && s.remaining > 0); }
+        function hasActivePrizes() { return wheelConfig.some(s=>s.code&&s.remaining>0); }
+        function getActivePrizes() { return wheelConfig.filter(s=>s.code&&s.remaining>0); }
 
         function renderActivePrizes() {
-            const c = document.getElementById('activePrizesList');
-            if (!c) return;
+            const c = document.getElementById('activePrizesList'); if (!c) return;
             const a = getActivePrizes();
-            if (!a.length) {
-                c.innerHTML = '<p style="color:#e74c3c;text-align:center;">🎰 Розыгрышей нет.<br><span style="font-size:13px;">Загляните позже!</span></p>';
-                document.getElementById('spinBtn').style.display = 'none';
-                document.getElementById('wheel').style.opacity = '0.4';
-            } else {
-                document.getElementById('spinBtn').style.display = '';
-                document.getElementById('wheel').style.opacity = '1';
-                c.innerHTML = '<p style="color:#27ae60;font-weight:bold;">🎁 Активные призы:</p>' + a.map(s => `<p style="color:#f1c40f;">• ${s.prize} — ${s.remaining} шт.</p>`).join('');
-            }
+            if (!a.length) { c.innerHTML = '<p style="color:#e74c3c;text-align:center;">🎰 Розыгрышей нет.<br><span style="font-size:13px;">Загляните позже!</span></p>'; document.getElementById('spinBtn').style.display='none'; document.getElementById('wheel').style.opacity='0.4'; }
+            else { document.getElementById('spinBtn').style.display=''; document.getElementById('wheel').style.opacity='1'; c.innerHTML = '<p style="color:#27ae60;font-weight:bold;">🎁 Активные призы:</p>' + a.map(s=>`<p style="color:#f1c40f;">• ${s.prize} — ${s.remaining} шт.</p>`).join(''); }
         }
 
         async function canSpin() { return !(await isBlockedInSheet()); }
@@ -390,220 +289,97 @@
             if (!(await canSpin())) { alert('Вы уже крутили сегодня!'); return; }
             if (!wheelConfig.length) { alert('Розыгрыш не настроен.'); return; }
             if (!hasActivePrizes()) { alert('Розыгрышей нет.'); return; }
-            
-            const wheel = document.getElementById('wheel'), btn = document.getElementById('spinBtn');
-            btn.disabled = true;
-            wheel.style.transform = `rotate(${1800 + Math.floor(Math.random() * 360)}deg)`;
-            
+            const w = document.getElementById('wheel'), b = document.getElementById('spinBtn'); b.disabled = true; w.style.transform = `rotate(${1800+Math.floor(Math.random()*360)}deg)`;
             setTimeout(async () => {
-                const ap = getActivePrizes();
-                let rnd = Math.random() * 100, cum = 0, result = ap[ap.length - 1];
+                const ap = getActivePrizes(); let rnd = Math.random()*100, cum = 0, result = ap[ap.length-1];
                 for (const s of ap) { cum += s.chance; if (rnd <= cum) { result = s; break; } }
-                
                 await addBlockRecord();
-                
                 let uniqueCode = null;
-                if (result.code) {
-                    try {
-                        const resp = await fetch(APPS_SCRIPT_URL + '?sheet=History&deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code));
-                        const json = await resp.json();
-                        if (json.uniqueCode) uniqueCode = json.uniqueCode;
-                    } catch(e) {}
-                }
-                
+                if (result.code) { try { const resp = await fetch(APPS_SCRIPT_URL + '?sheet=History&deviceId=' + encodeURIComponent(deviceId) + '&prize=' + encodeURIComponent(result.prize) + '&code=' + encodeURIComponent(result.code)); const json = await resp.json(); if (json.uniqueCode) uniqueCode = json.uniqueCode; } catch(e) {} }
                 const rd = document.getElementById('resultText');
-                if (uniqueCode) {
-                    rd.innerHTML = `
-                        <div class="promo-result">
-                            <p style="font-size:18px;color:#27ae60;">🎉 ${result.prize}!</p>
-                            <div class="promo-code-box">${uniqueCode}</div>
-                            <button class="copy-btn" id="copyBtn" onclick="copyPromoCode('${uniqueCode}')">📋 Скопировать промокод</button>
-                            <p style="color:#aaa;font-size:12px;margin-top:8px;">Примените в корзине при заказе</p>
-                        </div>`;
-                    localStorage.setItem('lastPrizeInfo', JSON.stringify({
-                        code: uniqueCode,
-                        prize: result.prize,
-                        discount: parseInt(result.name) || 0,
-                        isFree: (parseInt(result.name) || 0) === 0
-                    }));
-                } else {
-                    rd.innerHTML = '<p style="font-size:20px;">😔 ' + result.name + '</p>';
-                }
-                
-                const found = wheelConfig.find(s => s.code === result.code);
-                if (found && found.remaining > 0) found.remaining--;
-                
-                renderActivePrizes();
-                updateSpinButton();
+                if (uniqueCode) { rd.innerHTML = `<div class="promo-result"><p style="font-size:18px;color:#27ae60;">🎉 ${result.prize}!</p><div class="promo-code-box">${uniqueCode}</div><button class="copy-btn" id="copyBtn" onclick="copyPromoCode('${uniqueCode}')">📋 Скопировать промокод</button><p style="color:#aaa;font-size:12px;margin-top:8px;">Примените в корзине при заказе</p></div>`; localStorage.setItem('lastPrizeInfo', JSON.stringify({code:uniqueCode,prize:result.prize,discount:parseInt(result.name)||0,isFree:(parseInt(result.name)||0)===0})); }
+                else { rd.innerHTML = '<p style="font-size:20px;">😔 ' + result.name + '</p>'; }
+                const found = wheelConfig.find(s=>s.code===result.code); if (found&&found.remaining>0) found.remaining--;
+                renderActivePrizes(); updateSpinButton();
                 setTimeout(async () => { await loadWheelConfig(); renderActivePrizes(); updateSpinButton(); }, 2000);
             }, 4000);
         }
 
-        function updateSpinButton() {
-            const btn = document.getElementById('spinBtn');
-            if (!btn) return;
-            if (!hasActivePrizes()) { btn.disabled = true; btn.textContent = '🔒 Нет призов'; btn.style.display = 'none'; return; }
-            canSpin().then(a => { btn.disabled = !a; btn.textContent = a ? '🎡 Крутить' : '🔒 Приходите завтра'; });
-        }
+        function updateSpinButton() { const b = document.getElementById('spinBtn'); if (!b) return; if (!hasActivePrizes()) { b.disabled=true; b.textContent='🔒 Нет призов'; b.style.display='none'; return; } canSpin().then(a=>{b.disabled=!a;b.textContent=a?'🎡 Крутить':'🔒 Приходите завтра';}); }
 
-        function showWheel() {
-            ['mainMenu','jerkyCatalog','delicaciesSection'].forEach(id => document.getElementById(id).style.display = 'none');
-            document.getElementById('wheelSection').style.display = 'block';
-            document.getElementById('deviceIdDisplay').textContent = 'Device ID: ' + deviceId;
-            (!wheelConfig.length ? loadWheelConfig().then(() => { renderActivePrizes(); updateSpinButton(); }) : (renderActivePrizes(), updateSpinButton()));
-        }
+        function showWheel() { ['mainMenu','jerkyCatalog','delicaciesSection'].forEach(id=>document.getElementById(id).style.display='none'); document.getElementById('wheelSection').style.display='block'; document.getElementById('deviceIdDisplay').textContent='Device ID: '+deviceId; (!wheelConfig.length?loadWheelConfig().then(()=>{renderActivePrizes();updateSpinButton();}):(renderActivePrizes(),updateSpinButton())); }
 
         function applyPromo() {
-            const code = document.getElementById('promoInput').value.trim();
-            if (!code) return;
+            const code = document.getElementById('promoInput').value.trim(); if (!code) return;
             const msg = document.getElementById('promoMessage');
-            
             const storedCode = localStorage.getItem('lastPromoCode');
-            if (storedCode && code === storedCode) {
-                const savedPrize = localStorage.getItem('lastPrizeInfo');
-                if (savedPrize) {
-                    const prizeInfo = JSON.parse(savedPrize);
-                    appliedPromo = { code: prizeInfo.code, discount: prizeInfo.discount, prize: prizeInfo.prize, isFree: prizeInfo.isFree };
-                    msg.innerHTML = prizeInfo.isFree ? `<span class="promo-info">✅ Приз «${prizeInfo.prize}» применён!</span>` : `<span class="promo-info">✅ Промокод применён! Скидка ${prizeInfo.discount}%</span>`;
-                    markPromoAsUsed(prizeInfo.code);
-                    openCart();
-                    return;
-                }
-            }
-            
-            const found = wheelConfig.find(s => s.code === code);
-            if (found) {
-                const dp = parseInt(found.name) || 0;
-                const isFree = dp === 0;
-                appliedPromo = { code: code, discount: dp, prize: found.prize, isFree: isFree };
-                msg.innerHTML = isFree ? `<span class="promo-info">✅ Приз «${found.prize}» применён!</span>` : `<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`;
-                openCart();
-                return;
-            }
-            
-            const baseCode = code.split('-')[0];
-            const baseFound = wheelConfig.find(s => s.code === baseCode);
-            if (baseFound) {
-                const dp = parseInt(baseFound.name) || 0;
-                const isFree = dp === 0;
-                appliedPromo = { code: code, discount: dp, prize: baseFound.prize, isFree: isFree };
-                msg.innerHTML = isFree ? `<span class="promo-info">✅ Приз «${baseFound.prize}» применён!</span>` : `<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`;
-                markPromoAsUsed(code);
-                openCart();
-                return;
-            }
-            
-            appliedPromo = null;
-            msg.innerHTML = '<span class="promo-error">❌ Промокод не найден</span>';
-            openCart();
+            if (storedCode && code === storedCode) { const saved = localStorage.getItem('lastPrizeInfo'); if (saved) { const info = JSON.parse(saved); appliedPromo = {code:info.code,discount:info.discount,prize:info.prize,isFree:info.isFree}; msg.innerHTML = info.isFree ? `<span class="promo-info">✅ Приз «${info.prize}» применён!</span>` : `<span class="promo-info">✅ Промокод применён! Скидка ${info.discount}%</span>`; markPromoAsUsed(info.code); openCart(); return; } }
+            const found = wheelConfig.find(s=>s.code===code); if (found) { const dp=parseInt(found.name)||0,isFree=dp===0; appliedPromo={code:code,discount:dp,prize:found.prize,isFree:isFree}; msg.innerHTML=isFree?`<span class="promo-info">✅ Приз «${found.prize}» применён!</span>`:`<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`; openCart(); return; }
+            const baseCode = code.split('-')[0]; const baseFound = wheelConfig.find(s=>s.code===baseCode); if (baseFound) { const dp=parseInt(baseFound.name)||0,isFree=dp===0; appliedPromo={code:code,discount:dp,prize:baseFound.prize,isFree:isFree}; msg.innerHTML=isFree?`<span class="promo-info">✅ Приз «${baseFound.prize}» применён!</span>`:`<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`; markPromoAsUsed(code); openCart(); return; }
+            appliedPromo=null; msg.innerHTML='<span class="promo-error">❌ Промокод не найден</span>'; openCart();
         }
 
         async function loadStockFromGoogleSheet() {
             if (!navigator.onLine) { showOfflineBanner(); return; }
-            try {
-                const d = await (await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Stock'!A2:C20?key=${SHEET_API_KEY}`)).json();
-                if (d.values) { const s = {}; for (const r of d.values) { if (r.length >= 2) s[r[0]] = { qty: parseFloat(String(r[1]).replace(',', '.')) || 0, date: r[2] || '' }; } localStorage.setItem('stockCache', JSON.stringify(s)); stockCache = s; applyStock(s); showStatus(true); }
-            } catch (e) { showOfflineBanner(); const c = localStorage.getItem('stockCache'); if (c) { try { stockCache = JSON.parse(c); applyStock(stockCache, true); showStatus(false); } catch(e2) {} } else showStatus(false); }
+            try { const d = await (await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Stock'!A2:C20?key=${SHEET_API_KEY}`)).json(); if (d.values) { const s={}; for (const r of d.values) { if (r.length>=2) s[r[0]]={qty:parseFloat(String(r[1]).replace(',','.'))||0,date:r[2]||''}; } localStorage.setItem('stockCache',JSON.stringify(s)); stockCache=s; applyStock(s); showStatus(true); } }
+            catch(e) { showOfflineBanner(); const c=localStorage.getItem('stockCache'); if(c){try{stockCache=JSON.parse(c);applyStock(stockCache,true);showStatus(false);}catch(e2){}} else showStatus(false); }
         }
 
-        function applyStock(stock, isCached = false) {
-            for (const [id, info] of Object.entries(stock)) {
-                const el = document.getElementById(`stock_${id}`), btn = document.getElementById(`btn_${id}`);
-                if (!el) continue;
-                if (btn) btn.disabled = false;
-                el.textContent = info.qty > 0 ? `В наличии: ${info.qty} шт.${info.date ? ' (' + info.date + ')' : ''}${isCached ? ' (кэш)' : ''}` : 'Предзаказ';
-                el.className = info.qty > 0 ? 'stock-info' : 'stock-info preorder';
-                if (btn) btn.textContent = info.qty > 0 ? 'Добавить в корзину' : 'Предзаказать';
-            }
-        }
+        function applyStock(stock, isCached=false) { for (const [id,info] of Object.entries(stock)) { const el=document.getElementById(`stock_${id}`),btn=document.getElementById(`btn_${id}`); if(!el) continue; if(btn) btn.disabled=false; el.textContent=info.qty>0?`В наличии: ${info.qty} шт.${info.date?' ('+info.date+')':''}${isCached?' (кэш)':''}`:'Предзаказ'; el.className=info.qty>0?'stock-info':'stock-info preorder'; if(btn) btn.textContent=info.qty>0?'Добавить в корзину':'Предзаказать'; } }
+        function showStatus(ok) { document.getElementById('statusPanel').style.display='flex'; document.getElementById('statusDot').className=ok?'status-dot green':'status-dot red'; }
+        function showMainMenu() { ['jerkyCatalog','delicaciesSection','wheelSection','statusPanel'].forEach(id=>document.getElementById(id).style.display='none'); document.getElementById('mainMenu').style.display='block'; }
+        function showJerkyCatalog() { ['mainMenu','delicaciesSection','wheelSection'].forEach(id=>document.getElementById(id).style.display='none'); document.getElementById('jerkyCatalog').style.display='block'; if(!stockCache) loadStockFromGoogleSheet(); else document.getElementById('statusPanel').style.display='flex'; }
+        function showDelicacies() { ['mainMenu','jerkyCatalog','wheelSection','statusPanel'].forEach(id=>document.getElementById(id).style.display='none'); document.getElementById('delicaciesSection').style.display='block'; }
+        async function refreshStock() { localStorage.removeItem('stockCache'); stockCache=null; await loadStockFromGoogleSheet(); }
 
-        function showStatus(ok) { document.getElementById('statusPanel').style.display = 'flex'; document.getElementById('statusDot').className = ok ? 'status-dot green' : 'status-dot red'; }
-        function showMainMenu() { ['jerkyCatalog','delicaciesSection','wheelSection','statusPanel'].forEach(id => document.getElementById(id).style.display = 'none'); document.getElementById('mainMenu').style.display = 'block'; }
-        function showJerkyCatalog() { ['mainMenu','delicaciesSection','wheelSection'].forEach(id => document.getElementById(id).style.display = 'none'); document.getElementById('jerkyCatalog').style.display = 'block'; if (!stockCache) loadStockFromGoogleSheet(); else document.getElementById('statusPanel').style.display = 'flex'; }
-        function showDelicacies() { ['mainMenu','jerkyCatalog','wheelSection','statusPanel'].forEach(id => document.getElementById(id).style.display = 'none'); document.getElementById('delicaciesSection').style.display = 'block'; }
-        async function refreshStock() { localStorage.removeItem('stockCache'); stockCache = null; await loadStockFromGoogleSheet(); }
-
-        function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
-        function loadCartFromStorage() { const s = localStorage.getItem('cart'); cart = s ? (() => { try { return JSON.parse(s); } catch(e) { return {}; } })() : {}; }
-        function updateCartBar() { let c = 0, t = 0; for (const id in cart) { c += cart[id].qty; t += cart[id].qty * cart[id].price; } document.getElementById('cartCount').textContent = c; document.getElementById('cartTotal').textContent = t + ' ₽'; }
-        function updateProductUI(id) { const q = cart[id] ? cart[id].qty : 0; const card = document.querySelector(`.product-card[data-id="${id}"]`); if (!card) return; const a = card.querySelector('.add-btn'), c = card.querySelector('.quantity-control'), d = document.getElementById(`qty_${id}`); if (q > 0) { a.style.display = 'none'; c.style.display = 'flex'; d.textContent = q; } else { a.style.display = 'block'; c.style.display = 'none'; } }
-        function addToCart(id, name, price) { if (!cart[id]) cart[id] = { name, price, qty: 0 }; cart[id].qty++; saveCartToStorage(); updateCartBar(); updateProductUI(id); }
-        function changeCartQty(id, delta) { if (!cart[id]) return; cart[id].qty += delta; if (cart[id].qty <= 0) delete cart[id]; saveCartToStorage(); updateCartBar(); updateProductUI(id); if (document.getElementById('cartModal').classList.contains('active')) openCart(); }
-        function clearCart() { cart = {}; saveCartToStorage(); updateCartBar(); document.querySelectorAll('.product-card').forEach(c => updateProductUI(c.dataset.id)); closeCart(); }
+        function saveCartToStorage() { localStorage.setItem('cart',JSON.stringify(cart)); }
+        function loadCartFromStorage() { const s=localStorage.getItem('cart'); cart=s?(($){try{return JSON.parse(s);}catch(e){return{};}})():{}; }
+        function updateCartBar() { let c=0,t=0; for(const id in cart){c+=cart[id].qty;t+=cart[id].qty*cart[id].price;} document.getElementById('cartCount').textContent=c; document.getElementById('cartTotal').textContent=t+' ₽'; }
+        function updateProductUI(id) { const q=cart[id]?cart[id].qty:0; const card=document.querySelector(`.product-card[data-id="${id}"]`); if(!card) return; const a=card.querySelector('.add-btn'),c=card.querySelector('.quantity-control'),d=document.getElementById(`qty_${id}`); if(q>0){a.style.display='none';c.style.display='flex';d.textContent=q;}else{a.style.display='block';c.style.display='none';} }
+        function addToCart(id,name,price) { if(!cart[id]) cart[id]={name,price,qty:0}; cart[id].qty++; saveCartToStorage(); updateCartBar(); updateProductUI(id); }
+        function changeCartQty(id,delta) { if(!cart[id]) return; cart[id].qty+=delta; if(cart[id].qty<=0) delete cart[id]; saveCartToStorage(); updateCartBar(); updateProductUI(id); if(document.getElementById('cartModal').classList.contains('active')) openCart(); }
+        function clearCart() { cart={}; saveCartToStorage(); updateCartBar(); document.querySelectorAll('.product-card').forEach(c=>updateProductUI(c.dataset.id)); closeCart(); }
         function openCart() {
-            const div = document.getElementById('cartItems'); let t = 0; div.innerHTML = '';
-            if (!Object.keys(cart).length) div.innerHTML = '<p style="text-align:center;color:#aaa;">Корзина пуста</p>';
-            else for (const id in cart) { const it = cart[id], total = it.qty * it.price; t += total; const si = stockCache ? stockCache[id] : null; div.innerHTML += `<div class="cart-item"><span class="cart-item-name">${it.name}${(!si || si.qty <= 0) ? ' <span style="color:#f39c12;">(предзаказ)</span>' : ''}</span><button class="remove-btn" onclick="changeCartQty('${id}',-1)">−</button><span class="cart-item-qty">${it.qty}</span><button class="remove-btn" onclick="changeCartQty('${id}',1)">+</button><span class="cart-item-price">${total} ₽</span></div>`; }
-            let disc = 0; 
-            if (appliedPromo && !appliedPromo.isFree) disc = Math.round(t * appliedPromo.discount / 100);
-            document.getElementById('discountInfo').innerHTML = '';
-            if (appliedPromo) {
-                if (appliedPromo.isFree) {
-                    document.getElementById('discountInfo').innerHTML = `<span style="color:#27ae60;">🎁 Приз: ${appliedPromo.prize}</span>`;
-                } else if (disc > 0) {
-                    document.getElementById('discountInfo').innerHTML = `<span style="color:#27ae60;">Скидка: -${disc} ₽</span>`;
-                }
+            const div=document.getElementById('cartItems'); let t=0; div.innerHTML='';
+            if(!Object.keys(cart).length&&!appliedPromo) div.innerHTML='<p style="text-align:center;color:#aaa;">Корзина пуста</p>';
+            else {
+                for(const id in cart){const it=cart[id],total=it.qty*it.price;t+=total;const si=stockCache?stockCache[id]:null;div.innerHTML+=`<div class="cart-item"><span class="cart-item-name">${it.name}${(!si||si.qty<=0)?' <span style="color:#f39c12;">(предзаказ)</span>':''}</span><button class="remove-btn" onclick="changeCartQty('${id}',-1)">−</button><span class="cart-item-qty">${it.qty}</span><button class="remove-btn" onclick="changeCartQty('${id}',1)">+</button><span class="cart-item-price">${total} ₽</span></div>`;}
+                if(appliedPromo&&appliedPromo.isFree) div.innerHTML+=`<div style="background:#1a3a1a;border-radius:8px;padding:12px;margin-top:12px;"><span style="color:#27ae60;">🎁 Приз: ${appliedPromo.prize}</span><br><span style="color:#aaa;font-size:12px;">Промокод: ${appliedPromo.code}</span></div>`;
             }
-            document.getElementById('modalTotal').textContent = 'Итого: ' + (t - disc) + ' ₽';
+            let disc=0; if(appliedPromo&&!appliedPromo.isFree) disc=Math.round(t*appliedPromo.discount/100);
+            document.getElementById('discountInfo').innerHTML='';
+            if(appliedPromo&&!appliedPromo.isFree&&disc>0) document.getElementById('discountInfo').innerHTML=`<span style="color:#27ae60;">Скидка: -${disc} ₽</span>`;
+            document.getElementById('modalTotal').textContent='Итого: '+(t-disc)+' ₽';
             document.getElementById('cartModal').classList.add('active');
         }
         function closeCart() { document.getElementById('cartModal').classList.remove('active'); }
 
         async function sendOrder() {
-    // Проверяем: есть ли товары в корзине ИЛИ применён бесплатный приз
-    const hasItems = Object.keys(cart).length > 0;
-    const hasFreePrize = appliedPromo && appliedPromo.isFree;
-    
-    if (!hasItems && !hasFreePrize) { 
-        alert('Корзина пуста!'); 
-        return; 
-    }
-    
-    let t = 0, text = '';
-    
-    // Товары в корзине
-    if (hasItems) {
-        for (const id in cart) { 
-            const it = cart[id], total = it.qty * it.price; 
-            t += total; 
-            const si = stockCache ? stockCache[id] : null; 
-            text += `${it.name} x${it.qty} = ${total} ₽${(!si || si.qty <= 0) ? ' (предзаказ)' : ''}\n`; 
+            const hasItems = Object.keys(cart).length > 0;
+            const hasFreePrize = appliedPromo && appliedPromo.isFree;
+            if (!hasItems && !hasFreePrize) { alert('Корзина пуста!'); return; }
+            let t=0,text='';
+            if (hasItems) { for(const id in cart){const it=cart[id],total=it.qty*it.price;t+=total;const si=stockCache?stockCache[id]:null;text+=`${it.name} x${it.qty} = ${total} ₽${(!si||si.qty<=0)?' (предзаказ)':''}\n`;} }
+            if (appliedPromo) {
+                if (appliedPromo.isFree) { text+=hasItems?'\n':''; text+=`🎁 Приз с колеса фортуны: ${appliedPromo.prize}\nПромокод: ${appliedPromo.code}\n`; }
+                else { const d=Math.round(t*appliedPromo.discount/100); text+=`\nПромокод: ${appliedPromo.code} (-${d} ₽)\n`; t-=d; }
+            }
+            text+=t===0&&hasFreePrize?'\n💰 Итого: 0 ₽ (только призовой товар)':`\n💰 Итого: ${t} ₽`;
+            if(document.getElementById('sauceCheckbox').checked) text+='\n🌶 С острым соусом!';
+            const msg=document.querySelector('input[name="messenger"]:checked').value;
+            try{await navigator.clipboard.writeText(text);}catch(e){fallbackCopy(text);}
+            window.open(msg==='telegram'?'https://t.me/Andreik115':'https://vk.me/18451549','_blank');
+            cart={};appliedPromo=null;document.getElementById('promoInput').value='';document.getElementById('promoMessage').innerHTML='';
+            saveCartToStorage();updateCartBar();document.querySelectorAll('.product-card').forEach(c=>updateProductUI(c.dataset.id));closeCart();
         }
-    }
-    
-    // Применённый промокод/приз
-    if (appliedPromo) {
-        if (appliedPromo.isFree) {
-            text += hasItems ? '\n' : '';
-            text += `🎁 Приз с колеса фортуны: ${appliedPromo.prize}\n`;
-            text += `Промокод: ${appliedPromo.code}\n`;
-        } else {
-            const d = Math.round(t * appliedPromo.discount / 100);
-            text += `\nПромокод: ${appliedPromo.code} (-${d} ₽)\n`;
-            t -= d;
-        }
-    }
-    
-    // Итого
-    if (t === 0 && hasFreePrize) {
-        text += `\n💰 Итого: 0 ₽ (только призовой товар)`;
-    } else {
-        text += `\n💰 Итого: ${t} ₽`;
-    }
-    
-    if (document.getElementById('sauceCheckbox').checked) text += '\n🌶 С острым соусом!';
-    
-    const msg = document.querySelector('input[name="messenger"]:checked').value;
-    try { await navigator.clipboard.writeText(text); } catch(e) { fallbackCopy(text); }
-    window.open(msg === 'telegram' ? 'https://t.me/Andreik115' : 'https://vk.me/18451549', '_blank');
-    
-    cart = {}; appliedPromo = null; 
-    document.getElementById('promoInput').value = ''; 
-    document.getElementById('promoMessage').innerHTML = '';
-    saveCartToStorage(); updateCartBar();
-    document.querySelectorAll('.product-card').forEach(c => updateProductUI(c.dataset.id));
-    closeCart();
-});
+
+        document.getElementById('sendOrderButton').addEventListener('click', sendOrder);
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('sauceCheckbox').checked=false;
+            loadCartFromStorage(); updateCartBar();
+            document.querySelectorAll('.product-card').forEach(c=>updateProductUI(c.dataset.id));
+            showMainMenu();
+        });
     </script>
 </body>
 </html>
