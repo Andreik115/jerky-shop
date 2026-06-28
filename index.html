@@ -313,7 +313,13 @@ setTimeout(async()=>{await loadWheelConfig();renderActivePrizes();updateSpinButt
 
 function updateSpinButton(){const b=document.getElementById('spinBtn');if(!b)return;if(!hasActivePrizes()){b.disabled=true;b.textContent='🔒 Нет призов';b.style.display='none';return;}canSpin().then(a=>{b.disabled=!a;b.textContent=a?'🎡 Крутить':'🔒 Приходите завтра';});}
 
-function showWheel(){['mainMenu','jerkyCatalog','delicaciesSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('wheelSection').style.display='block';document.getElementById('deviceIdDisplay').textContent='Device ID: '+deviceId;(!wheelConfig.length?loadWheelConfig().then(()=>{renderActivePrizes();updateSpinButton();}):(renderActivePrizes(),updateSpinButton()));}
+function showWheel(){
+['mainMenu','jerkyCatalog','delicaciesSection'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+document.getElementById('wheelSection').style.display='block';
+document.getElementById('deviceIdDisplay').textContent='Device ID: '+deviceId;
+if(!wheelConfig.length){loadWheelConfig().then(()=>{renderActivePrizes();updateSpinButton();});}
+else{renderActivePrizes();updateSpinButton();}
+}
 
 function applyPromo(){
 const code=document.getElementById('promoInput').value.trim();if(!code)return;
@@ -346,26 +352,19 @@ if(c){try{stockCache=JSON.parse(c);applyStock(stockCache,true);showStatus(false)
 function applyStock(stock,isCached=false){for(const[id,info]of Object.entries(stock)){const el=document.getElementById(`stock_${id}`),btn=document.getElementById(`btn_${id}`);if(!el)continue;if(btn)btn.disabled=false;el.textContent=info.qty>0?`В наличии: ${info.qty} шт.${info.date?' ('+info.date+')':''}${isCached?' (кэш)':''}`:'Предзаказ';el.className=info.qty>0?'stock-info':'stock-info preorder';if(btn)btn.textContent=info.qty>0?'Добавить в корзину':'Предзаказать';}}
 function showStatus(ok){document.getElementById('statusPanel').style.display='flex';document.getElementById('statusDot').className=ok?'status-dot green':'status-dot red';}
 function showMainMenu(){
-['jerkyCatalog','delicaciesSection','wheelSection','statusPanel'].forEach(id=>{
-const el=document.getElementById(id);if(el)el.style.display='none';
-});
+['jerkyCatalog','delicaciesSection','wheelSection','statusPanel'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 document.getElementById('mainMenu').style.display='block';
-document.getElementById('statusPanel').style.display='none';
 }
 
 function showJerkyCatalog(){
-['mainMenu','delicaciesSection','wheelSection'].forEach(id=>{
-const el=document.getElementById(id);if(el)el.style.display='none';
-});
+['mainMenu','delicaciesSection','wheelSection'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 document.getElementById('jerkyCatalog').style.display='block';
 if(!stockCache)loadStockFromGoogleSheet();
 else document.getElementById('statusPanel').style.display='flex';
 }
 
 function showDelicacies(){
-['mainMenu','jerkyCatalog','wheelSection','statusPanel'].forEach(id=>{
-const el=document.getElementById(id);if(el)el.style.display='none';
-});
+['mainMenu','jerkyCatalog','wheelSection','statusPanel'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 document.getElementById('delicaciesSection').style.display='block';
 }
 function showJerkyCatalog(){['mainMenu','delicaciesSection','wheelSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('jerkyCatalog').style.display='block';if(!stockCache)loadStockFromGoogleSheet();else document.getElementById('statusPanel').style.display='flex';}
