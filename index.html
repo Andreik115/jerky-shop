@@ -305,10 +305,18 @@
         }
 
         async function markPromoAsUsed(code) {
-            try {
-                await fetch(APPS_SCRIPT_URL + '?sheet=PromoUsage&action=markUsed&code=' + encodeURIComponent(code));
-            } catch(e) {}
+    try {
+        console.log('Отмечаем использование кода:', code);
+        const resp = await fetch(APPS_SCRIPT_URL + '?sheet=PromoUsage&action=markUsed&code=' + encodeURIComponent(code));
+        const result = await resp.json();
+        console.log('Результат отметки:', result);
+        if (!result.success) {
+            console.error('Не удалось отметить:', result.error);
         }
+    } catch(e) {
+        console.error('Ошибка отметки использования:', e);
+    }
+}
 
         async function isBlockedInSheet() {
             if (!navigator.onLine) return false;
