@@ -99,16 +99,18 @@
         .promo-code-box { background: #1a1a1a; border: 2px dashed #f39c12; border-radius: 8px; padding: 12px; margin: 8px 0; font-size: 24px; font-weight: bold; color: #f1c40f; letter-spacing: 2px; user-select: all; word-break: break-all; }
         .copy-btn { background: #f39c12; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }
         .copy-btn.copied { background: #27ae60; color: #fff; }
+        .offline-banner { display: none; position: fixed; top: 0; left: 0; right: 0; background: #e74c3c; color: #fff; text-align: center; padding: 10px; font-size: 14px; z-index: 9998; }
     </style>
 </head>
 <body>
 
-    <!-- Сплэш-скрин -->
     <div id="splashScreen" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#1a1a1a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;">
         <div style="font-size:60px;">🥩</div>
         <h1 style="color:#e74c3c;font-size:28px;margin-top:16px;">KoMeat</h1>
         <p style="color:#aaa;margin-top:8px;">Джерки ручной работы</p>
     </div>
+
+    <div class="offline-banner" id="offlineBanner">📡 Нет подключения к интернету</div>
 
     <div class="status-panel" id="statusPanel" style="display:none">
         <span class="status-dot" id="statusDot"></span>
@@ -266,7 +268,12 @@
         let cart = {}, stockCache = null, wheelConfig = [], appliedPromo = null;
         let deviceId = localStorage.getItem('deviceId') || (() => { const id = 'KO-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); return id; })();
 
-        // Сплэш-скрин
+        function showOfflineBanner() { const b = document.getElementById('offlineBanner'); if (b) b.style.display = 'block'; }
+        function hideOfflineBanner() { const b = document.getElementById('offlineBanner'); if (b) b.style.display = 'none'; }
+        window.addEventListener('offline', showOfflineBanner);
+        window.addEventListener('online', hideOfflineBanner);
+        if (!navigator.onLine) showOfflineBanner();
+
         setTimeout(() => {
             const splash = document.getElementById('splashScreen');
             if (splash) { splash.style.transition = 'opacity 0.5s'; splash.style.opacity = '0'; setTimeout(() => splash.remove(), 500); }
@@ -298,6 +305,7 @@
         }
 
         async function isBlockedInSheet() {
+            if (!navigator.onLine) return false;
             try {
                 const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Blocks'!A2:C100?key=${SHEET_API_KEY}`);
                 const d = await r.json();
@@ -310,25 +318,28 @@
                         if (row[1] === deviceId && (row[2] || '') !== 'unblocked' && (now - rd) / 3600000 < 24) return true;
                     }
                 }
-            } catch (e) {}
+            } catch (e) { showOfflineBanner(); }
             return false;
         }
 
         async function addBlockRecord() {
-            try { await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(new Date().toISOString()) + '&deviceId=' + encodeURIComponent(deviceId)); } catch (e) {}
+            if (!navigator.onLine) return;
+            try { await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=addBlock&date=' + encodeURIComponent(new Date().toISOString()) + '&deviceId=' + encodeURIComponent(deviceId)); } catch (e) { showOfflineBanner(); }
         }
 
         async function requestUnblock() {
+            if (!navigator.onLine) { alert('Нет подключения к интернету'); return; }
             const s = document.getElementById('unblockStatus');
             s.innerHTML = '<span style="color:#f39c12;">⏳ Разблокировка...</span>';
             try {
                 const r = await (await fetch(APPS_SCRIPT_URL + '?sheet=Blocks&action=requestUnblock&deviceId=' + encodeURIComponent(deviceId))).json();
                 s.innerHTML = r.success ? '<span style="color:#27ae60;">✅ Готово!</span>' : '<span style="color:#e74c3c;">❌ Ошибка</span>';
                 if (r.success) updateSpinButton();
-            } catch (e) { s.innerHTML = '<span style="color:#e74c3c;">❌ Ошибка</span>'; }
+            } catch (e) { s.innerHTML = '<span style="color:#e74c3c;">❌ Нет сети</span>'; showOfflineBanner(); }
         }
 
         async function loadWheelConfig() {
+            if (!navigator.onLine) return;
             try {
                 const r = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Prizes'!A2:F10?key=${SHEET_API_KEY}`);
                 const d = await r.json();
@@ -338,7 +349,7 @@
                     { name: 'Скидка 5%', prize: 'Скидка 5%', code: 'WHEEL5', chance: 30, remaining: 0 },
                     { name: 'Пусто', prize: 'Пусто', code: null, chance: 50, remaining: Infinity }
                 ];
-            } catch (e) {}
+            } catch (e) { showOfflineBanner(); }
         }
 
         function hasActivePrizes() { return wheelConfig.some(s => s.code && s.remaining > 0); }
@@ -352,7 +363,6 @@
                 c.innerHTML = '<p style="color:#e74c3c;text-align:center;">🎰 Розыгрышей нет.<br><span style="font-size:13px;">Загляните позже!</span></p>';
                 document.getElementById('spinBtn').style.display = 'none';
                 document.getElementById('wheel').style.opacity = '0.4';
-                document.getElementById('resultText').innerHTML = '';
             } else {
                 document.getElementById('spinBtn').style.display = '';
                 document.getElementById('wheel').style.opacity = '1';
@@ -392,7 +402,7 @@
                     rd.innerHTML = `
                         <div class="promo-result">
                             <p style="font-size:18px;color:#27ae60;">🎉 ${result.prize}!</p>
-                            <div class="promo-code-box" id="promoCodeText">${uniqueCode}</div>
+                            <div class="promo-code-box">${uniqueCode}</div>
                             <button class="copy-btn" id="copyBtn" onclick="copyPromoCode('${uniqueCode}')">📋 Скопировать промокод</button>
                             <p style="color:#aaa;font-size:12px;margin-top:8px;">Примените в корзине при заказе</p>
                         </div>`;
@@ -402,6 +412,7 @@
                 
                 const found = wheelConfig.find(s => s.code === result.code);
                 if (found && found.remaining > 0) found.remaining--;
+                
                 renderActivePrizes();
                 updateSpinButton();
                 setTimeout(async () => { await loadWheelConfig(); renderActivePrizes(); updateSpinButton(); }, 2000);
@@ -427,28 +438,23 @@
             if (!code) return;
             const msg = document.getElementById('promoMessage');
             const storedCode = localStorage.getItem('lastPromoCode');
-            // Проверяем и обычные коды, и уникальные
             if (storedCode && code === storedCode) {
                 appliedPromo = { code: code, discount: 10 };
                 msg.innerHTML = '<span class="promo-info">✅ Ваш уникальный промокод применён! Скидка 10%</span>';
             } else {
                 const found = wheelConfig.find(s => s.code === code);
-                if (found) {
-                    appliedPromo = { code: code, discount: parseInt(found.name) || 0 };
-                    msg.innerHTML = `<span class="promo-info">✅ Промокод применён! Скидка ${appliedPromo.discount}%</span>`;
-                } else {
-                    appliedPromo = null;
-                    msg.innerHTML = '<span class="promo-error">❌ Не найден</span>';
-                }
+                if (found) { appliedPromo = { code: code, discount: parseInt(found.name) || 0 }; msg.innerHTML = `<span class="promo-info">✅ Промокод применён! Скидка ${appliedPromo.discount}%</span>`; }
+                else { appliedPromo = null; msg.innerHTML = '<span class="promo-error">❌ Не найден</span>'; }
             }
             openCart();
         }
 
         async function loadStockFromGoogleSheet() {
+            if (!navigator.onLine) { showOfflineBanner(); return; }
             try {
                 const d = await (await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Stock'!A2:C20?key=${SHEET_API_KEY}`)).json();
                 if (d.values) { const s = {}; for (const r of d.values) { if (r.length >= 2) s[r[0]] = { qty: parseFloat(String(r[1]).replace(',', '.')) || 0, date: r[2] || '' }; } localStorage.setItem('stockCache', JSON.stringify(s)); stockCache = s; applyStock(s); showStatus(true); }
-            } catch (e) { const c = localStorage.getItem('stockCache'); if (c) { try { stockCache = JSON.parse(c); applyStock(stockCache, true); showStatus(false); } catch(e2) {} } else showStatus(false); }
+            } catch (e) { showOfflineBanner(); const c = localStorage.getItem('stockCache'); if (c) { try { stockCache = JSON.parse(c); applyStock(stockCache, true); showStatus(false); } catch(e2) {} } else showStatus(false); }
         }
 
         function applyStock(stock, isCached = false) {
