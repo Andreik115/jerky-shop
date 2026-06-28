@@ -1,8 +1,9 @@
-const CACHE_NAME = 'komeat-cache-v6';
+const CACHE_NAME = 'komeat-cache-v7';
 const urlsToCache = [
   '/jerky-shop/',
   '/jerky-shop/index.html',
   '/jerky-shop/offline.html',
+  '/jerky-shop/firebase-messaging-sw.js',
   '/jerky-shop/pig.png',
   '/jerky-shop/chicken.png',
   '/jerky-shop/cow.png',
