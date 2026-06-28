@@ -14,6 +14,8 @@
         navigator.serviceWorker.register('service-worker.js');
       }
     </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
     <style>
         .ios-hint { display: none; background: #2a2a2a; border: 1px solid #e74c3c; border-radius: 12px; padding: 12px; margin: 12px 0; text-align: center; font-size: 13px; }
         @supports (-webkit-touch-callout: none) { .ios-hint { display: block; } }
@@ -102,9 +104,6 @@
         .copy-btn { background: #f39c12; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }
         .copy-btn.copied { background: #27ae60; color: #fff; }
         .offline-banner { display: none; position: fixed; top: 0; left: 0; right: 0; background: #e74c3c; color: #fff; text-align: center; padding: 10px; font-size: 14px; z-index: 9998; }
-        .reviews-section { margin-top: 12px; border-top: 1px solid #333; padding-top: 8px; }
-        .review-item { background: #222; border-radius: 8px; padding: 10px; margin: 6px 0; font-size: 13px; }
-        .review-stars { color: #f1c40f; }
     </style>
 </head>
 <body>
@@ -133,6 +132,7 @@
     <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
     <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
     <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12;color:#f39c12;display:none;">🎁 Колесо фортуны</button>
+    <button class="main-menu-btn" id="pushBtn" onclick="requestPushPermission()" style="display:none;border-color:#3498db;color:#3498db;">🔔 Включить уведомления</button>
 </div>
 
 <div id="jerkyCatalog" style="display:none;">
@@ -284,7 +284,6 @@ localStorage.setItem('lastPromoCode',code);
 }
 
 async function markPromoAsUsed(code){try{await fetch(APPS_SCRIPT_URL+'?sheet=PromoUsage&action=markUsed&code='+encodeURIComponent(code));}catch(e){}}
-
 async function incrementOrderCounter(product){try{await fetch(APPS_SCRIPT_URL+'?sheet=OrderCounter&action=increment&product='+encodeURIComponent(product));}catch(e){}}
 
 async function loadReviews(){
@@ -438,6 +437,40 @@ try{await navigator.clipboard.writeText(text);}catch(e){fallbackCopy(text);}
 window.open(msg==='telegram'?'https://t.me/Andreik115':'https://vk.me/18451549','_blank');
 cart={};appliedPromo=null;document.getElementById('promoInput').value='';document.getElementById('promoMessage').innerHTML='';
 saveCartToStorage();updateCartBar();document.querySelectorAll('.product-card').forEach(c=>updateProductUI(c.dataset.id));closeCart();
+}
+
+// Firebase Push
+const firebaseConfig = {
+  apiKey: "AIzaSyBDsY7DCOqY9lQ8D7RDhBK0clnud7G7E18",
+  authDomain: "komeat-61db2.firebaseapp.com",
+  projectId: "komeat-61db2",
+  storageBucket: "komeat-61db2.firebasestorage.app",
+  messagingSenderId: "159451537231",
+  appId: "1:159451537231:web:8fa75e5a0cf8fa549cef3a"
+};
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+async function requestPushPermission() {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      const token = await messaging.getToken({ vapidKey: 'BO9YIjzQn4a43FZDgazLDAFZt0Q7knAOVcS0qJtnTIsLhuqcgn8-bMvrGH7ziloy4VZyR5m9Y9_e9yNQP1-6Fbs' });
+      await fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=add&deviceId=' + encodeURIComponent(deviceId) + '&token=' + encodeURIComponent(token));
+      alert('✅ Уведомления включены!');
+      document.getElementById('pushBtn').style.display = 'none';
+    } else {
+      alert('❌ Уведомления отключены.');
+    }
+  } catch(e) {
+    console.error('Push error:', e);
+  }
+}
+
+if (isApp && Notification.permission !== 'granted') {
+  const btn = document.getElementById('pushBtn');
+  if (btn) btn.style.display = 'block';
 }
 
 document.getElementById('sendOrderButton').addEventListener('click',sendOrder);
