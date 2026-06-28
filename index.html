@@ -526,7 +526,7 @@ function updatePushButton() {
       btn.style.color = '#3498db';
     }
 }
-
+}
 if (isApp && pushEnabled && currentPushToken) {
   messaging.getToken({ vapidKey: 'BO9YIjzQn4a43FZDgazLDAFZt0Q7knAOVcS0qJtnTIsLhuqcgn8-bMvrGH7ziloy4VZyR5m9Y9_e9yNQP1-6Fbs' }).then(token => {
     if (token !== currentPushToken) {
