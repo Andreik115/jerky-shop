@@ -550,29 +550,42 @@
         function closeCart() { document.getElementById('cartModal').classList.remove('active'); }
 
         async function sendOrder() {
-    if (!Object.keys(cart).length && !appliedPromo) { alert('Корзина пуста!'); return; }
-    if (!Object.keys(cart).length && appliedPromo && !appliedPromo.isFree) { alert('Добавьте товары в корзину!'); return; }
+    // Проверяем: есть ли товары в корзине ИЛИ применён бесплатный приз
+    const hasItems = Object.keys(cart).length > 0;
+    const hasFreePrize = appliedPromo && appliedPromo.isFree;
     
-    let t = 0, text = '';
-    for (const id in cart) { 
-        const it = cart[id], total = it.qty * it.price; 
-        t += total; 
-        const si = stockCache ? stockCache[id] : null; 
-        text += `${it.name} x${it.qty} = ${total} ₽${(!si || si.qty <= 0) ? ' (предзаказ)' : ''}\n`; 
+    if (!hasItems && !hasFreePrize) { 
+        alert('Корзина пуста!'); 
+        return; 
     }
     
+    let t = 0, text = '';
+    
+    // Товары в корзине
+    if (hasItems) {
+        for (const id in cart) { 
+            const it = cart[id], total = it.qty * it.price; 
+            t += total; 
+            const si = stockCache ? stockCache[id] : null; 
+            text += `${it.name} x${it.qty} = ${total} ₽${(!si || si.qty <= 0) ? ' (предзаказ)' : ''}\n`; 
+        }
+    }
+    
+    // Применённый промокод/приз
     if (appliedPromo) {
         if (appliedPromo.isFree) {
-            text += `\n🎁 Приз с колеса фортуны: ${appliedPromo.prize}`;
-            text += `\nПромокод: ${appliedPromo.code}`;
+            text += hasItems ? '\n' : '';
+            text += `🎁 Приз с колеса фортуны: ${appliedPromo.prize}\n`;
+            text += `Промокод: ${appliedPromo.code}\n`;
         } else {
             const d = Math.round(t * appliedPromo.discount / 100);
-            text += `\nПромокод: ${appliedPromo.code} (-${d} ₽)`;
+            text += `\nПромокод: ${appliedPromo.code} (-${d} ₽)\n`;
             t -= d;
         }
     }
     
-    if (t === 0 && appliedPromo && appliedPromo.isFree) {
+    // Итого
+    if (t === 0 && hasFreePrize) {
         text += `\n💰 Итого: 0 ₽ (только призовой товар)`;
     } else {
         text += `\n💰 Итого: ${t} ₽`;
