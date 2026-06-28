@@ -457,7 +457,10 @@ let pushEnabled = localStorage.getItem('pushEnabled') === 'true';
 
 async function togglePush() {
   const btn = document.getElementById('pushBtn');
+  if (!btn) return;
+  
   if (pushEnabled) {
+    // Отключаем
     if (currentPushToken) {
       try { await fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=remove&token=' + encodeURIComponent(currentPushToken)); } catch(e) {}
     }
@@ -469,23 +472,43 @@ async function togglePush() {
     btn.style.borderColor = '#3498db';
     btn.style.color = '#3498db';
     alert('🔕 Уведомления отключены');
-  } else {
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        const token = await messaging.getToken({ vapidKey: 'BO9YIjzQn4a43FZDgazLDAFZt0Q7knAOVcS0qJtnTIsLhuqcgn8-bMvrGH7ziloy4VZyR5m9Y9_e9yNQP1-6Fbs' });
-        await fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=add&deviceId=' + encodeURIComponent(deviceId) + '&token=' + encodeURIComponent(token));
-        currentPushToken = token;
-        pushEnabled = true;
-        localStorage.setItem('pushEnabled', 'true');
-        localStorage.setItem('pushToken', token);
-        btn.textContent = '🔕 Отключить уведомления';
-        btn.style.borderColor = '#e74c3c';
-        btn.style.color = '#e74c3c';
-        alert('✅ Уведомления включены!');
-      } else { alert('❌ Уведомления отключены.'); }
-    } catch(e) { console.error('Push error:', e); alert('❌ Не удалось'); }
+    return;
   }
+  
+  // Включаем
+  btn.disabled = true;
+  btn.textContent = '⏳ Запрос...';
+  
+  try {
+    // Небольшая задержка для WebView
+    await new Promise(r => setTimeout(r, 300));
+    
+    const permission = await Notification.requestPermission();
+    
+    if (permission === 'granted') {
+      const token = await messaging.getToken({ vapidKey: 'BO9YIjzQn4a43FZDgazLDAFZt0Q7knAOVcS0qJtnTIsLhuqcgn8-bMvrGH7ziloy4VZyR5m9Y9_e9yNQP1-6Fbs' });
+      await fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=add&deviceId=' + encodeURIComponent(deviceId) + '&token=' + encodeURIComponent(token));
+      currentPushToken = token;
+      pushEnabled = true;
+      localStorage.setItem('pushEnabled', 'true');
+      localStorage.setItem('pushToken', token);
+      btn.textContent = '🔕 Отключить уведомления';
+      btn.style.borderColor = '#e74c3c';
+      btn.style.color = '#e74c3c';
+      alert('✅ Уведомления включены!');
+    } else if (permission === 'denied') {
+      alert('❌ Уведомления запрещены. Разрешите их в настройках телефона: Настройки → Приложения → KoMeat → Уведомления');
+    } else {
+      alert('❌ Уведомления не включены. Попробуйте ещё раз.');
+    }
+  } catch(e) {
+    console.error('Push error:', e);
+    alert('❌ Не удалось. Возможно, браузер не поддерживает уведомления в этом режиме.');
+  }
+  
+  btn.disabled = false;
+  updatePushButton();
+}
 }
 
 function updatePushButton() {
