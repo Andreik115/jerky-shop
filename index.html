@@ -132,7 +132,7 @@
     <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
     <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
     <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12;color:#f39c12;display:none;">🎁 Колесо фортуны</button>
-    <button class="main-menu-btn" id="pushBtn" onclick="requestPushPermission()" style="display:none;border-color:#3498db;color:#3498db;">🔔 Включить уведомления</button>
+    <button class="main-menu-btn" id="pushBtn" onclick="togglePush()" style="display:none;border-color:#3498db;color:#3498db;">🔔 Включить уведомления</button>
 </div>
 
 <div id="jerkyCatalog" style="display:none;">
@@ -439,7 +439,7 @@ cart={};appliedPromo=null;document.getElementById('promoInput').value='';documen
 saveCartToStorage();updateCartBar();document.querySelectorAll('.product-card').forEach(c=>updateProductUI(c.dataset.id));closeCart();
 }
 
-// Firebase Push
+// Firebase Push с переключателем
 const firebaseConfig = {
   apiKey: "AIzaSyBDsY7DCOqY9lQ8D7RDhBK0clnud7G7E18",
   authDomain: "komeat-61db2.firebaseapp.com",
@@ -452,26 +452,70 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-async function requestPushPermission() {
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
-      const token = await messaging.getToken({ vapidKey: 'BO9YIjzQn4a43FZDgazLDAFZt0Q7knAOVcS0qJtnTIsLhuqcgn8-bMvrGH7ziloy4VZyR5m9Y9_e9yNQP1-6Fbs' });
-      await fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=add&deviceId=' + encodeURIComponent(deviceId) + '&token=' + encodeURIComponent(token));
-      alert('✅ Уведомления включены!');
-      document.getElementById('pushBtn').style.display = 'none';
-    } else {
-      alert('❌ Уведомления отключены.');
+let currentPushToken = localStorage.getItem('pushToken') || null;
+let pushEnabled = localStorage.getItem('pushEnabled') === 'true';
+
+async function togglePush() {
+  const btn = document.getElementById('pushBtn');
+  if (pushEnabled) {
+    if (currentPushToken) {
+      try { await fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=remove&token=' + encodeURIComponent(currentPushToken)); } catch(e) {}
     }
-  } catch(e) {
-    console.error('Push error:', e);
+    currentPushToken = null;
+    pushEnabled = false;
+    localStorage.setItem('pushEnabled', 'false');
+    localStorage.removeItem('pushToken');
+    btn.textContent = '🔔 Включить уведомления';
+    btn.style.borderColor = '#3498db';
+    btn.style.color = '#3498db';
+    alert('🔕 Уведомления отключены');
+  } else {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        const token = await messaging.getToken({ vapidKey: 'BO9YIjzQn4a43FZDgazLDAFZt0Q7knAOVcS0qJtnTIsLhuqcgn8-bMvrGH7ziloy4VZyR5m9Y9_e9yNQP1-6Fbs' });
+        await fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=add&deviceId=' + encodeURIComponent(deviceId) + '&token=' + encodeURIComponent(token));
+        currentPushToken = token;
+        pushEnabled = true;
+        localStorage.setItem('pushEnabled', 'true');
+        localStorage.setItem('pushToken', token);
+        btn.textContent = '🔕 Отключить уведомления';
+        btn.style.borderColor = '#e74c3c';
+        btn.style.color = '#e74c3c';
+        alert('✅ Уведомления включены!');
+      } else { alert('❌ Уведомления отключены.'); }
+    } catch(e) { console.error('Push error:', e); alert('❌ Не удалось'); }
   }
 }
 
-if (isApp && Notification.permission !== 'granted') {
+function updatePushButton() {
   const btn = document.getElementById('pushBtn');
-  if (btn) btn.style.display = 'block';
+  if (!btn) return;
+  if (isApp) {
+    btn.style.display = 'block';
+    if (pushEnabled) {
+      btn.textContent = '🔕 Отключить уведомления';
+      btn.style.borderColor = '#e74c3c';
+      btn.style.color = '#e74c3c';
+    } else {
+      btn.textContent = '🔔 Включить уведомления';
+      btn.style.borderColor = '#3498db';
+      btn.style.color = '#3498db';
+    }
+  }
 }
+
+if (isApp && pushEnabled && currentPushToken) {
+  messaging.getToken({ vapidKey: 'BO9YIjzQn4a43FZDgazLDAFZt0Q7knAOVcS0qJtnTIsLhuqcgn8-bMvrGH7ziloy4VZyR5m9Y9_e9yNQP1-6Fbs' }).then(token => {
+    if (token !== currentPushToken) {
+      fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=add&deviceId=' + encodeURIComponent(deviceId) + '&token=' + encodeURIComponent(token));
+      localStorage.setItem('pushToken', token);
+      currentPushToken = token;
+    }
+  }).catch(() => {});
+}
+
+updatePushButton();
 
 document.getElementById('sendOrderButton').addEventListener('click',sendOrder);
 document.addEventListener('DOMContentLoaded',()=>{
