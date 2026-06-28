@@ -326,14 +326,48 @@ appliedPromo=null;msg.innerHTML='<span class="promo-error">❌ Промокод 
 }
 
 async function loadStockFromGoogleSheet(){
-if(!navigator.onLine){showOfflineBanner();return;}
-try{const d=await(await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Stock'!A2:C20?key=${SHEET_API_KEY}`)).json();if(d.values){const s={};for(const r of d.values){if(r.length>=2)s[r[0]]={qty:parseFloat(String(r[1]).replace(',','.'))||0,date:r[2]||''};}localStorage.setItem('stockCache',JSON.stringify(s));stockCache=s;applyStock(s);showStatus(true);}}
-catch(e){showOfflineBanner();const c=localStorage.getItem('stockCache');if(c){try{stockCache=JSON.parse(c);applyStock(stockCache,true);showStatus(false);}catch(e2){}}else showStatus(false);}
+if(!navigator.onLine){
+showOfflineBanner();
+const c=localStorage.getItem('stockCache');
+if(c){try{stockCache=JSON.parse(c);applyStock(stockCache,true);showStatus(false);}catch(e2){showStatus(false);}}
+else showStatus(false);
+return;
+}
+try{
+const d=await(await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Stock'!A2:C20?key=${SHEET_API_KEY}`)).json();
+if(d.values){const s={};for(const r of d.values){if(r.length>=2)s[r[0]]={qty:parseFloat(String(r[1]).replace(',','.'))||0,date:r[2]||''};}localStorage.setItem('stockCache',JSON.stringify(s));stockCache=s;applyStock(s);showStatus(true);}
+}catch(e){
+showOfflineBanner();
+const c=localStorage.getItem('stockCache');
+if(c){try{stockCache=JSON.parse(c);applyStock(stockCache,true);showStatus(false);}catch(e2){}}else showStatus(false);
+}
 }
 
 function applyStock(stock,isCached=false){for(const[id,info]of Object.entries(stock)){const el=document.getElementById(`stock_${id}`),btn=document.getElementById(`btn_${id}`);if(!el)continue;if(btn)btn.disabled=false;el.textContent=info.qty>0?`В наличии: ${info.qty} шт.${info.date?' ('+info.date+')':''}${isCached?' (кэш)':''}`:'Предзаказ';el.className=info.qty>0?'stock-info':'stock-info preorder';if(btn)btn.textContent=info.qty>0?'Добавить в корзину':'Предзаказать';}}
 function showStatus(ok){document.getElementById('statusPanel').style.display='flex';document.getElementById('statusDot').className=ok?'status-dot green':'status-dot red';}
-function showMainMenu(){['jerkyCatalog','delicaciesSection','wheelSection','statusPanel'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('mainMenu').style.display='block';}
+function showMainMenu(){
+['jerkyCatalog','delicaciesSection','wheelSection','statusPanel'].forEach(id=>{
+const el=document.getElementById(id);if(el)el.style.display='none';
+});
+document.getElementById('mainMenu').style.display='block';
+document.getElementById('statusPanel').style.display='none';
+}
+
+function showJerkyCatalog(){
+['mainMenu','delicaciesSection','wheelSection'].forEach(id=>{
+const el=document.getElementById(id);if(el)el.style.display='none';
+});
+document.getElementById('jerkyCatalog').style.display='block';
+if(!stockCache)loadStockFromGoogleSheet();
+else document.getElementById('statusPanel').style.display='flex';
+}
+
+function showDelicacies(){
+['mainMenu','jerkyCatalog','wheelSection','statusPanel'].forEach(id=>{
+const el=document.getElementById(id);if(el)el.style.display='none';
+});
+document.getElementById('delicaciesSection').style.display='block';
+}
 function showJerkyCatalog(){['mainMenu','delicaciesSection','wheelSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('jerkyCatalog').style.display='block';if(!stockCache)loadStockFromGoogleSheet();else document.getElementById('statusPanel').style.display='flex';}
 function showDelicacies(){['mainMenu','jerkyCatalog','wheelSection','statusPanel'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('delicaciesSection').style.display='block';}
 async function refreshStock(){localStorage.removeItem('stockCache');stockCache=null;await loadStockFromGoogleSheet();}
