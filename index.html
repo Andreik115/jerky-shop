@@ -136,14 +136,7 @@
         <p>Твоё мясное комьюнити</p>
         <a href="#" onclick="openTelegram()" style="display:inline-block;margin-top:12px;background:#e74c3c;border-radius:8px;padding:10px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:15px;">📢 Подписывайся на наш Telegram</a>
     </div>
-    
-    <!-- Баннер приложения -->
-    <div class="app-banner">
-        <p>📱 Установи наше приложение!</p>
-        <a href="https://expo.dev/accounts/andreik115/projects/komeat/builds/1750522d-3569-40e6-be2f-c46a13db7d93" target="_blank" class="app-download-btn">⬇️ Скачать APK для Android</a>
-        <p style="color:#aaa; font-size:11px; margin-top:6px;">Push-уведомления • Офлайн-режим • Быстрее</p>
-    </div>
-    
+       
     <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
     <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
     <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12;color:#f39c12;display:none;">🎁 Колесо фортуны</button>
@@ -351,7 +344,7 @@ async function loadOrderCounts(){
 try{
 const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'OrderCounter'!A2:B20?key=${SHEET_API_KEY}`);
 const d=await r.json();
-if(d.values){for(const row of d.values){const el=document.getElementById(`orders_${row[0]}`);if(el)el.textContent=`📦 ${row[1]} зак.`;}}
+if(d.values){for(const row of d.values){const el=document.getElementById(`orders_${row[0]}`);if(el)el.textContent=`📦 Заказано: ${row[1]} раз`;}}
 }catch(e){}
 }
 
