@@ -42,16 +42,14 @@
         .product-price { color: #e74c3c; font-size: 18px; font-weight: bold; margin-bottom: 6px; }
         .product-weight { color: #aaa; font-size: 13px; }
         .product-comp { color: #888; font-size: 12px; margin-top: 6px; line-height: 1.4; }
-        .product-rating { color: #f1c40f; font-size: 13px; margin-top: 4px; }
-        .product-orders { color: #aaa; font-size: 12px; }
+        .product-rating { color: #f1c40f; font-size: 13px; margin-top: 4px; cursor: pointer; text-decoration: underline; }
+        .product-orders { color: #aaa; font-size: 12px; margin-top: 4px; }
+        .review-btn { background: #333; color: #f39c12; border: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-left: 10px; }
         .stock-info { color: #27ae60; font-size: 12px; margin-top: 6px; font-weight: 500; }
         .stock-info.preorder { color: #f39c12; }
         .kbju-container { display: flex; gap: 12px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #333; }
         .kbju-item { display: flex; align-items: baseline; gap: 3px; }
         .kbju-value { color: #e74c3c; font-weight: bold; font-size: 13px; }
-        .kbju-label { color: #888; font-size: 10px; }
-        .kbju-item { text-align: center; }
-        .kbju-value { color: #e74c3c; font-weight: bold; font-size: 14px; }
         .kbju-label { color: #888; font-size: 10px; }
         .add-container { display: flex; align-items: center; margin-top: 10px; }
         .btn { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
@@ -111,9 +109,13 @@
         .copy-btn { background: #f39c12; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }
         .copy-btn.copied { background: #27ae60; color: #fff; }
         .offline-banner { display: none; position: fixed; top: 0; left: 0; right: 0; background: #e74c3c; color: #fff; text-align: center; padding: 10px; font-size: 14px; z-index: 9998; }
-        .app-banner { background: #1a3a1a; border: 1px solid #27ae60; border-radius: 12px; padding: 12px; margin: 12px 0; text-align: center; }
-        .app-banner p { color: #fff; margin: 0 0 8px; }
-        .app-download-btn { display: inline-block; background: #27ae60; border-radius: 8px; padding: 10px 20px; color: #fff; text-decoration: none; font-weight: bold; }
+        .review-item { background: #1a1a1a; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+        .review-header { display: flex; justify-content: space-between; align-items: center; }
+        .review-name { color: #fff; font-weight: bold; }
+        .review-text { color: #aaa; margin-top: 4px; }
+        .review-date { color: #666; font-size: 11px; margin-top: 4px; }
+        .star-rating { margin: 10px 0; }
+        .star-rating span { cursor: pointer; font-size: 30px; }
     </style>
 </head>
 <body>
@@ -139,7 +141,6 @@
         <p>Твоё мясное комьюнити</p>
         <a href="#" onclick="openTelegram()" style="display:inline-block;margin-top:12px;background:#e74c3c;border-radius:8px;padding:10px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:15px;">📢 Подписывайся на наш Telegram</a>
     </div>
-       
     <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
     <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
     <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12;color:#f39c12;display:none;">🎁 Колесо фортуны</button>
@@ -155,10 +156,13 @@
         <div class="product-name">Свиные джерки «Коньячные»</div>
         <div class="product-price">450 ₽</div>
         <div class="product-weight">100 г</div>
-        <div class="product-rating" id="rating_pork_cognac"></div>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+            <span class="product-rating" id="rating_pork_cognac" onclick="openReviews('pork_cognac','Свиные джерки «Коньячные»')"></span>
+            <button class="review-btn" onclick="openReview('pork_cognac','Свиные джерки «Коньячные»')">✍️ Оставить отзыв</button>
+        </div>
         <div class="product-orders" id="orders_pork_cognac"></div>
         <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
-                <div class="kbju-container">
+        <div class="kbju-container">
             <div class="kbju-item"><span class="kbju-value">441</span><span class="kbju-label">ккал</span></div>
             <div class="kbju-item"><span class="kbju-value">65.0г</span><span class="kbju-label">Б</span></div>
             <div class="kbju-item"><span class="kbju-value">15.2г</span><span class="kbju-label">Ж</span></div>
@@ -175,14 +179,17 @@
         <div class="product-name">Свиные джерки «Паприка»</div>
         <div class="product-price">450 ₽</div>
         <div class="product-weight">100 г</div>
-        <div class="product-rating" id="rating_pork_paprika"></div>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+            <span class="product-rating" id="rating_pork_paprika" onclick="openReviews('pork_paprika','Свиные джерки «Паприка»')"></span>
+            <button class="review-btn" onclick="openReview('pork_paprika','Свиные джерки «Паприка»')">✍️ Оставить отзыв</button>
+        </div>
         <div class="product-orders" id="orders_pork_paprika"></div>
         <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
         <div class="kbju-container">
-            <div class="kbju-item"><div class="kbju-value">417</div><div class="kbju-label">ккал</div></div>
-            <div class="kbju-item"><div class="kbju-value">66.2г</div><div class="kbju-label">Белки</div></div>
-            <div class="kbju-item"><div class="kbju-value">15.4г</div><div class="kbju-label">Жиры</div></div>
-            <div class="kbju-item"><div class="kbju-value">2.3г</div><div class="kbju-label">Углеводы</div></div>
+            <div class="kbju-item"><span class="kbju-value">417</span><span class="kbju-label">ккал</span></div>
+            <div class="kbju-item"><span class="kbju-value">66.2г</span><span class="kbju-label">Б</span></div>
+            <div class="kbju-item"><span class="kbju-value">15.4г</span><span class="kbju-label">Ж</span></div>
+            <div class="kbju-item"><span class="kbju-value">2.3г</span><span class="kbju-label">У</span></div>
         </div>
         <div class="stock-info" id="stock_pork_paprika">Загрузка...</div>
         <div class="add-container">
@@ -198,14 +205,17 @@
         <div class="product-name">Куриные джерки</div>
         <div class="product-price">600 ₽</div>
         <div class="product-weight">100 г</div>
-        <div class="product-rating" id="rating_chicken"></div>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+            <span class="product-rating" id="rating_chicken" onclick="openReviews('chicken','Куриные джерки')"></span>
+            <button class="review-btn" onclick="openReview('chicken','Куриные джерки')">✍️ Оставить отзыв</button>
+        </div>
         <div class="product-orders" id="orders_chicken"></div>
         <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
         <div class="kbju-container">
-            <div class="kbju-item"><div class="kbju-value">393</div><div class="kbju-label">ккал</div></div>
-            <div class="kbju-item"><div class="kbju-value">70.3г</div><div class="kbju-label">Белки</div></div>
-            <div class="kbju-item"><div class="kbju-value">10.3г</div><div class="kbju-label">Жиры</div></div>
-            <div class="kbju-item"><div class="kbju-value">2.8г</div><div class="kbju-label">Углеводы</div></div>
+            <div class="kbju-item"><span class="kbju-value">393</span><span class="kbju-label">ккал</span></div>
+            <div class="kbju-item"><span class="kbju-value">70.3г</span><span class="kbju-label">Б</span></div>
+            <div class="kbju-item"><span class="kbju-value">10.3г</span><span class="kbju-label">Ж</span></div>
+            <div class="kbju-item"><span class="kbju-value">2.8г</span><span class="kbju-label">У</span></div>
         </div>
         <div class="stock-info" id="stock_chicken">Загрузка...</div>
         <div class="add-container">
@@ -221,14 +231,17 @@
         <div class="product-name">Говяжьи джерки</div>
         <div class="product-price">900 ₽</div>
         <div class="product-weight">100 г</div>
-        <div class="product-rating" id="rating_beef"></div>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+            <span class="product-rating" id="rating_beef" onclick="openReviews('beef','Говяжьи джерки')"></span>
+            <button class="review-btn" onclick="openReview('beef','Говяжьи джерки')">✍️ Оставить отзыв</button>
+        </div>
         <div class="product-orders" id="orders_beef"></div>
         <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
         <div class="kbju-container">
-            <div class="kbju-item"><div class="kbju-value">494</div><div class="kbju-label">ккал</div></div>
-            <div class="kbju-item"><div class="kbju-value">73.3г</div><div class="kbju-label">Белки</div></div>
-            <div class="kbju-item"><div class="kbju-value">20.0г</div><div class="kbju-label">Жиры</div></div>
-            <div class="kbju-item"><div class="kbju-value">3.2г</div><div class="kbju-label">Углеводы</div></div>
+            <div class="kbju-item"><span class="kbju-value">494</span><span class="kbju-label">ккал</span></div>
+            <div class="kbju-item"><span class="kbju-value">73.3г</span><span class="kbju-label">Б</span></div>
+            <div class="kbju-item"><span class="kbju-value">20.0г</span><span class="kbju-label">Ж</span></div>
+            <div class="kbju-item"><span class="kbju-value">3.2г</span><span class="kbju-label">У</span></div>
         </div>
         <div class="stock-info" id="stock_beef">Загрузка...</div>
         <div class="add-container">
@@ -264,6 +277,38 @@
     </div>
 </div>
 
+<!-- Модальное окно ОТЗЫВА -->
+<div class="modal" id="reviewModal">
+    <div class="modal-content">
+        <h2>✍️ Оставить отзыв</h2>
+        <p id="reviewProductName" style="color:#aaa;"></p>
+        <label style="color:#fff;">Ваше имя:</label>
+        <input type="text" id="reviewName" class="promo-input" placeholder="Введите имя">
+        <label style="color:#fff;">Оценка:</label>
+        <div class="star-rating" id="starRating">
+            <span onclick="setReviewRating(1)">☆</span>
+            <span onclick="setReviewRating(2)">☆</span>
+            <span onclick="setReviewRating(3)">☆</span>
+            <span onclick="setReviewRating(4)">☆</span>
+            <span onclick="setReviewRating(5)">☆</span>
+        </div>
+        <label style="color:#fff;">Отзыв:</label>
+        <textarea id="reviewText" class="promo-input" style="height:100px;" placeholder="Напишите ваш отзыв..."></textarea>
+        <button class="send-order-btn" onclick="submitReview()" style="margin-top:12px;">✅ Отправить</button>
+        <button class="clear-cart-btn" onclick="closeReview()">❌ Отмена</button>
+    </div>
+</div>
+
+<!-- Модальное окно ПРОСМОТРА ОТЗЫВОВ -->
+<div class="modal" id="reviewsModal">
+    <div class="modal-content">
+        <h2>📝 Отзывы</h2>
+        <p id="reviewsProductName" style="color:#aaa;"></p>
+        <div id="reviewsList"></div>
+        <button class="clear-cart-btn" onclick="document.getElementById('reviewsModal').classList.remove('active')" style="margin-top:12px;">Закрыть</button>
+    </div>
+</div>
+
 <div class="cart-bar" id="cartBar">
     <div class="cart-info"><span>🛒</span><span class="cart-count" id="cartCount">0</span><span class="cart-total" id="cartTotal">0 ₽</span></div>
     <button class="cart-btn" onclick="openCart()">Оформить</button>
@@ -293,6 +338,8 @@ const isApp=(()=>{if(urlParams.get('app')==='true')return true;if(navigator.stan
 const isAdmin=urlParams.get('admin')==='true';
 let cart={},stockCache=null,wheelConfig=[],appliedPromo=null;
 let deviceId=localStorage.getItem('deviceId')||(()=>{const id='KO-'+Math.random().toString(36).substr(2,9);localStorage.setItem('deviceId',id);return id;})();
+let currentReviewProduct='',reviewRating=5;
+let allReviews={};
 
 function showOfflineBanner(){const b=document.getElementById('offlineBanner');if(b)b.style.display='block';}
 function hideOfflineBanner(){const b=document.getElementById('offlineBanner');if(b)b.style.display='none';}
@@ -321,21 +368,93 @@ localStorage.setItem('lastPromoCode',code);
 async function markPromoAsUsed(code){try{await fetch(APPS_SCRIPT_URL+'?sheet=PromoUsage&action=markUsed&code='+encodeURIComponent(code));}catch(e){}}
 async function incrementOrderCounter(product){try{await fetch(APPS_SCRIPT_URL+'?sheet=OrderCounter&action=increment&product='+encodeURIComponent(product));}catch(e){}}
 
+// ОТЗЫВЫ
+function openReview(productId, productName) {
+    currentReviewProduct = productId;
+    document.getElementById('reviewProductName').textContent = productName;
+    document.getElementById('reviewName').value = localStorage.getItem('reviewName') || '';
+    document.getElementById('reviewText').value = '';
+    reviewRating = 5;
+    updateReviewStars();
+    document.getElementById('reviewModal').classList.add('active');
+}
+
+function closeReview() {
+    document.getElementById('reviewModal').classList.remove('active');
+}
+
+function setReviewRating(r) {
+    reviewRating = r;
+    updateReviewStars();
+}
+
+function updateReviewStars() {
+    const stars = document.getElementById('starRating').children;
+    for (let i = 0; i < 5; i++) {
+        stars[i].textContent = i < reviewRating ? '⭐' : '☆';
+    }
+}
+
+async function submitReview() {
+    const name = document.getElementById('reviewName').value.trim();
+    const text = document.getElementById('reviewText').value.trim();
+    if (!name) { alert('Введите имя'); return; }
+    if (!text) { alert('Напишите отзыв'); return; }
+    
+    try {
+        localStorage.setItem('reviewName', name);
+        await fetch(APPS_SCRIPT_URL + '?sheet=Reviews&action=add&productId=' + encodeURIComponent(currentReviewProduct) + '&name=' + encodeURIComponent(name) + '&rating=' + reviewRating + '&text=' + encodeURIComponent(text) + '&date=' + encodeURIComponent(new Date().toLocaleDateString('ru-RU')));
+        alert('✅ Отзыв отправлен на модерацию!');
+        closeReview();
+        setTimeout(loadReviews, 1000);
+    } catch(e) {
+        alert('❌ Ошибка отправки');
+    }
+}
+
+function openReviews(productId, productName) {
+    document.getElementById('reviewsProductName').textContent = productName;
+    const div = document.getElementById('reviewsList');
+    const revs = allReviews[productId];
+    
+    if (revs && revs.filter(r => r.visible).length > 0) {
+        div.innerHTML = revs.filter(r => r.visible).map(r => `
+            <div class="review-item">
+                <div class="review-header">
+                    <span class="review-name">${r.name}</span>
+                    <span style="color:#f1c40f;">${'⭐'.repeat(r.rating)}</span>
+                </div>
+                <div class="review-text">${r.text}</div>
+                <div class="review-date">${r.date}</div>
+            </div>
+        `).join('');
+    } else {
+        div.innerHTML = '<p style="color:#aaa; text-align:center;">Пока нет отзывов</p>';
+    }
+    
+    document.getElementById('reviewsModal').classList.add('active');
+}
+
 async function loadReviews(){
 try{
 const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'Reviews'!A2:F50?key=${SHEET_API_KEY}`);
 const d=await r.json();
 if(d.values){
-const reviews={};
+const revs={};
+allReviews={};
 for(const row of d.values){
-if(row[5]!=='Да')continue;
 const product=row[0];
-if(!reviews[product])reviews[product]=[];
-reviews[product].push({name:row[1],rating:parseInt(row[2]),text:row[3],date:row[4]});
+if(!allReviews[product])allReviews[product]=[];
+allReviews[product].push({name:row[1],rating:parseInt(row[2]),text:row[3],date:row[4],visible:row[5]==='Да'});
+
+if(row[5]==='Да'){
+if(!revs[product])revs[product]=[];
+revs[product].push(parseInt(row[2]));
 }
-for(const[product,revs]of Object.entries(reviews)){
-const avg=Math.round(revs.reduce((s,r)=>s+r.rating,0)/revs.length*10)/10;
-const count=revs.length;
+}
+for(const[product,ratings]of Object.entries(revs)){
+const avg=Math.round(ratings.reduce((s,r)=>s+r,0)/ratings.length*10)/10;
+const count=ratings.length;
 const el=document.getElementById(`rating_${product}`);
 if(el)el.innerHTML=`⭐ ${avg} (${count} отз.)`;
 }
