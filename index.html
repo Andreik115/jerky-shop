@@ -46,6 +46,10 @@
         .product-orders { color: #aaa; font-size: 12px; }
         .stock-info { color: #27ae60; font-size: 12px; margin-top: 6px; font-weight: 500; }
         .stock-info.preorder { color: #f39c12; }
+        .kbju-container { display: flex; justify-content: space-around; margin-top: 10px; padding-top: 10px; border-top: 1px solid #333; }
+        .kbju-item { text-align: center; }
+        .kbju-value { color: #e74c3c; font-weight: bold; font-size: 14px; }
+        .kbju-label { color: #888; font-size: 10px; }
         .add-container { display: flex; align-items: center; margin-top: 10px; }
         .btn { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
         .btn:active { background: #c0392b; }
@@ -104,6 +108,9 @@
         .copy-btn { background: #f39c12; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }
         .copy-btn.copied { background: #27ae60; color: #fff; }
         .offline-banner { display: none; position: fixed; top: 0; left: 0; right: 0; background: #e74c3c; color: #fff; text-align: center; padding: 10px; font-size: 14px; z-index: 9998; }
+        .app-banner { background: #1a3a1a; border: 1px solid #27ae60; border-radius: 12px; padding: 12px; margin: 12px 0; text-align: center; }
+        .app-banner p { color: #fff; margin: 0 0 8px; }
+        .app-download-btn { display: inline-block; background: #27ae60; border-radius: 8px; padding: 10px 20px; color: #fff; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -129,6 +136,14 @@
         <p>Твоё мясное комьюнити</p>
         <a href="#" onclick="openTelegram()" style="display:inline-block;margin-top:12px;background:#e74c3c;border-radius:8px;padding:10px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:15px;">📢 Подписывайся на наш Telegram</a>
     </div>
+    
+    <!-- Баннер приложения -->
+    <div class="app-banner">
+        <p>📱 Установи наше приложение!</p>
+        <a href="https://expo.dev/accounts/andreik115/projects/komeat/builds/1750522d-3569-40e6-be2f-c46a13db7d93" target="_blank" class="app-download-btn">⬇️ Скачать APK для Android</a>
+        <p style="color:#aaa; font-size:11px; margin-top:6px;">Push-уведомления • Офлайн-режим • Быстрее</p>
+    </div>
+    
     <button class="main-menu-btn" onclick="showJerkyCatalog()">🔥 Джерки</button>
     <button class="main-menu-btn" onclick="showDelicacies()">🍖 Мясные деликатесы</button>
     <button class="main-menu-btn app-only" onclick="showWheel()" style="border-color:#f39c12;color:#f39c12;display:none;">🎁 Колесо фортуны</button>
@@ -147,6 +162,12 @@
         <div class="product-rating" id="rating_pork_cognac"></div>
         <div class="product-orders" id="orders_pork_cognac"></div>
         <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, пажитник, коньяк, прованские травы</div>
+        <div class="kbju-container">
+            <div class="kbju-item"><div class="kbju-value">441</div><div class="kbju-label">ккал</div></div>
+            <div class="kbju-item"><div class="kbju-value">65.0г</div><div class="kbju-label">Белки</div></div>
+            <div class="kbju-item"><div class="kbju-value">15.2г</div><div class="kbju-label">Жиры</div></div>
+            <div class="kbju-item"><div class="kbju-value">1.6г</div><div class="kbju-label">Углеводы</div></div>
+        </div>
         <div class="stock-info" id="stock_pork_cognac">Загрузка...</div>
         <div class="add-container">
             <button class="btn add-btn" id="btn_pork_cognac" onclick="addToCart('pork_cognac','Свиные джерки Коньячные',450)">Добавить в корзину</button>
@@ -161,6 +182,12 @@
         <div class="product-rating" id="rating_pork_paprika"></div>
         <div class="product-orders" id="orders_pork_paprika"></div>
         <div class="product-comp">Состав: Карбонад, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
+        <div class="kbju-container">
+            <div class="kbju-item"><div class="kbju-value">417</div><div class="kbju-label">ккал</div></div>
+            <div class="kbju-item"><div class="kbju-value">66.2г</div><div class="kbju-label">Белки</div></div>
+            <div class="kbju-item"><div class="kbju-value">15.4г</div><div class="kbju-label">Жиры</div></div>
+            <div class="kbju-item"><div class="kbju-value">2.3г</div><div class="kbju-label">Углеводы</div></div>
+        </div>
         <div class="stock-info" id="stock_pork_paprika">Загрузка...</div>
         <div class="add-container">
             <button class="btn add-btn" id="btn_pork_paprika" onclick="addToCart('pork_paprika','Свиные джерки Паприка',450)">Добавить в корзину</button>
@@ -178,6 +205,12 @@
         <div class="product-rating" id="rating_chicken"></div>
         <div class="product-orders" id="orders_chicken"></div>
         <div class="product-comp">Состав: Куриная грудка, нитритная соль, поваренная соль, соевый соус, чеснок, черный перец, паприка копченая, прованские травы</div>
+        <div class="kbju-container">
+            <div class="kbju-item"><div class="kbju-value">393</div><div class="kbju-label">ккал</div></div>
+            <div class="kbju-item"><div class="kbju-value">70.3г</div><div class="kbju-label">Белки</div></div>
+            <div class="kbju-item"><div class="kbju-value">10.3г</div><div class="kbju-label">Жиры</div></div>
+            <div class="kbju-item"><div class="kbju-value">2.8г</div><div class="kbju-label">Углеводы</div></div>
+        </div>
         <div class="stock-info" id="stock_chicken">Загрузка...</div>
         <div class="add-container">
             <button class="btn add-btn" id="btn_chicken" onclick="addToCart('chicken','Куриные джерки',600)">Добавить в корзину</button>
@@ -195,6 +228,12 @@
         <div class="product-rating" id="rating_beef"></div>
         <div class="product-orders" id="orders_beef"></div>
         <div class="product-comp">Состав: Говяжья мякоть, нитритная соль, поваренная соль, соевый соус, чеснок, лимонный сок, сахар, чёрный перец</div>
+        <div class="kbju-container">
+            <div class="kbju-item"><div class="kbju-value">494</div><div class="kbju-label">ккал</div></div>
+            <div class="kbju-item"><div class="kbju-value">73.3г</div><div class="kbju-label">Белки</div></div>
+            <div class="kbju-item"><div class="kbju-value">20.0г</div><div class="kbju-label">Жиры</div></div>
+            <div class="kbju-item"><div class="kbju-value">3.2г</div><div class="kbju-label">Углеводы</div></div>
+        </div>
         <div class="stock-info" id="stock_beef">Загрузка...</div>
         <div class="add-container">
             <button class="btn add-btn" id="btn_beef" onclick="addToCart('beef','Говяжьи джерки',900)">Добавить в корзину</button>
@@ -379,8 +418,10 @@ const code=document.getElementById('promoInput').value.trim();if(!code)return;
 const msg=document.getElementById('promoMessage');
 const storedCode=localStorage.getItem('lastPromoCode');
 if(storedCode&&code===storedCode){const saved=localStorage.getItem('lastPrizeInfo');if(saved){const info=JSON.parse(saved);appliedPromo={code:info.code,discount:info.discount,prize:info.prize,isFree:info.isFree};msg.innerHTML=info.isFree?`<span class="promo-info">✅ Приз «${info.prize}» применён!</span>`:`<span class="promo-info">✅ Промокод применён! Скидка ${info.discount}%</span>`;markPromoAsUsed(info.code);openCart();return;}}
-const found=wheelConfig.find(s=>s.code===code);if(found){const dp=parseInt(found.name)||0,isFree=dp===0;appliedPromo={code:code,discount:dp,prize:found.prize,isFree:isFree};msg.innerHTML=isFree?`<span class="promo-info">✅ Приз «${found.prize}» применён!</span>`:`<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`;openCart();return;}
-const baseCode=code.split('-')[0];const baseFound=wheelConfig.find(s=>s.code===baseCode);if(baseFound){const dp=parseInt(baseFound.name)||0,isFree=dp===0;appliedPromo={code:code,discount:dp,prize:baseFound.prize,isFree:isFree};msg.innerHTML=isFree?`<span class="promo-info">✅ Приз «${baseFound.prize}» применён!</span>`:`<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`;markPromoAsUsed(code);openCart();return;}
+const found=wheelConfig.find(s=>s.code===code);
+if(found){const dp=parseInt(found.name)||0,isFree=dp===0;appliedPromo={code:code,discount:dp,prize:found.prize,isFree:isFree};msg.innerHTML=isFree?`<span class="promo-info">✅ Приз «${found.prize}» применён!</span>`:`<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`;openCart();return;}
+const baseCode=code.split('-')[0];const baseFound=wheelConfig.find(s=>s.code===baseCode);
+if(baseFound){const dp=parseInt(baseFound.name)||0,isFree=dp===0;appliedPromo={code:code,discount:dp,prize:baseFound.prize,isFree:isFree};msg.innerHTML=isFree?`<span class="promo-info">✅ Приз «${baseFound.prize}» применён!</span>`:`<span class="promo-info">✅ Промокод применён! Скидка ${dp}%</span>`;markPromoAsUsed(code);openCart();return;}
 appliedPromo=null;msg.innerHTML='<span class="promo-error">❌ Промокод не найден</span>';openCart();
 }
 
@@ -439,7 +480,7 @@ cart={};appliedPromo=null;document.getElementById('promoInput').value='';documen
 saveCartToStorage();updateCartBar();document.querySelectorAll('.product-card').forEach(c=>updateProductUI(c.dataset.id));closeCart();
 }
 
-// Firebase Push с переключателем
+// Firebase Push
 const firebaseConfig = {
   apiKey: "AIzaSyBDsY7DCOqY9lQ8D7RDhBK0clnud7G7E18",
   authDomain: "komeat-61db2.firebaseapp.com",
@@ -460,7 +501,6 @@ async function togglePush() {
   if (!btn) return;
   
   if (pushEnabled) {
-    // Отключаем
     if (currentPushToken) {
       try { await fetch(APPS_SCRIPT_URL + '?sheet=PushTokens&action=remove&token=' + encodeURIComponent(currentPushToken)); } catch(e) {}
     }
@@ -475,14 +515,11 @@ async function togglePush() {
     return;
   }
   
-  // Включаем
   btn.disabled = true;
   btn.textContent = '⏳ Запрос...';
   
   try {
-    // Небольшая задержка для WebView
     await new Promise(r => setTimeout(r, 300));
-    
     const permission = await Notification.requestPermission();
     
     if (permission === 'granted') {
@@ -497,7 +534,7 @@ async function togglePush() {
       btn.style.color = '#e74c3c';
       alert('✅ Уведомления включены!');
     } else if (permission === 'denied') {
-      alert('❌ Уведомления запрещены. Разрешите их в настройках телефона: Настройки → Приложения → KoMeat → Уведомления');
+      alert('❌ Уведомления запрещены. Разрешите их в настройках телефона.');
     } else {
       alert('❌ Уведомления не включены. Попробуйте ещё раз.');
     }
@@ -509,7 +546,6 @@ async function togglePush() {
   btn.disabled = false;
   updatePushButton();
 }
-
 
 function updatePushButton() {
   const btn = document.getElementById('pushBtn');
